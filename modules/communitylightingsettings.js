@@ -1,0 +1,3 @@
+class CommunityLightingSettings extends FormApplication {
+    
+}

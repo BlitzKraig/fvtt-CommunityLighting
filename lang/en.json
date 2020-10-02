@@ -1,0 +1,24 @@
+{
+    "COMMUNITYLIGHTING": {
+        "authors": {
+            "Blitz": {
+                "lights": {
+                    "lightning": {
+                        "name": "Lightning",
+                        "description": "A basic Lightning strike, randomly flashes on for a short time",
+                        "intensityDescription": "Controls how bright the flash will be",
+                        "speedDescription": "Controls how often the lightning will strike"
+                    },
+                    "torch": {
+                        "name": "Deep Torch",
+                        "description": "A deeper, alternative version of the torch"
+                    }
+                }
+            }
+        },
+        "settings": {
+            "name": "Community Lighting Settings",
+            "label": "Open Settings"
+        }
+    }
+}
