@@ -1,6 +1,8 @@
 class CLAnimations {
 
-    // Blitz
+    /* Author: Blitz */
+
+    // Not in use: example only
     blitzPulseTest(dt, {
         speed = 5,
         intensity = 5
@@ -28,6 +30,43 @@ class CLAnimations {
         // Switch direction
         if (a > (2 * Math.PI)) this._pulseAngle = 0;
 
+    }
+
+    blitzLightningSimple(dt, {
+        speed = 5,
+        intensity = 5
+    }) {
+        // Rest at brightness 0
+        // Randomly flash to full alpha. opacity based on intensity, likelihood of flash on speed
+        // Check flipped value at start
+        let flipped = this._flipped;
+        // Use binaryRandomInterval to flip on at random
+        // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
+        CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
+
+        // These two checks ensure we respect the Opacity slider in lights
+        if (!this._originalColorAlpha) {
+            this._originalColorAlpha = this.coloration.uniforms.alpha;
+        }
+        // If the opacity slider is changed, it will be an unexpected value. Reset our original tracker if so
+        // This animation sets the alpha to `0` at one point, so don't reset the tracker if alpha is 0
+        if (this.coloration.uniforms.alpha != this._originalColorAlpha && this.coloration.uniforms.alpha != 0) {
+            this._originalColorAlpha = this.coloration.uniforms.alpha;
+        }
+
+        // Only run if we have flipped this frame
+        if (flipped != this._flipped) {
+            if (this._flipped) {
+                // Set the alpha somewhere between 0.1 and 1, depending on intensity
+                let alpha = 0.1 * intensity;
+                this.illumination.uniforms.alpha = alpha;
+                this.coloration.uniforms.alpha = this._originalColorAlpha; // Don't bother multiplying this with alpha, users can use the opacity slider to set this directly, since the light only has 2 phases
+            } else {
+                // Set the alpha to zero
+                this.illumination.uniforms.alpha = 0;
+                this.coloration.uniforms.alpha = 0;
+            }
+        }   
     }
 
     blitzTorch(dt, {
@@ -64,10 +103,9 @@ class CLAnimations {
         speed = 5,
         intensity = 5
     }) {
-
         // Check flipped value at start
         let flipped = this._flipped;
-        CLAnimationHelpers.binaryTimer(this, speed);
+        CLAnimationHelpers.binaryTimer(this, speed, dt);
 
         var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
         minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
@@ -102,7 +140,7 @@ class CLAnimations {
         intensity = 5
     }) {
         let flipped = this._flipped;
-        CLAnimationHelpers.binaryTimer(this, speed);
+        CLAnimationHelpers.binaryTimer(this, speed, dt);
 
         var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
         minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
@@ -156,7 +194,7 @@ class CLAnimations {
         intensity = 5
     }) {
         let flipped = this._flipped;
-        CLAnimationHelpers.binaryTimer(this, speed);
+        CLAnimationHelpers.binaryTimer(this, speed, dt);
 
         var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
         minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
@@ -199,8 +237,8 @@ class CLAnimations {
                 this.coloration.uniforms.alpha = this._originalColorAlpha;
             }
         }
-
     }
+    /* Blitz end */
 
     // Your Lighting Code Here
 
