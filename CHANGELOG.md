@@ -1,5 +1,5 @@
-# 3.0.0 - Initial Release (Dancing Lights Reborn)
+# 0.0.1 - 2020/10/04
 
-* Rebuilt for FVTT 0.7.x, taking advantage of the rebuilt light/sight system
-* Added localization support - Please contact me if you would like to help localize the module
-* 
+* Initial Release!
+* Added lights based on my old Dancing Lights presets
+* Added community management gubbins, to allow others to add custom lighting

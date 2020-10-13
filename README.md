@@ -9,19 +9,66 @@
 
 This module aims to provide a platform for FVTT users to create and publish their own lighting animations, and provide a good selection of community made lighting animations to GameMasters.
 
-PRs are open for new lighting animations! See Contribution Tutorial below.
+### For GameMasters
+
+Download this module and enjoy the new Lighting Animations provided!
+
+### For Content Creators
+
+Read through the Contribution Tutorial below and add your lighting animations!
 
 ## Contributing
 
-PRs are welcome to add your own lights.
+Tutorial below. PRs are always open to add your own lighting animations.
 
-Please note that _removing_ or significantly altering already added lights will require a good reason, added in the PR description - I want to avoid breaking users scenes where possible.
+If you wish to _remove_ or significantly alter the logic for one or more of your already added lights, please provide a reason added in your PR description - I want to avoid breaking users scenes where possible.
 
 ## Contribution Tutorial
 
+To create and publish your own custom lighting animation, you'll need to run through a couple of steps:
+
+1. Register your animation metadata in `lights.json`
+2. Build your actual animation in `modules/animations.js`
+
+And optionally
+
+3. Provide translations in the `lang` files
+
+Once this is done, you can create a Pull Request and integrate your work into the module, covered in
+
+4. Integrating into the module
+
+We will run through each of these steps below. I will also provide an example implementation at the end.
+
+If you have any issues following this tutorial, feel free to ping me on Discord at Blitz#6797
+
+### 0. Getting set up
+
+If you already know how develop and edit modules, skip to the next section.
+
+> Prerequisites: Foundry 0.7.4+, Git
+
+To get started, first you'll need to clone this repo into your `modules` directory.
+
+In a terminal, navigate to the `modules` directory and run:
+`$ git clone https://github.com/BlitzKraig/fvtt-CommunityLighting.git`
+
+Once the repo is cloned, ensure the directory name matches the name provided in `module.json` - `CommunityLighting`
+
+Launch Foundry
+
+Launch a world
+
+Open `Manage Modules`, and enable `CommunityLighting by Everybody`
+
+You are now ready to begin creating your lighting animations.
+Open the module directory in the editor of your choice, and follow the rest of the tutorial.
+
 ### 1. JSON
 
-Add your Author object inside `lights.json`
+You must first register your lights metadata in a specific JSON file, so CommunityLighting knows how to set up your animations.
+
+First, add your Author object inside `lights.json`. You can use any name you want, but please keep all of your metadata inside the one Author object.
 
 ```JSON
 "ExampleUser": {
@@ -32,7 +79,7 @@ Add your Author object inside `lights.json`
 
 This is where you lights definitions will live, alongside optional details.
 
-You can add your Discord tag if you want users to be able to contact you via discord when they're having issues with your particular animation, or links to your Github, Twitter and Youtube, which will appear in the attributions page. These are all completely optional.
+You can add your Discord tag if you want users to be able to contact you via discord when they're having issues with your particular animation, or links to your Github, Twitter and Youtube, which will appear in the attributions page (Not yet built). *These are all completely optional.*
 
 ``` JSON
 "ExampleUser": {
@@ -45,15 +92,15 @@ You can add your Discord tag if you want users to be able to contact you via dis
 }
 ```
 
-Next, you can define your lights. These definitions will be stored inside a `lights` array, and must at least contain a `name` and a `shaderName`.
+Next, you can define your lights. These definitions will be stored inside a `lights` array, and **must** at least contain a `name` and a `shaderName`.
 
 The `name` will be displayed in the animation selection dropdown for an ambient light. Try to keep these unique if possible.
 
-The `shaderName` must match your animation function name, which we'll set up down below.
+The `shaderName` must match your animation function name, which we'll set up down below. It should consist of alphabetical characters only, preferably in `camelCase`.
 
-You can optionally add a `description`, `intensityDescription` and `speedDescription`, which will be displayed later, describing your light, what the intensity slider does, and what the speed slider does.
+You can optionally add a `description`, `intensityDescription` and `speedDescription`, which will be displayed later, describing your light, what the intensity slider does, and what the speed slider does. These sliders are provided by Foundry core, and can be seen in the configuration panel for a light.
 
-Finally, you can add a `translationName`, which will allow all of these details to be translated using Foundrys translation features, which we'll cover later.
+Finally, you can add an optional `translationName`, which will allow all of these details to be translated using Foundrys translation features, which we'll cover later. The `translationName` should consist of alphabetical characters only, preferably in `camelCase`.
 
 ``` JSON
 "ExampleUser": {
@@ -80,7 +127,10 @@ Finally, you can add a `translationName`, which will allow all of these details 
 }
 ```
 
-Your JSON is complete. Make sure you have your commas in the right places, and you've not mangled any other author objects in the process.
+> Note that the first `light` object, "My Cool Light" contains all of the optional properties, while the second object "My Less Cool Light" contains the bare minimum to get started.
+> I recommend providing as much detail as possible.
+
+Your JSON is complete! Make sure you have your commas in the right places, and you've not mangled any other author objects in the process.
 
 ### 2. Javascript
 
@@ -88,15 +138,16 @@ Once you've defined your lights in the JSON, we'll move on to actually building 
 
 Open the `modules/animations.js` file.
 
-Scroll down to the bottom and create your animation function, using the name you defined in `shaderName` in the JSON file.
+Scroll down to the bottom of the file and create your animation function, using the name you defined in `shaderName` in the JSON file.
 
-Note, try to keep all of your own lights together in the file. I'd suggest prefixing the `shaderName` and function with your author name until I implement some better organization.
+> Try to keep all of your own lights together in the file. I'd suggest prefixing the `shaderName` and function with your author name until I implement some better organization.
 
-Your animation function needs to accept 2 (3) arguments:
-* dt - DeltaTime
-* {speed, intensity} - The values from the speed & intensity sliders
+Your animation function needs to accept 2 arguments, an integer and an Object, which are passed in from Foundry core:
 
-You can use the animation functions already in the file as a starting point.
+* `dt` - DeltaTime - Time in ms since last 'frame'
+* `{speed, intensity}` - The values from the speed & intensity sliders - Both `1` to `10`
+
+> You can copy & paste one of the animation functions already in the file as a starting point.
 
 ``` javascript
 coolLight(dt, {
@@ -107,26 +158,76 @@ coolLight(dt, {
 }
 ```
 
+> **IMPORTANT** The function name (`coolLight`) matches the `shaderName` (`coolLight`) provided in the JSON in step 1
+
 Inside this function, the `this` keyword will refer to the lightsource being animated.
 
 `this.illumination` and `this.coloration` refer to the shaders that handle the light circle, and the color.
 
-Most of your modifications will probably be to their `uniforms`.
+Most of your modifications will probably be to their `uniforms` objects, which contain multiple properties you can play with.
 
 For example:
 `this.illumination.uniforms.alpha = 0.5` will set the illumination to half brightness.
 
-Keep in mind that to 'animate' a light, you will need to alter these values based on something else. You can check `blitzPulseTest` inside `animations.js` to see how the pulse animation works, based on Pulse in Foundry Core.
+Some useful uniforms:
+
+* illumination
+  * `alpha` - The illuminations opacity - `0.0` to `1.0`
+  * `ratio` - The ratio of bright to dim light - `0.0` to `1.0`
+* coloration
+  * `alpha` - The colors opacity - `0.0` to `1.0`
+  * `ratio` - The ratio of bright to dim color - `0.0` to `1.0`
+  * `color` - The displayed color - RGB Array `[0,0,0]` to `[1,1,1]`
+  * `sharpness` - Currently unsupported - Foundry core removed this, but is expected to add it again soon.
+
+> You can change a lot more than just the shader uniforms, but you'll have to experiment to see exactly what you can do.
+
+Keep in mind that to 'animate' a light, you will need to alter these values based on something else (usually time, often using a wave function). You can check `blitzPulseTest` inside `animations.js` to see how the pulse animation works, based on Pulse in Foundry Core.
 
 You can also use the static methods in `CLAnimationHelpers` to help simplify some of the process. See `blitzSimpleFlash` for a fairly easy example.
 
-Note that if you've come up with something useful that can be easily re-used, you can add it into `animationhelpers.js`, and it will appear in the `CLAnimationHelpers` class for other authors to use.
+>If you've come up with something useful that can be easily re-used by other animations, feel free to add it into `animationhelpers.js`, and it will appear in the `CLAnimationHelpers` class for other authors to use if approved.
 
-When you're ready to test, save the file. Refresh Foundry, and double click on an Ambient Light. Find your animation in the `Light Animation Type` dropdown, and select it. Save the light and see how your animation looks!
+Additionally, if you need to keep track of any specific value, it is recommended to add a property to `this`, prefixed with an underscore, eg. `this._myCustomVar = 0`
+This will allow you to check or update `this._myCustomVar` every 'frame'
+
+Your animation code might look something like this:
+
+``` javascript
+coolLight(dt, {
+    speed = 5,
+    intensity = 5
+}) {
+    /* Example code for a simple flashing light */
+    /* `speed` controls how quickly the light will flip on and off */
+    /* `intensity` controls how dim the light will be when it is 'off' */
+
+    CLAnimationHelpers.binaryTimer(this, speed); // Use the binaryTimer helper to set `this._flipped` to true/false, based on speed
+
+        if (this._flipped) {
+            // Set the alpha somewhere between 0 and 0.9, depending on intensity
+            let alpha = 1 - (0.1 * intensity);
+            this.illumination.uniforms.alpha = alpha; // Update the shader displaying the light emission
+            this.coloration.uniforms.alpha = alpha; // Update the shader displaying the color of the light
+        } else {
+            // Set the alpha back to full
+            this.illumination.uniforms.alpha = 1;
+            this.coloration.uniforms.alpha = 1;
+        }
+    }
+}
+```
+
+> The example code above is provided for simplicity, and is not very performant. There is a more advanced version of this in `modules/animations.js`, `blitzSimpleFlash`
+
+When you're ready to test, save the file.
+Refresh Foundry, and double click on an Ambient Light, or create a new one.
+Find your animation in the `Light Animation Type` dropdown, and select it.
+Save the light and see how your animation looks!
 
 ### 3. Translation
 
-If you want to support translating your light names, descriptions etc., you need to make sure you have a `translationName` setup in the light object inside `lights.json`
+If you want to support translating your light names, descriptions etc., you need to make sure you have a `translationName` setup in the light object inside `lights.json`, as described in step 1
 
 ``` JSON
 "ExampleUser": {
@@ -178,9 +279,9 @@ Inside your Author object, add a new object for each translation-supported light
 
 Inside each translateable light, add the properties you wish to translate.
 
-Supported properties are `name`, `description`, `intensityDescription` and `speedDescription`.
+Currently supported properties are `name`, `description`, `intensityDescription` and `speedDescription`.
 
-Note that if you add translations here, you don't need to add those properties in `lights.json`
+> If you add translations here, you don't need to add those same properties in your light object in `lights.json`, but having both shouldn't cause any problems.
 
 ``` JSON
 {
@@ -219,13 +320,21 @@ Eventually, I'm planning a more advanced system inside foundry that will automat
 
 `https://raw.githubusercontent.com/BlitzKraig/fvtt-CommunityLighting/master/module.json`
 
+## In the works
+
+* Ability to hide/show animations from the selection UI
+* Optional selection UI overhaul - Searchable, categorized
+* Full custom shader support
+* More animation helpers
+* Improved onboarding and documentation
+* Support for Advanced Lighting Toolkit (Upcoming module)
+
 ## Feedback
 
 This module is open for feedback and suggestions! I would love to improve it and implement new features.
 
 For bugs/feedback, create an issue on GitHub, or contact me on Discord at Blitz#6797
 
-Additionally, light authors can provide their contact details, if they so choose. These details can be found by hovering over the animation name in the light config.
+Additionally, light authors can provide their Discord/GitHub contact details, if they so choose. These details can be found by hovering over the animation name in the light config (Not yet implemented).
 
 ## [Release Notes](./CHANGELOG.md)
-
