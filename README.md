@@ -144,7 +144,7 @@ Scroll down to the bottom of the file and create your animation function, using 
 
 Your animation function needs to accept 2 arguments, an integer and an Object, which are passed in from Foundry core:
 
-* `dt` - DeltaTime - Time in ms since last 'frame'
+* `dt` - DeltaTime - Time since last 'frame', in 1/60th of a second
 * `{speed, intensity}` - The values from the speed & intensity sliders - Both `1` to `10`
 
 > You can copy & paste one of the animation functions already in the file as a starting point.
@@ -159,6 +159,8 @@ coolLight(dt, {
 ```
 
 > **IMPORTANT** The function name (`coolLight`) matches the `shaderName` (`coolLight`) provided in the JSON in step 1
+
+The `= 5` on the `speed` and `intensity` declarations simply tell the function to default these variables to `5` if they are not provided by the caller.
 
 Inside this function, the `this` keyword will refer to the lightsource being animated.
 
@@ -184,7 +186,7 @@ Some useful uniforms:
 
 Keep in mind that to 'animate' a light, you will need to alter these values based on something else (usually time, often using a wave function). You can check `blitzPulseTest` inside `animations.js` to see how the pulse animation works, based on Pulse in Foundry Core.
 
-You can also use the static methods in `CLAnimationHelpers` to help simplify some of the process. See `blitzSimpleFlash` for a fairly easy example.
+You can also use the static methods in `CLAnimationHelpers` to help simplify some of the process. See `blitzSimpleFlash` for a fairly easy example, using the `binaryTimer` helper to flip a light between two states at regular intervals.
 
 >If you've come up with something useful that can be easily re-used by other animations, feel free to add it into `animationhelpers.js`, and it will appear in the `CLAnimationHelpers` class for other authors to use if approved.
 
@@ -218,7 +220,7 @@ coolLight(dt, {
 }
 ```
 
-> The example code above is provided for simplicity, and is not very performant. There is a more advanced version of this in `modules/animations.js`, `blitzSimpleFlash`
+> The example code above is provided for simplicity, and is not very performant. It also does not respect the Opacity value set on the light, as this directly alters the coloration alpha. There is a more advanced version of this in `modules/animations.js`, `blitzSimpleFlash`
 
 When you're ready to test, save the file.
 Refresh Foundry, and double click on an Ambient Light, or create a new one.
