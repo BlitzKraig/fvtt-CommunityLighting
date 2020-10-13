@@ -9,6 +9,24 @@
                         "intensityDescription": "Controls how bright the flash will be",
                         "speedDescription": "Controls how often the lightning will strike"
                     },
+                    "flash": {
+                        "name": "Simple Flash",
+                        "description": "A simple flashing light",
+                        "intensityDescription": "Controls how dim the light will be when it flashes off",
+                        "speedDescription": "Controls how often the light will flash"        
+                    },
+                    "rgbflash": {
+                        "name": "RGB Flash",
+                        "description": "A simple flashing light, cycling between Red, Green and Blue",
+                        "intensityDescription": "Controls how dim the light will be when it flashes off",
+                        "speedDescription": "Controls how often the light will flash"
+                    },
+                    "policeflash": {
+                        "name": "Police Flash",
+                        "description": "A simple flashing light, cycling between Red and Blue, mimicking police lights",
+                        "intensityDescription": "Controls how dim the light will be when it flashes off",
+                        "speedDescription": "Controls how often the light will flash"
+                    },
                     "torch": {
                         "name": "Deep Torch",
                         "description": "A deeper, alternative version of the torch"

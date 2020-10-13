@@ -35,7 +35,7 @@
                 "translationName": "policeflash",
                 "name": "Police Flash",
                 "shaderName": "blitzPoliceFlash",
-                "description": "A simple flashing light, cycling between Red, and Blue, mimicing police lights",
+                "description": "A simple flashing light, cycling between Red, and Blue, mimicking police lights",
                 "intensityDescription": "Controls how dim the light will be when it flashes off",
                 "speedDescription": "Controls how often the light will flash"
             },
