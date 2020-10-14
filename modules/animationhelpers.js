@@ -171,4 +171,21 @@ class CLAnimationHelpers {
             source._revertTime = undefined;
         }
     }
+
+    static cosineWave(source, speed, intensity, dt, speedMultiplier = 1) {
+        if(!source._wave){
+            source._wave = {};
+        }
+        const distance = 0.1 * intensity;
+        const ms = (30000 * speedMultiplier) / speed;
+        const da = (2 * Math.PI) * ((60 * dt) / ms);
+        source._wave.distance = distance;
+        source._wave.a = source._wave.pulseAngle = (source._wave.pulseAngle ?? 0) + da;
+        source._wave.delta = (Math.cos(source._wave.pulseAngle) + 1) / 2;
+        
+        source._wave.simplifiedValue = source._wave.delta * source._wave.distance;
+        source._wave.invertedSimplifiedValue = 1 - source._wave.simplifiedValue;
+
+        if (source._wave.a > (2 * Math.PI)) source._wave.pulseAngle = 0;
+    }
 }

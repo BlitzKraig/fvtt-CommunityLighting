@@ -32,14 +32,28 @@ class CLAnimations {
 
     }
 
+    blitzFadeSimple(dt, {
+        speed = 5,
+        intensity = 5
+    }) {
+        CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
+
+        // Attempt to respect the original opacity value. Changes during animation will require a refresh
+        if (!this._originalColorAlpha) {
+            this._originalColorAlpha = this.coloration.uniforms.alpha;
+        }
+
+        this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
+        this.coloration.uniforms.alpha = this._wave.invertedSimplifiedValue * this._originalColorAlpha;
+    }
+
     blitzLightningSimple(dt, {
         speed = 5,
         intensity = 5
     }) {
-        // Rest at brightness 0
-        // Randomly flash to full alpha. opacity based on intensity, likelihood of flash on speed
         // Check flipped value at start
         let flipped = this._flipped;
+
         // Use binaryRandomInterval to flip on at random
         // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);

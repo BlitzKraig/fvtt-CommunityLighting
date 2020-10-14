@@ -8,9 +8,17 @@
         },
         "lights": [
             {
+                "translationName": "fade",
+                "name": "Fader",
+                "shaderName": "blitzFadeSimple",
+                "description": "A basic Lightning strike, randomly flashes on for a short time",
+                "intensityDescription": "Controls how bright the flash will be",
+                "speedDescription": "Controls how often the lightning will strike"
+            },
+            {
                 "translationName": "lightning",
                 "name": "Lightning",
-                "shaderName": "blitzLightning",
+                "shaderName": "blitzLightningSimple",
                 "description": "A basic Lightning strike, randomly flashes on for a short time",
                 "intensityDescription": "Controls how bright the flash will be",
                 "speedDescription": "Controls how often the lightning will strike"
