@@ -37,6 +37,7 @@ class CLAnimations {
         intensity = 5
     }) {
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
+        CLAnimationHelpers.addSimpleBlur(this, 20);
 
         // Attempt to respect the original opacity value. Changes during animation will require a refresh
         if (!this._originalColorAlpha) {

@@ -188,4 +188,17 @@ class CLAnimationHelpers {
 
         if (source._wave.a > (2 * Math.PI)) source._wave.pulseAngle = 0;
     }
+
+    static addSimpleBlur(source, strength = 10) {
+        if(!source.illumination._blurred){
+            let blurFilter = new PIXI.filters.BlurFilter(strength);
+            blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
+            if(source.illumination.filters){
+                source.illumination.filters.push(blurFilter);
+            } else {
+                source.illumination.filters = [blurFilter];
+            }
+            source.illumination._blurred = true;
+        }
+    }
 }
