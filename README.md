@@ -59,7 +59,7 @@ Launch Foundry
 
 Launch a world
 
-Open `Manage Modules`, and enable `CommunityLighting by Everybody`
+Open `Manage Modules`, and enable `CommunityLighting by Blitz`
 
 You are now ready to begin creating your lighting animations.
 Open the module directory in the editor of your choice, and follow the rest of the tutorial.
@@ -92,38 +92,43 @@ You can add your Discord tag if you want users to be able to contact you via dis
 }
 ```
 
-Next, you can define your lights. These definitions will be stored inside a `lights` array, and **must** at least contain a `name` and a `shaderName`.
+Next, you can define your lights. These definitions will be stored inside a `lights` array, and **must** at least contain a `name` and a `animationFunction`.
 
 The `name` will be displayed in the animation selection dropdown for an ambient light. Try to keep these unique if possible.
 
-The `shaderName` must match your animation function name, which we'll set up down below. It should consist of alphabetical characters only, preferably in `camelCase`.
+The `animationFunction` must match your animation function name, which we'll set up down below. It should consist of alphabetical characters only, preferably in `camelCase`.
 
-You can optionally add a `description`, `intensityDescription` and `speedDescription`, which will be displayed later, describing your light, what the intensity slider does, and what the speed slider does. These sliders are provided by Foundry core, and can be seen in the configuration panel for a light.
+You can optionally add a `description`, `intensityDescription` and `speedDescription`, which will be displayed in a later update, describing your light, what the intensity slider does, and what the speed slider does. These sliders are provided by Foundry core, and can be seen in the configuration panel for a light.
 
 Finally, you can add an optional `translationName`, which will allow all of these details to be translated using Foundrys translation features, which we'll cover later. The `translationName` should consist of alphabetical characters only, preferably in `camelCase`.
 
 ``` JSON
-"ExampleUser": {
-        "discord": "ExampleUser#00000",
-        "links": {
-            "github": "https://githubhere",
-            "twitter": "https://twitterhere",
-            "youtube": "https://youtubehere"
-        },
-         "lights": [
-            {
-                "translationName": "coolLight",
-                "name": "My Cool Light",
-                "shaderName": "coolLight",
-                "description": "A basic, but very cool light",
-                "intensityDescription": "Controls how radical the light will be!",
-                "speedDescription": "Controls how often the light will be radical."
+{
+    "Blitz": {
+        ...
+    },
+    "ExampleUser": {
+            "discord": "ExampleUser#00000",
+            "links": {
+                "github": "https://githubhere",
+                "twitter": "https://twitterhere",
+                "youtube": "https://youtubehere"
             },
-            {
-                "name": "My Less Cool Light",
-                "shaderName": "boringLight"
-            }
-         ]
+             "lights": [
+                {
+                    "translationName": "coolLight",
+                    "name": "My Cool Light",
+                    "animationFunction": "coolLight",
+                    "description": "A basic, but very cool light",
+                    "intensityDescription": "Controls how radical the light will be!",
+                    "speedDescription": "Controls how often the light will be radical."
+                },
+                {
+                    "name": "My Less Cool Light",
+                    "animationFunction": "boringLight"
+                }
+             ]
+    }
 }
 ```
 
@@ -132,15 +137,21 @@ Finally, you can add an optional `translationName`, which will allow all of thes
 
 Your JSON is complete! Make sure you have your commas in the right places, and you've not mangled any other author objects in the process.
 
+#### A note on Custom Shaders
+
+Custom Shaders are supported, but not yet documented.
+
+In order to use a custom shader, please see the `Custom Shader Example` light in lights.json. Add any shader code to `modules/shaders.js`
+
 ### 2. Javascript
 
 Once you've defined your lights in the JSON, we'll move on to actually building them.
 
 Open the `modules/animations.js` file.
 
-Scroll down to the bottom of the file and create your animation function, using the name you defined in `shaderName` in the JSON file.
+Scroll down to the bottom of the file and create your animation function, using the name you defined in `animationFunction` in the JSON file.
 
-> Try to keep all of your own lights together in the file. I'd suggest prefixing the `shaderName` and function with your author name until I implement some better organization.
+> Try to keep all of your own lights together in the file. I'd suggest prefixing the `animationFunction` and function with your author name until I implement some better organization.
 
 Your animation function needs to accept 2 arguments, an integer and an Object, which are passed in from Foundry core:
 
@@ -158,7 +169,7 @@ coolLight(dt, {
 }
 ```
 
-> **IMPORTANT** The function name (`coolLight`) matches the `shaderName` (`coolLight`) provided in the JSON in step 1
+> **IMPORTANT** The function name (`coolLight`) matches the `animationFunction` (`coolLight`) provided in the JSON in step 1
 
 The `= 5` on the `speed` and `intensity` declarations simply tell the function to default these variables to `5` if they are not provided by the caller.
 

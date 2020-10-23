@@ -31,10 +31,14 @@
                         "name": "Deep Torch",
                         "description": "A deeper, alternative version of the torch"
                     }
+                },
+                "misc": {
+                    "otherString":"Miscellaneous strings can go in the 'misc' object of your Author set"
                 }
             }
         },
         "settings": {
+            "title": "Community Lighting",
             "name": "Community Lighting Settings",
             "label": "Open Settings"
         }

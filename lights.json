@@ -2,15 +2,27 @@
     "Blitz": {
         "discord": "Blitz#6797",
         "links": {
-            "github": "https://githubhere",
-            "twitter": "https://twitterhere",
-            "youtube": "https://youtubehere"
+            "github": "https://github.com/BlitzKraig",
+            "twitter": "",
+            "youtube": ""
         },
         "lights": [
             {
+                "translationName": "shadertest",
+                "name": "Custom Shader Example",
+                "animationFunction": "foundryTime",
+                "shaders":{
+                    "coloration":"CustomWaveColorationShader",
+                    "illumination":"CustomWaveIlluminationShader"
+                },
+                "description": "A pulsing light using a custom shader",
+                "intensityDescription": "Controls how extreme the fade will be",
+                "speedDescription": "Controls how quickly the light will fade in and out"
+            },
+            {
                 "translationName": "fade",
                 "name": "Fader",
-                "shaderName": "blitzFadeSimple",
+                "animationFunction": "blitzFadeSimple",
                 "description": "A fading light",
                 "intensityDescription": "Controls how extreme the fade will be",
                 "speedDescription": "Controls how quickly the light will fade in and out"
@@ -18,7 +30,7 @@
             {
                 "translationName": "lightning",
                 "name": "Lightning",
-                "shaderName": "blitzLightningSimple",
+                "animationFunction": "blitzLightningSimple",
                 "description": "A basic Lightning strike, randomly flashes on for a short time",
                 "intensityDescription": "Controls how bright the flash will be",
                 "speedDescription": "Controls how often the lightning will strike"
@@ -26,7 +38,7 @@
             {
                 "translationName": "flash",
                 "name": "Simple Flash",
-                "shaderName": "blitzSimpleFlash",
+                "animationFunction": "blitzSimpleFlash",
                 "description": "A simple flashing light",
                 "intensityDescription": "Controls how dim the light will be when it flashes off",
                 "speedDescription": "Controls how often the light will flash"
@@ -34,7 +46,7 @@
             {
                 "translationName": "rgbflash",
                 "name": "RGB Flash",
-                "shaderName": "blitzRGBFlash",
+                "animationFunction": "blitzRGBFlash",
                 "description": "A simple flashing light, cycling between Red, Green and Blue",
                 "intensityDescription": "Controls how dim the light will be when it flashes off",
                 "speedDescription": "Controls how often the light will flash"
@@ -42,15 +54,21 @@
             {
                 "translationName": "policeflash",
                 "name": "Police Flash",
-                "shaderName": "blitzPoliceFlash",
+                "animationFunction": "blitzPoliceFlash",
                 "description": "A simple flashing light, cycling between Red, and Blue, mimicking police lights",
                 "intensityDescription": "Controls how dim the light will be when it flashes off",
                 "speedDescription": "Controls how often the light will flash"
             },
             {
                 "translationName": "torch",
-                "name": "Deep Torch",
-                "shaderName": "blitzTorch",
+                "name": "Alternate Torch",
+                "animationFunction": "blitzTorch",
+                "description": "A deeper, alternative version of the torch"
+            },
+            {
+                "translationName": "blurtorch",
+                "name": "Blurred Torch",
+                "animationFunction": "blitzTorchBlur",
                 "description": "A deeper, alternative version of the torch"
             }
         ]

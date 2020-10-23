@@ -1,10 +1,10 @@
 {
   "name": "CommunityLighting",
-  "title": "CommunityLighting by Everybody",
-  "description": "Community Lighting Module for ambient light animations, accepting PRs",
-  "version": "0.0.1",
+  "title": "CommunityLighting by Blitz",
+  "description": "Community Lighting Module for ambient light animations! Add your lights via GitHub PR, or just use the lights added by others in your games!",
+  "version": "0.1.0",
   "author": "Blitzkraig",
-  "scripts": ["./communitylighting.js", "./modules/communitylightingsettings.js", "./modules/animationmanager.js", "./modules/animationhelpers.js", "./modules/animations.js", "./dependencies/chroma.min.js", "./dependencies/pixi-filters.js"],
+  "scripts": ["./communitylighting.js", "./modules/communitylightingsettings.js", "./modules/animationmanager.js", "./modules/animationhelpers.js", "./modules/animations.js", "./modules/preanimations.js", "./modules/shaders.js", "./dependencies/chroma.min.js", "./dependencies/pixi-filters.js"],
   "styles": [],
   "packs": [],
   "languages": [
@@ -19,8 +19,8 @@
       "path": "lang/es.json"
     }
   ],
-  "minimumCoreVersion": "0.7.3",
-  "compatibleCoreVersion": "0.7.3",
+  "minimumCoreVersion": "0.7.5",
+  "compatibleCoreVersion": "0.7.5",
   "url": "https://github.com/BlitzKraig/fvtt-CommunityLighting",
   "manifest": "https://raw.githubusercontent.com/BlitzKraig/fvtt-CommunityLighting/master/module.json",
   "download": "https://github.com/BlitzKraig/fvtt-CommunityLighting/releases/download/latest/communitylighting-release.zip"

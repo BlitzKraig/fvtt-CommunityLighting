@@ -1,4 +1,4 @@
-name: AdvancedLightingToolkit Release
+name: CommunityLighting Release
 
 on: [push]
 
@@ -11,7 +11,7 @@ jobs:
       shell: bash
       id: get-version
       run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
-    - run: zip -r ./advancedlightingtoolkit-release.zip module.json advancedlightingtoolkit.js ColorTest.png dependencies/ modules/ icons/ packs/ css/
+    - run: zip -r ./communitylighting-release.zip module.json lights.json communitylighting.js dependencies/ lang/ modules/ templates/
     - name: Create Release
       id: create_versioned_release
       uses: ncipollo/release-action@v1
@@ -22,5 +22,5 @@ jobs:
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: './module.json,./advancedlightingtoolkit-release.zip'
+        artifacts: './module.json,./communitylighting-release.zip'
         tag: latest

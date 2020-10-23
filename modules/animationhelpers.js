@@ -1,11 +1,22 @@
 class CLAnimationHelpers {
 
     /**
+     * Finds and caches the AmbientLight placeable as _source
+     * 
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     */
+    static cachePlaceable(source){
+        if(!source._source){
+            source._source = canvas.lighting.placeables.find(t => t.source == source);
+        }
+    }
+
+    /**
      * Creates and flips a _flipped flag on your light source after maxTime divided by speed. Useful for flashing animations
      * Call at the start of your animation function.
      * 
      * Usage: After using this, check `this._flipped` in your animation function, and run different code based on the result
-     * @param {Object} source - The lighting container, 'this' from your animation function
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {int} speed - How quickly the phase will change. The speed variable, passed into your animation
      * @param {float} dt - DeltaTime since last update, in 1/60th of a second. The dt variable, passed into your animation
      * @param {int} [maxTime=50] - The time to remain in one phase, divided by your speed. Increase this to slow down your base timer, or decrease it to speed up
@@ -39,7 +50,7 @@ class CLAnimationHelpers {
      * Call at the start of your animation function.
      * 
      * Usage: After using this, check `this._phase` in your animation function, and run different code based on the result
-     * @param {Object} source - The lighting container, 'this' from your animation function
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {int} speed - How quickly the phase will change. The speed variable, passed into your animation
      * @param {float} dt - DeltaTime since last update, in 1/60th of a second. The dt variable, passed into your animation
      * @param {int} [maxTime=50] - The time to remain in one phase, divided by your speed. Increase this to slow down your base timer, or decrease it to speed up
@@ -75,7 +86,7 @@ class CLAnimationHelpers {
      * Call at the start of your animation function.
      * 
      * Usage: After using this, check `this._flipped` in your animation function, and run different code based on the result
-     * @param {Object} source - The lighting container, 'this' from your animation function
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {int} speed - The speed variable, passed into your animation
      * @param {float} dt - DeltaTime since last update, in 1/60th of a second. The dt variable, passed into your animation
      * @param {int} offPhaseDelay - How long to wait before attempting random flip. Higher values increase the 'off' time
@@ -125,7 +136,7 @@ class CLAnimationHelpers {
      * Call at the start of your animation function.
      * 
      * Usage: After using this, check `this._phase` in your animation function, and run different code based on the result
-     * @param {Object} source - The lighting container, 'this' from your animation function
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {int} speed - The speed variable, passed into your animation
      * @param {float} dt - DeltaTime since last update, in 1/60th of a second. The dt variable, passed into your animation
      * @param {int} offPhaseDelay - How long to wait before attempting random flip. Higher values increase the 'off' time
@@ -172,6 +183,15 @@ class CLAnimationHelpers {
         }
     }
 
+    /**
+     * Generate a cosine wave, based on Foundry Core animations, and attach it to the source under the _wave property
+     * _wave.simplifiedValue and _wave.invertedSimplifiedValue are floats between 0 and 1, and are useful for keeping things simple.
+     * @param {PointSource} source 
+     * @param {int} speed 
+     * @param {int} intensity 
+     * @param {float} dt 
+     * @param {int} speedMultiplier 
+     */
     static cosineWave(source, speed, intensity, dt, speedMultiplier = 1) {
         if(!source._wave){
             source._wave = {};
@@ -189,6 +209,12 @@ class CLAnimationHelpers {
         if (source._wave.a > (2 * Math.PI)) source._wave.pulseAngle = 0;
     }
 
+    /**
+     * Add a blur filter to the light
+     * This will be removed once Advanced Lighting Toolkit releases and enables this functionality for all lights
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     * @param {int} strength - Blur Strength
+     */
     static addSimpleBlur(source, strength = 10) {
         if(!source.illumination._blurred){
             let blurFilter = new PIXI.filters.BlurFilter(strength);
@@ -199,6 +225,49 @@ class CLAnimationHelpers {
                 source.illumination.filters = [blurFilter];
             }
             source.illumination._blurred = true;
+        }
+    }
+
+    /**
+     * Ensures the blur filter is removed if set
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     */
+    static removeBlur(source) {
+        if(source.illumination._blurred){
+            source.illumination.filters = []; // TODO: Check specifically for a blur filter if possible, and remove it
+            source.illumination._blurred = false;
+        }
+    }
+
+    /**
+     * Forces the Coloration uniforms to work by updating the AmbientLight source with a tintColor if it doesn't have one
+     * 
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     */
+    static forceColorationShader(source) {
+        CLAnimationHelpers.cachePlaceable(source);
+        if (source._source) {
+            if (!source._source.data.tintColor || source._source.data.tintColor === '#000000') {
+                source._source.update({
+                    tintColor: '#000001'
+                });
+            }
+        }
+    }
+
+    /**
+     * Call another animation within your animation
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     * @param {String} animationName - The function name of the animation to include
+     * @param {float} dt - The dt variable, passed into your animation
+     * @param {int} speed - The speed variable, passed into your animation
+     * @param {int} intensity - The intensity variable, passed into your animation
+     */
+    static includeAnimation(source, animationName, dt, speed, intensity) {
+        try{
+            CommunityLighting.animationManager.communityAnimations[animationName].call(source, dt, {speed, intensity});
+        } catch(e){
+            console.log(`Attempt to include animation ${animationName} failed`);
         }
     }
 }

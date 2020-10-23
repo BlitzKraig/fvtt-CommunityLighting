@@ -1,5 +1,13 @@
 class CLAnimations {
 
+    constructor(){
+        Hooks.on("initializePointSourceShaders", CLPreAnimation.onPointSourceInit);
+    }
+
+    /* Author: Global - Core helper - Normally used with custom shaders */
+    foundryTime = PointSource.prototype.animateTime
+    /* Global End */
+
     /* Author: Blitz */
 
     // Not in use: example only
@@ -37,7 +45,6 @@ class CLAnimations {
         intensity = 5
     }) {
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
-        CLAnimationHelpers.addSimpleBlur(this, 20);
 
         // Attempt to respect the original opacity value. Changes during animation will require a refresh
         if (!this._originalColorAlpha) {
@@ -52,9 +59,6 @@ class CLAnimations {
         speed = 5,
         intensity = 5
     }) {
-        // Check flipped value at start
-        let flipped = this._flipped;
-
         // Use binaryRandomInterval to flip on at random
         // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
@@ -69,57 +73,80 @@ class CLAnimations {
             this._originalColorAlpha = this.coloration.uniforms.alpha;
         }
 
-        // Only run if we have flipped this frame
-        if (flipped != this._flipped) {
-            if (this._flipped) {
-                // Set the alpha somewhere between 0.1 and 1, depending on intensity
-                let alpha = 0.1 * intensity;
-                this.illumination.uniforms.alpha = alpha;
-                this.coloration.uniforms.alpha = this._originalColorAlpha; // Don't bother multiplying this with alpha, users can use the opacity slider to set this directly, since the light only has 2 phases
-            } else {
-                // Set the alpha to zero
-                this.illumination.uniforms.alpha = 0;
-                this.coloration.uniforms.alpha = 0;
-            }
-        }   
+        if (this._flipped) {
+            // Set the alpha somewhere between 0.1 and 1, depending on intensity
+            let alpha = 0.1 * intensity;
+            this.illumination.uniforms.alpha = alpha;
+            this.coloration.uniforms.alpha = this._originalColorAlpha; // Don't bother multiplying this with alpha, users can use the opacity slider to set this directly, since the light only has 2 phases
+        } else {
+            // Set the alpha to zero
+            this.illumination.uniforms.alpha = 0;
+            this.coloration.uniforms.alpha = 0;
+        }
     }
 
+    // Based on the 0.7 beta torch
     blitzTorch(dt, {
         speed = 5,
         intensity = 5
     }) {
+
+        CLAnimationHelpers.binaryTimer(this, speed, dt);
+
         // Cause the torch to flicker by not changing every frame
         const t = Date.now();
         const targetMS = (0.5 + (Math.random() / 2)) * (10 - speed) * 16;
-        if ((t - this._animTime) < targetMS) return;
+
+        const iu = this.illumination.uniforms;
+        const cu = this.coloration.uniforms;
+        if ((t - this._animTime) < targetMS) {
+            var alteredValue = Math.random() * 0.001;
+            if (this._flipped) {
+                iu.ratio -= alteredValue;
+                iu.alpha -= alteredValue;
+                cu.alpha -= alteredValue;
+            } else {
+                iu.ratio += alteredValue;
+                iu.alpha += alteredValue;
+                cu.alpha += alteredValue;
+            }
+            return;
+        }
         this._animTime = t;
 
         // Evolve illumination
-        const iu = this.illumination.uniforms;
         iu.ratio = this._ar1(iu.ratio, {
             center: this.bright / this.dim,
             sigma: 0.002 * intensity
         });
         iu.alpha = this._ar1(iu.alpha, {
             center: 0.9,
-            sigma: 0.01 * intensity,
+            sigma: 0.005 * intensity,
             max: 1.0
         });
 
         // Evolve coloration
-        const cu = this.coloration.uniforms;
         cu.alpha = this._ar1(cu.alpha, {
             center: this.alpha,
-            sigma: 0.01 * intensity
+            sigma: 0.005 * intensity
         });
     }
+    
+    // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
+    blitzTorchBlur(dt, {
+        speed = 5,
+        intensity = 5
+    }) {
+        CLAnimationHelpers.addSimpleBlur(this, 20);
+        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, speed, intensity);
+    }
+
 
     blitzSimpleFlash(dt, {
         speed = 5,
         intensity = 5
     }) {
-        // Check flipped value at start
-        let flipped = this._flipped;
+
         CLAnimationHelpers.binaryTimer(this, speed, dt);
 
         var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
@@ -134,19 +161,16 @@ class CLAnimations {
             this._originalColorAlpha = this.coloration.uniforms.alpha;
         }
 
-        // Only run if we have flipped this frame
-        if (flipped != this._flipped) {
-            if (this._flipped) {
-                // Set the alpha somewhere between 0 and 0.9, depending on intensity
-                let alpha = 1 - (0.1 * intensity);
-                alpha = parseFloat(alpha.toFixed(2));
-                this.illumination.uniforms.alpha = alpha;
-                this.coloration.uniforms.alpha = minColorAlpha;
-            } else {
-                // Set the alpha to full
-                this.illumination.uniforms.alpha = 1;
-                this.coloration.uniforms.alpha = this._originalColorAlpha;
-            }
+        if (this._flipped) {
+            // Set the alpha somewhere between 0 and 0.9, depending on intensity
+            let alpha = 1 - (0.1 * intensity);
+            alpha = parseFloat(alpha.toFixed(2));
+            this.illumination.uniforms.alpha = alpha;
+            this.coloration.uniforms.alpha = minColorAlpha;
+        } else {
+            // Set the alpha to full
+            this.illumination.uniforms.alpha = 1;
+            this.coloration.uniforms.alpha = this._originalColorAlpha;
         }
     }
 
@@ -154,107 +178,65 @@ class CLAnimations {
         speed = 5,
         intensity = 5
     }) {
+        // Track _flipped value at start of cycle
         let flipped = this._flipped;
-        CLAnimationHelpers.binaryTimer(this, speed, dt);
 
-        var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
-        minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
+        CLAnimationHelpers.forceColorationShader(this);
+        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
 
-        // These two checks ensure we respect the Opacity slider in lights
-        if (!this._originalColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-        // If the opacity slider is changed, it will be an unexpected value. Reset our original tracker if so
-        if (this.coloration.uniforms.alpha != this._originalColorAlpha && this.coloration.uniforms.alpha != minColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-
-        // Only run if we have flipped this frame
-        if (flipped != this._flipped) {
-            if (this._flipped) {
-                // Set the alpha somewhere between 0 and 0.9, depending on intensity
-                let alpha = 1 - (0.1 * intensity);
-                alpha = parseFloat(alpha.toFixed(2));
-                this.illumination.uniforms.alpha = alpha;
-                this.coloration.uniforms.alpha = minColorAlpha;
-            } else {
-                let color = this.coloration.uniforms.color;
-                switch (color.toString()) {
-                    case "1,0,0":
-                        color = [0, 1, 0];
-                        break;
-                    case "0,1,0":
-
-                        color = [0, 0, 1];
-                        break;
-                    case "0,0,1":
-                        color = [1, 0, 0]
-                        break;
-
-                    default:
-                        color = [1, 0, 0];
-                        break;
-                }
-                this.coloration.uniforms.color = color;
-                // Set the alpha to full
-                this.illumination.uniforms.alpha = 1;
-                this.coloration.uniforms.alpha = this._originalColorAlpha;
+        // Only run if _flipped is false, and has changed in this cycle
+        if (flipped && !this._flipped) {
+            let color = this.coloration.uniforms.color;
+            switch (color.toString()) {
+                case "1,0,0":
+                    color = [0, 1, 0];
+                    break;
+                case "0,1,0":
+                    color = [0, 0, 1];
+                    break;
+                case "0,0,1":
+                    color = [1, 0, 0]
+                    break;
+                default:
+                    color = [1, 0, 0];
+                    break;
             }
+            this.coloration.uniforms.color = color;
         }
-
     }
 
     blitzPoliceFlash(dt, {
         speed = 5,
         intensity = 5
     }) {
+        // Track _flipped value at start of cycle
         let flipped = this._flipped;
-        CLAnimationHelpers.binaryTimer(this, speed, dt);
-
-        var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
-        minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
-
-        // These two checks ensure we respect the Opacity slider in lights
-        if (!this._originalColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-        // If the opacity slider is changed, it will be an unexpected value. Reset our original tracker if so
-        if (this.coloration.uniforms.alpha != this._originalColorAlpha && this.coloration.uniforms.alpha != minColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-
-        if (flipped != this._flipped) {
-            if (this._flipped) {
-                this.coloration.uniforms.ratio = 0.5
-                // Set the alpha somewhere between 0 and 0.9, depending on intensity
-                let alpha = 1 - (0.1 * intensity);
-                alpha = parseFloat(alpha.toFixed(2));
-                this.illumination.uniforms.alpha = alpha;
-                this.coloration.uniforms.alpha = minColorAlpha;
-            } else {
-                this.coloration.uniforms.ratio = 1;
-                let color = this.coloration.uniforms.color;
-                switch (color.toString()) {
-                    case "1,0,0":
-                        color = [0, 0, 1];
-                        break;
-                    case "0,0,1":
-                        color = [1, 0, 0]
-                        break;
-
-                    default:
-                        color = [1, 0, 0];
-                        break;
-                }
-                this.coloration.uniforms.color = color;
-                // Set the alpha to full
-                this.illumination.uniforms.alpha = 1;
-                this.coloration.uniforms.alpha = this._originalColorAlpha;
+        CLAnimationHelpers.forceColorationShader(this);
+        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
+        
+        // Only run if _flipped is false, and has changed in this cycle
+        if (flipped && !this._flipped) {
+            this.coloration.uniforms.ratio = 1;
+            let color = this.coloration.uniforms.color;
+            switch (color.toString()) {
+                case "1,0,0":
+                    color = [0, 0, 1];
+                    break;
+                case "0,0,1":
+                    color = [1, 0, 0]
+                    break;
+                default:
+                    color = [1, 0, 0];
+                    break;
             }
+            this.coloration.uniforms.color = color;
+            // Set the alpha to full
+            this.illumination.uniforms.alpha = 1;
+            this.coloration.uniforms.alpha = this._originalColorAlpha;
         }
     }
-    /* Blitz end */
 
-    // Your Lighting Code Here
 
+    // Your Lighting Code Here ⬆
+    // Precede your code with /* Author: Authorname */
 }
