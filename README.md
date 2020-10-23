@@ -5,7 +5,7 @@
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Q5Q01YIEJ)
 
-## Community Lighting for 0.7.3+
+## Community Lighting for 0.7.5+
 
 This module aims to provide a platform for FVTT users to create and publish their own lighting animations, and provide a good selection of community made lighting animations to GameMasters.
 
@@ -46,7 +46,7 @@ If you have any issues following this tutorial, feel free to ping me on Discord 
 
 If you already know how develop and edit modules, skip to the next section.
 
-> Prerequisites: Foundry 0.7.4+, Git
+> Prerequisites: Foundry 0.7.5+, Git
 
 To get started, first you'll need to clone this repo into your `modules` directory.
 
