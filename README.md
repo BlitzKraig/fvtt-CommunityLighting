@@ -141,7 +141,9 @@ Your JSON is complete! Make sure you have your commas in the right places, and y
 
 Custom Shaders are supported, but not yet documented.
 
-In order to use a custom shader, please see the `Custom Shader Example` light in lights.json. Add any shader code to `modules/shaders.js`
+In order to use a custom shader, please see the `Custom Shader Example` light under `Blitz` in lights.json.
+
+Add any shader code to `modules/shaders.js`
 
 ### 2. Javascript
 

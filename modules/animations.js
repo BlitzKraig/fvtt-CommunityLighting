@@ -40,16 +40,27 @@ class CLAnimations {
 
     }
 
+    blitzShaderTest(dt, {
+        speed = 5,
+        intensity = 5
+    }) {
+        CLAnimationHelpers.addIlluminationBlur(this, 20);
+        CLAnimationHelpers.addColorationBlur(this, 20, 10);
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity);
+        
+        CLAnimationHelpers.cosineWave(this, speed, 6, dt);
+        this.coloration.filters[0].blur = 100 * this._wave.simplifiedValue;
+        this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
+    }
+
     blitzFadeSimple(dt, {
         speed = 5,
         intensity = 5
     }) {
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
+        CLAnimationHelpers.cachePlaceable(this);
 
-        // Attempt to respect the original opacity value. Changes during animation will require a refresh
-        if (!this._originalColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
+        this._originalColorAlpha = this?._source.data.tintAlpha
 
         this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
         this.coloration.uniforms.alpha = this._wave.invertedSimplifiedValue * this._originalColorAlpha;
@@ -62,17 +73,10 @@ class CLAnimations {
         // Use binaryRandomInterval to flip on at random
         // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
+        CLAnimationHelpers.cachePlaceable(this);
 
-        // These two checks ensure we respect the Opacity slider in lights
-        if (!this._originalColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-        // If the opacity slider is changed, it will be an unexpected value. Reset our original tracker if so
-        // This animation sets the alpha to `0` at one point, so don't reset the tracker if alpha is 0
-        if (this.coloration.uniforms.alpha != this._originalColorAlpha && this.coloration.uniforms.alpha != 0) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-
+        this._originalColorAlpha = this?._source.data.tintAlpha
+        
         if (this._flipped) {
             // Set the alpha somewhere between 0.1 and 1, depending on intensity
             let alpha = 0.1 * intensity;
@@ -85,13 +89,39 @@ class CLAnimations {
         }
     }
 
+    blitzElectricFault(dt, {
+        speed = 5,
+        intensity = 5
+    }) {
+        // Use binaryRandomInterval to flip on at random
+        // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
+        CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
+        CLAnimationHelpers.cachePlaceable(this);
+
+        this._originalColorAlpha = this?._source.data.tintAlpha
+
+        if (this._flipped) {
+            // Set the alpha somewhere between 0 and 0.9, depending on intensity
+            let alpha = 1 - (0.1 * intensity);
+            this.illumination.uniforms.alpha = alpha;
+            this.coloration.uniforms.alpha = this._originalColorAlpha - (this._originalColorAlpha * (0.1 * intensity)); // Don't bother multiplying this with alpha, users can use the opacity slider to set this directly, since the light only has 2 phases
+        } else {
+            // Set the alpha to full
+            this.illumination.uniforms.alpha = 1;
+            this.coloration.uniforms.alpha = this._originalColorAlpha;
+        }
+    }
+
     // Based on the 0.7 beta torch
     blitzTorch(dt, {
         speed = 5,
         intensity = 5
     }) {
 
+        
         CLAnimationHelpers.binaryTimer(this, speed, dt);
+        CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
+        CLAnimationHelpers.cachePlaceable(this);
 
         // Cause the torch to flicker by not changing every frame
         const t = Date.now();
@@ -99,6 +129,9 @@ class CLAnimations {
 
         const iu = this.illumination.uniforms;
         const cu = this.coloration.uniforms;
+
+        this._originalColor = hexToRGB(this.color);
+
         if ((t - this._animTime) < targetMS) {
             var alteredValue = Math.random() * 0.001;
             if (this._flipped) {
@@ -130,6 +163,9 @@ class CLAnimations {
             center: this.alpha,
             sigma: 0.005 * intensity
         });
+        cu.color.forEach((channel, index) =>{
+            cu.color[index] = this._originalColor[index] + ((1 - this._originalColor[index]) * this._wave.simplifiedValue / 2); // Bring the color closer to bright white
+        });
     }
     
     // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
@@ -137,7 +173,7 @@ class CLAnimations {
         speed = 5,
         intensity = 5
     }) {
-        CLAnimationHelpers.addSimpleBlur(this, 20);
+        CLAnimationHelpers.addIlluminationBlur(this, 20);
         CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, speed, intensity);
     }
 
@@ -148,18 +184,12 @@ class CLAnimations {
     }) {
 
         CLAnimationHelpers.binaryTimer(this, speed, dt);
+        CLAnimationHelpers.cachePlaceable(this);
+
+        this._originalColorAlpha = this?._source.data.tintAlpha
 
         var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
         minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
-
-        // These two checks ensure we respect the Opacity slider in lights
-        if (!this._originalColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
-        // If the opacity slider is changed, it will be an unexpected value. Reset our original tracker if so
-        if (this.coloration.uniforms.alpha != this._originalColorAlpha && this.coloration.uniforms.alpha != minColorAlpha) {
-            this._originalColorAlpha = this.coloration.uniforms.alpha;
-        }
 
         if (this._flipped) {
             // Set the alpha somewhere between 0 and 0.9, depending on intensity

@@ -210,14 +210,14 @@ class CLAnimationHelpers {
     }
 
     /**
-     * Add a blur filter to the light
+     * Add a blur filter to the illumination shader
      * This will be removed once Advanced Lighting Toolkit releases and enables this functionality for all lights
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {int} strength - Blur Strength
      */
-    static addSimpleBlur(source, strength = 10) {
+    static addIlluminationBlur(source, strength = 10, quality = 4) {
         if(!source.illumination._blurred){
-            let blurFilter = new PIXI.filters.BlurFilter(strength);
+            let blurFilter = new PIXI.filters.BlurFilter(strength, quality)
             blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
             if(source.illumination.filters){
                 source.illumination.filters.push(blurFilter);
@@ -227,16 +227,54 @@ class CLAnimationHelpers {
             source.illumination._blurred = true;
         }
     }
+    /**
+     * Add a blur filter to the coloration shader
+     * This will be removed once Advanced Lighting Toolkit releases and enables this functionality for all lights
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     * @param {int} strength - Blur Strength
+     */
+    static addColorationBlur(source, strength = 10, quality = 4) {
+        if(!source.coloration._blurred){
+            let blurFilter = new PIXI.filters.BlurFilter(strength, quality);
+            blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
+            if(source.coloration.filters){
+                source.coloration.filters.push(blurFilter);
+            } else {
+                source.coloration.filters = [blurFilter];
+            }
+            source.coloration._blurred = true;
+        }
+    }
 
     /**
-     * Ensures the blur filter is removed if set
+     * Ensures the blur filter is removed from the illumination shader if set
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      */
-    static removeBlur(source) {
+    static removeIlluminationBlur(source) {
         if(source.illumination._blurred){
             source.illumination.filters = []; // TODO: Check specifically for a blur filter if possible, and remove it
             source.illumination._blurred = false;
         }
+    }
+
+    /**
+     * Ensures the blur filter is removed from the coloration shader if set
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     */
+    static removeColorationBlur(source) {
+        if(source.coloration._blurred) {
+            source.coloration.filters = []; // TODO: Check specifically for a blur filter if possible, and remove it
+            source.coloration._blurred = false;
+        }
+    }
+
+    /**
+     * Ensures the blur filter is removed from coloration & illumination if set
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     */
+    static removeBlur(source) {
+        CLAnimationHelpers.removeIlluminationBlur(source);
+        CLAnimationHelpers.removeColorationBlur(source);
     }
 
     /**

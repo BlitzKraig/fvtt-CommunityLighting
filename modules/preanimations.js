@@ -5,7 +5,8 @@ class CLPreAnimation {
 
         // Clear some common custom properties
         pointSource._flipped = undefined;
-        pointSouce._originalColorAlpha = undefined;
+        pointSource._originalColorAlpha = undefined;
+        pointSource._originalColor = undefined;
 
         // Before specific animation. Maybe useful in some very specific cases
         // switch (animationName) {

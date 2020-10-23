@@ -1,9 +1,11 @@
+// Example shaders - These will be replaced
+
 /**
  * Wave animation illumination shader
  * @implements {StandardIlluminationShader}
  * @author SecretFire
  */
-class CustomWaveIlluminationShader extends StandardIlluminationShader {
+class CLCustomWaveIlluminationShader extends StandardIlluminationShader {
     static fragmentShader = `
     precision mediump float;
     uniform float time;
@@ -34,7 +36,7 @@ class CustomWaveIlluminationShader extends StandardIlluminationShader {
    * @implements {StandardColorationShader}
    * @author SecretFire
    */
-  class CustomWaveColorationShader extends StandardColorationShader {
+  class CLCustomWaveColorationShader extends StandardColorationShader {
     static fragmentShader = `
     precision mediump float;
     uniform float time;
