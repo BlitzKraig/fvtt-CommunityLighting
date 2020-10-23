@@ -1,5 +1,3 @@
-# 0.0.1 - 2020/10/04
+# 0.1.0 - 2020/10/23
 
 * Initial Release!
-* Added lights based on my old Dancing Lights presets
-* Added community management gubbins, to allow others to add custom lighting
