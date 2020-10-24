@@ -1,13 +1,21 @@
 class CLAnimationHelpers {
 
     /**
-     * Finds and caches the AmbientLight placeable as _source
+     * Finds and caches the AmbientLight placeable as _source, and sets _placeableType to "AmbientLight" or "Token"
      * 
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      */
     static cachePlaceable(source){
         if(!source._source){
             source._source = canvas.lighting.placeables.find(t => t.source == source);
+            if(source._source){
+                source._placeableType = "AmbientLight";
+            } else {
+                source._source = canvas.tokens.placeables.find(t => t.light == source);
+                if(source._source){
+                    source._placeableType = "Token";
+                }
+            }
         }
     }
 

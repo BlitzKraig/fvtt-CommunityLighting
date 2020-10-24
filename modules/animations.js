@@ -1,6 +1,6 @@
 class CLAnimations {
 
-    constructor(){
+    constructor() {
         Hooks.on("initializePointSourceShaders", CLPreAnimation.onPointSourceInit);
     }
 
@@ -47,7 +47,7 @@ class CLAnimations {
         CLAnimationHelpers.addIlluminationBlur(this, 20);
         CLAnimationHelpers.addColorationBlur(this, 20, 10);
         CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity);
-        
+
         CLAnimationHelpers.cosineWave(this, speed, 6, dt);
         this.coloration.filters[0].blur = 100 * this._wave.simplifiedValue;
         this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
@@ -60,7 +60,11 @@ class CLAnimations {
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
         CLAnimationHelpers.cachePlaceable(this);
 
-        this._originalColorAlpha = this?._source.data.tintAlpha
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+        }
 
         this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
         this.coloration.uniforms.alpha = this._wave.invertedSimplifiedValue * this._originalColorAlpha;
@@ -75,8 +79,12 @@ class CLAnimations {
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
         CLAnimationHelpers.cachePlaceable(this);
 
-        this._originalColorAlpha = this?._source.data.tintAlpha
-        
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+        }
+
         if (this._flipped) {
             // Set the alpha somewhere between 0.1 and 1, depending on intensity
             let alpha = 0.1 * intensity;
@@ -98,7 +106,11 @@ class CLAnimations {
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
         CLAnimationHelpers.cachePlaceable(this);
 
-        this._originalColorAlpha = this?._source.data.tintAlpha
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+        }
 
         if (this._flipped) {
             // Set the alpha somewhere between 0 and 0.9, depending on intensity
@@ -118,7 +130,7 @@ class CLAnimations {
         intensity = 5
     }) {
 
-        
+
         CLAnimationHelpers.binaryTimer(this, speed, dt);
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
         CLAnimationHelpers.cachePlaceable(this);
@@ -163,11 +175,11 @@ class CLAnimations {
             center: this.alpha,
             sigma: 0.005 * intensity
         });
-        cu.color.forEach((channel, index) =>{
+        cu.color.forEach((channel, index) => {
             cu.color[index] = this._originalColor[index] + ((1 - this._originalColor[index]) * this._wave.simplifiedValue / 2); // Bring the color closer to bright white
         });
     }
-    
+
     // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
     blitzTorchBlur(dt, {
         speed = 5,
@@ -186,7 +198,11 @@ class CLAnimations {
         CLAnimationHelpers.binaryTimer(this, speed, dt);
         CLAnimationHelpers.cachePlaceable(this);
 
-        this._originalColorAlpha = this?._source.data.tintAlpha
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+        }
 
         var minColorAlpha = this._originalColorAlpha - (this._originalColorAlpha / 10 * intensity);
         minColorAlpha = parseFloat(minColorAlpha.toFixed(2));
@@ -243,7 +259,7 @@ class CLAnimations {
         let flipped = this._flipped;
         CLAnimationHelpers.forceColorationShader(this);
         CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
-        
+
         // Only run if _flipped is false, and has changed in this cycle
         if (flipped && !this._flipped) {
             this.coloration.uniforms.ratio = 1;
