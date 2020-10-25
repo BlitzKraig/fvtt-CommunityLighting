@@ -11,7 +11,7 @@ This module aims to provide a platform for FVTT users to create and publish thei
 
 ### Demo scene ft. custom shaders provided by SecretFire
 
-![Lighting Demo](docs\demo.gif)
+![Lighting Demo](./docs/demo.gif)
 
 ### For GameMasters
 
