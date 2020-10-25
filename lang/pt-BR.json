@@ -1,0 +1,46 @@
+{
+    "COMMUNITYLIGHTING": {
+        "authors": {
+            "Blitz": {
+                "lights": {
+                    "lightning": {
+                        "name": "Relampagos",
+                        "description": "Um relâmpago básico, pisca aleatoriamente por um curto período de tempo",
+                        "intensityDescription": "Controla o quão brilhante será o flash",
+                        "speedDescription": "Controla com que frequência o raio vai cair"
+                    },
+                    "flash": {
+                        "name": "Flash Simples",
+                        "description": "Uma simples luz intermitente",
+                        "intensityDescription": "Controla o quão fraca será a luz quando piscar",
+                        "speedDescription": "Controla a frequência com que a luz pisca"        
+                    },
+                    "rgbflash": {
+                        "name": "Flash RGB",
+                        "description": "Uma simples luz intermitente, alternando entre vermelho, verde e azul",
+                        "intensityDescription": "Controla o quão fraca será a luz quando piscar",
+                        "speedDescription": "Controla a frequência com que a luz pisca"
+                    },
+                    "policeflash": {
+                        "name": "Sirene de Policia",
+                        "description": "Uma simples luz intermitente, alternando entre o vermelho e o azul, imitando as luzes da polícia",
+                        "intensityDescription": "Controla o quão fraca será a luz quando piscar",
+                        "speedDescription": "Controla a frequência com que a luz pisca"
+                    },
+                    "torch": {
+                        "name": "Tocha Profunda",
+                        "description": "Uma versão alternativa mais profunda da tocha"
+                    }
+                },
+                "misc": {
+                    "otherString":"feiches diversos podem ir para o objeto 'misc' do seu conjunto Autor"
+                }
+            }
+        },
+        "settings": {
+            "title": "Iluminação Comunitária",
+            "name": "Configurações da Iluminação Comunitária",
+            "label": "Abrir Configurações"
+        }
+    }
+}
