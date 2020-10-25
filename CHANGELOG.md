@@ -6,6 +6,7 @@
 * Fixed forceColorationShader to prevent multiple updates
 * Added optional color to forceColorationShader helper
 * Updated readme, added demonstration gif
+* Added pt-BR translation from rinnocenti
 
 # 0.1.1 - 2020/10/24
 
