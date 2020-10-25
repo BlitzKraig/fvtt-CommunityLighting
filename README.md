@@ -9,6 +9,10 @@
 
 This module aims to provide a platform for FVTT users to create and publish their own lighting animations, and provide a good selection of community made lighting animations to GameMasters.
 
+### Demo scene ft. custom shaders provided by SecretFire
+
+![Lighting Demo](docs\demo.gif)
+
 ### For GameMasters
 
 Download this module and enjoy the new Lighting Animations provided!
@@ -139,11 +143,13 @@ Your JSON is complete! Make sure you have your commas in the right places, and y
 
 #### A note on Custom Shaders
 
-Custom Shaders are supported, but not yet documented.
+Custom Shaders are supported, but not yet fully documented.
 
 In order to use a custom shader, please see the `Custom Shader Example` light under `Blitz` in lights.json.
 
 Add any shader code to `modules/shaders.js`
+
+SecretFire has provided some exclusive shaders for CommunityLighting, and added some comments in `shaders.js`, which should help you get started if you want to dive into shader creation!
 
 ### 2. Javascript
 

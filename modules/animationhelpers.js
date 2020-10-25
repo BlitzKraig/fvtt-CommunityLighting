@@ -290,13 +290,14 @@ class CLAnimationHelpers {
      * 
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      */
-    static forceColorationShader(source) {
+    static async forceColorationShader(source, color = '#000001') {
         CLAnimationHelpers.cachePlaceable(source);
         if (source._source) {
             if (!source._source.data.tintColor || source._source.data.tintColor === '#000000') {
-                source._source.update({
-                    tintColor: '#000001'
-                });
+                await source._source.update({
+                    tintColor: color,
+                    lightAnimation: source.animation
+                }, {diff: false});
             }
         }
     }

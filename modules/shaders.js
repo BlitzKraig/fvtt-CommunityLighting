@@ -1,5 +1,3 @@
-// Example shaders - These will be replaced
-
 /**
  * Wave animation illumination shader
  * @implements {StandardIlluminationShader}
@@ -20,13 +18,13 @@ class CLCustomWaveIlluminationShader extends StandardIlluminationShader {
     const float MIN_INTENSITY = 0.8;
 
     // Normalized wave function to create the pulsating rings
-    // time allow the wave to move
+    // time allows the wave to move
     // dist modulated by intensity controls the wave length. 
     float wave(in float dist) {
         float sinWave = 0.5 * (sin(-time * 6.0 + dist * 10.0 * intensity) + 1.0);
 
         // Controls the max intensity and min intensity of the wave
-        // The wave is borned between these two values
+        // The wave is bound between these two values
         // Alternating between 0.8 and 1.1 (see const values)
         // the wave must be normalized before (values between 0 and 1)
         return ((MAX_INTENSITY - MIN_INTENSITY) * sinWave) + MIN_INTENSITY;
