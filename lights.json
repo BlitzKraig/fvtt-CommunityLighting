@@ -1,84 +1,117 @@
 {
-    "Blitz": {
-        "discord": "Blitz#6797",
-        "links": {
-            "github": "https://github.com/BlitzKraig",
-            "twitter": "",
-            "youtube": ""
+  "Blitz": {
+    "discord": "Blitz#6797",
+    "links": {
+      "github": "https://github.com/BlitzKraig",
+      "twitter": "",
+      "youtube": ""
+    },
+    "lights": [
+      {
+        "translationName": "shadertest",
+        "name": "Custom Shader Example",
+        "animationFunction": "blitzShaderTest",
+        "shaders":{
+          "coloration":"CLCustomWaveColorationShader",
+          "illumination":"CLCustomWaveIlluminationShader"
         },
-        "lights": [
-            {
-                "translationName": "shadertest",
-                "name": "Custom Shader Example",
-                "animationFunction": "blitzShaderTest",
-                "shaders":{
-                    "coloration":"CLCustomWaveColorationShader",
-                    "illumination":"CLCustomWaveIlluminationShader"
-                },
-                "description": "A pulsing light using a custom shader",
-                "intensityDescription": "Controls how extreme the fade will be",
-                "speedDescription": "Controls how quickly the light will fade in and out"
-            },
-            {
-                "translationName": "fade",
-                "name": "Fader",
-                "animationFunction": "blitzFadeSimple",
-                "description": "A fading light",
-                "intensityDescription": "Controls how extreme the fade will be",
-                "speedDescription": "Controls how quickly the light will fade in and out"
-            },
-            {
-                "translationName": "lightning",
-                "name": "Lightning",
-                "animationFunction": "blitzLightningSimple",
-                "description": "A basic Lightning strike, randomly flashes on for a short time",
-                "intensityDescription": "Controls how bright the flash will be",
-                "speedDescription": "Controls how often the lightning will strike"
-            },
-            {
-                "translationName": "electricFault",
-                "name": "Electric Fault",
-                "animationFunction": "blitzElectricFault",
-                "description": "A glitched electrical light. Dims slightly at random",
-                "intensityDescription": "Controls how much dimmer the light will get",
-                "speedDescription": "Controls how often the fault will occur"
-            },
-            {
-                "translationName": "flash",
-                "name": "Simple Flash",
-                "animationFunction": "blitzSimpleFlash",
-                "description": "A simple flashing light",
-                "intensityDescription": "Controls how dim the light will be when it flashes off",
-                "speedDescription": "Controls how often the light will flash"
-            },
-            {
-                "translationName": "rgbflash",
-                "name": "RGB Flash",
-                "animationFunction": "blitzRGBFlash",
-                "description": "A simple flashing light, cycling between Red, Green and Blue",
-                "intensityDescription": "Controls how dim the light will be when it flashes off",
-                "speedDescription": "Controls how often the light will flash"
-            },
-            {
-                "translationName": "policeflash",
-                "name": "Police Flash",
-                "animationFunction": "blitzPoliceFlash",
-                "description": "A simple flashing light, cycling between Red, and Blue, mimicking police lights",
-                "intensityDescription": "Controls how dim the light will be when it flashes off",
-                "speedDescription": "Controls how often the light will flash"
-            },
-            {
-                "translationName": "torch",
-                "name": "Alternate Torch",
-                "animationFunction": "blitzTorch",
-                "description": "A deeper, alternative version of the torch"
-            },
-            {
-                "translationName": "blurtorch",
-                "name": "Blurred Torch",
-                "animationFunction": "blitzTorchBlur",
-                "description": "A deeper, alternative version of the torch"
-            }
-        ]
-    }
+        "description": "A pulsing light using a custom shader",
+        "intensityDescription": "Controls how extreme the fade will be",
+        "speedDescription": "Controls how quickly the light will fade in and out"
+      },
+      {
+        "translationName": "fade",
+        "name": "Fader",
+        "animationFunction": "blitzFadeSimple",
+        "description": "A fading light",
+        "intensityDescription": "Controls how extreme the fade will be",
+        "speedDescription": "Controls how quickly the light will fade in and out"
+      },
+      {
+        "translationName": "lightning",
+        "name": "Lightning",
+        "animationFunction": "blitzLightningSimple",
+        "description": "A basic Lightning strike, randomly flashes on for a short time",
+        "intensityDescription": "Controls how bright the flash will be",
+        "speedDescription": "Controls how often the lightning will strike"
+      },
+      {
+        "translationName": "electricFault",
+        "name": "Electric Fault",
+        "animationFunction": "blitzElectricFault",
+        "description": "A glitched electrical light. Dims slightly at random",
+        "intensityDescription": "Controls how much dimmer the light will get",
+        "speedDescription": "Controls how often the fault will occur"
+      },
+      {
+        "translationName": "flash",
+        "name": "Simple Flash",
+        "animationFunction": "blitzSimpleFlash",
+        "description": "A simple flashing light",
+        "intensityDescription": "Controls how dim the light will be when it flashes off",
+        "speedDescription": "Controls how often the light will flash"
+      },
+      {
+        "translationName": "rgbflash",
+        "name": "RGB Flash",
+        "animationFunction": "blitzRGBFlash",
+        "description": "A simple flashing light, cycling between Red, Green and Blue",
+        "intensityDescription": "Controls how dim the light will be when it flashes off",
+        "speedDescription": "Controls how often the light will flash"
+      },
+      {
+        "translationName": "policeflash",
+        "name": "Police Flash",
+        "animationFunction": "blitzPoliceFlash",
+        "description": "A simple flashing light, cycling between Red, and Blue, mimicking police lights",
+        "intensityDescription": "Controls how dim the light will be when it flashes off",
+        "speedDescription": "Controls how often the light will flash"
+      },
+      {
+        "translationName": "torch",
+        "name": "Alternate Torch",
+        "animationFunction": "blitzTorch",
+        "description": "A deeper, alternative version of the torch"
+      },
+      {
+        "translationName": "blurtorch",
+        "name": "Blurred Torch",
+        "animationFunction": "blitzTorchBlur",
+        "description": "A deeper, alternative version of the torch"
+      }
+    ]
+  },
+  "SecretFire": {
+    "discord": "SecretFire#4843",
+    "links": {
+      "github": "https://github.com/Feu-Secret",
+      "twitter": "",
+      "youtube": ""
+    },
+    "lights": [
+      {
+        "translationName": "gridForceField",
+        "name": "Grid Force-Field",
+        "animationFunction": "secretFireAnimateTime",
+        "shaders": {
+          "coloration": "CLForceGridColorationShader"
+        },
+        "description": "A pulsating grid force-field",
+        "intensityDescription": "Controls the pulsating power",
+        "speedDescription": "Controls how quickly the grid is pulsating"
+      },
+      {
+        "translationName": "smokePatch",
+        "name": "Smoke Patch",
+        "animationFunction": "secretFireAnimateTime",
+        "shaders": {
+          "coloration": "CLSmokePatchColorationShader",
+          "illumination": "CLSmokePatchIlluminationShader"
+        },
+        "description": "A billow of smoke",
+        "intensityDescription": "Controls the intensity of the smoke",
+        "speedDescription": "Controls how quickly the smoke swirls"
+      }
+    ]
+  }
 }
