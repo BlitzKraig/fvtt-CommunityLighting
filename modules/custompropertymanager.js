@@ -111,7 +111,7 @@ class CLCustomPropertyManager {
                     $(
                     `<div class="form-group community-lighting-custom-property">
                         <label>${customPropertyObject.title}</label>
-                        <input type="checkbox" name="lightAnimation.${customPropertyObject.varName}" data-dtype="Boolean" checked="${currentValue}">
+                        <input type="checkbox" name="lightAnimation.${customPropertyObject.varName}" data-dtype="Boolean" ${currentValue?"checked":""}>
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -125,7 +125,7 @@ class CLCustomPropertyManager {
                 case "select":
                     var options = '';
                     customPropertyObject.options.forEach(option => {
-                        options+=`<option value="${option.value}">${option.label}</option>`;
+                        options+=`<option value="${option.value}"${option.value == currentValue?"selected":""}>${option.label}</option>`;
                     })
                     var customPropertyEl = $(
                     `<div class="form-group community-lighting-custom-property">
