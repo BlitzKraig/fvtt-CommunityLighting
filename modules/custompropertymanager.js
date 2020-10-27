@@ -2,7 +2,7 @@ class CLCustomPropertyManager {
 
     static async saveCustomProperties(object, changes) {
         var customProperties = JSON.parse(JSON.stringify(changes.lightAnimation)); // Clone changes
-    
+
         // Ensure we are not saving the data core stores in the db
         Object.keys(customProperties).forEach(key=>{
             if(key == "type" || key == "intensity" || key == "speed"){
@@ -14,6 +14,9 @@ class CLCustomPropertyManager {
             await placeable.unsetFlag("CommunityLighting", "customProperties"); // Remove flag if no custom vars
         } else {
             await placeable.setFlag("CommunityLighting", "customProperties", customProperties); // Set flag with custom vars
+        }
+        if(object.actorId){
+            CLCustomPropertyManager.loadCustomProperties(canvas.tokens.get(object._id).light);
         }
     }
 
@@ -33,9 +36,9 @@ class CLCustomPropertyManager {
         if(customProperties){
             // Add customProperties from the flag into the lightAnimation object
             mergeObject(pointSource._source.data.lightAnimation, customProperties)
-        if(customVars){
-            // Add customVars from the flag into the lightAnimation object
-            mergeObject(pointSource._source.data.lightAnimation, customVars)
+            if(pointSource._source.actor){
+                pointSource._source.update({lightAnimation: pointSource._source.data.lightAnimation}, {diff:false, loadedProperty:true})
+            }
         }
 
     }
@@ -66,7 +69,7 @@ class CLCustomPropertyManager {
             } else {
                 if (objectConfig.object.source.animation) {
                     currentValue = objectConfig.object.source.animation[customPropertyObject.varName] || customPropertyObject.default;
-            } else {
+                } else {
                     currentValue = customPropertyObject.default;
                 }
             }
@@ -181,7 +184,7 @@ class CLCustomPropertyManager {
             }
         });
     }
-    
+
     static onUpdateLightOrToken(scene, object, changes, diff){
         if(changes.lightAnimation && !diff.loadedProperty && !diff.colorForce){ // Only attempt to save if the lightAnimation prop has changed
             CLCustomPropertyManager.saveCustomProperties(object, changes);
