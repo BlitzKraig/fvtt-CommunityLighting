@@ -267,17 +267,33 @@ class CLAnimationHelpers {
     }
 
     /**
-     * Forces the Coloration uniforms to work by updating the AmbientLight source with a tintColor if it doesn't have one
+     * Forces the Coloration uniforms to work by updating the AmbientLight or Token source with a tintColor if it doesn't have one
      * 
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      */
     static async forceColorationShader(source, color = '#000001') {
         if (source._source) {
-            if (!source._source.data.tintColor || source._source.data.tintColor === '#000000') {
-                await source._source.update({
-                    tintColor: color,
-                    lightAnimation: source.animation
-                }, {diff: false});
+            var isToken = source._source.light ? true : false;
+            if (isToken) {
+                if (!source._source.data.lightColor || source._source.data.lightColor === '#000000') {
+                    await source._source.update({
+                        lightColor: color,
+                        lightAnimation: source.animation
+                    }, {
+                        diff: false,
+                        colorForce: true
+                    });
+                }
+            } else {
+                if (!source._source.data.tintColor || source._source.data.tintColor === '#000000') {
+                    await source._source.update({
+                        tintColor: color,
+                        lightAnimation: source.animation
+                    }, {
+                        diff: false,
+                        colorForce: true
+                    });
+                }
             }
         }
     }
