@@ -3,6 +3,8 @@ class CLAnimationManager {
 
     constructor() {
         this.communityAnimations = new CLAnimations();
+        Hooks.on("renderTokenConfig", CLCustomPropertyManager.onRenderTokenOrLightConfig);
+        Hooks.on("renderLightConfig", CLCustomPropertyManager.onRenderTokenOrLightConfig);
     }
 
     async addAnimations(animations) {
@@ -30,12 +32,9 @@ class CLAnimationManager {
         let animations = {};
         await
         function () {
-            animations[`CommunityLightingSeparatorBaseStart`] = {
-                label: `==== ⬇ CommunityLighting ⬇ ====`
-            }
             for (var author in customLightsObject) {
-                animations[`${author}CommunityLightingSeparator`] = {
-                    label: `---- ⬇ Author: ${author} ⬇ ----`
+                animations[`${author}CommunityLightingSeparatorStart`] = {
+                    label: `${author}`
                 }
                 let lightsArray = customLightsObject[author].lights;
                 lightsArray?.forEach(light => {
@@ -45,12 +44,15 @@ class CLAnimationManager {
                         illuminationShader: CLAnimationManager.getShaderClass(light.shaders?.illumination) || StandardIlluminationShader,
                         colorationShader: CLAnimationManager.getShaderClass(light.shaders?.coloration) || StandardColorationShader
                     }
+                    if(light.customProperties){
+                        animations[`${author}${light.name}`].customProperties = light.customProperties;
+                    }
                 });
+                animations[`${author}CommunityLightingSeparatorEnd`] = {
+                    label: `${author}`
+                }
             }
         }.call(this);
-        animations[`CommunityLightingSeparatorBaseEnd`] = {
-            label: `==== ⬆ CommunityLighting ⬆ ====`
-        }
         await this.addAnimations(animations);
     }
 
