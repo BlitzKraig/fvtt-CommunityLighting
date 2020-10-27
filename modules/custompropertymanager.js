@@ -1,5 +1,44 @@
 class CLCustomPropertyManager {
 
+    
+
+    static saveCustomVars(object, changes) {
+        var customVars = JSON.parse(JSON.stringify(changes.lightAnimation)); // Clone changes
+
+        // Ensure we are not saving the data core stores in the db
+        Object.keys(customVars).forEach(key=>{
+            if(key == "type" || key == "intensity" || key == "speed"){
+                delete customVars[key];
+            }               
+        });
+
+        if(!customVars || Object.getOwnPropertyNames(customVars).length == 0){
+            canvas.lighting.get(object._id).unsetFlag("CommunityLighting", "customVars"); // Remove flag if no custom vars
+        } else {
+            canvas.lighting.get(object._id).setFlag("CommunityLighting", "customVars", customVars); // Set flag with custom vars
+        }
+    }
+
+    static loadCustomVars(pointSource) {
+        if(!pointSource._source){
+            return; // Source is not cached yet, return
+        }
+        var customVars = pointSource._source.getFlag("CommunityLighting", "customVars");
+
+        // Remove any customVars from the current lightAnimation object
+        Object.keys(pointSource._source.data.lightAnimation).forEach(key=>{
+            if(key != "type" && key != "intensity" && key != "speed"){
+                delete pointSource._source.data.lightAnimation[key];
+            }               
+        });
+
+        if(customVars){
+            // Add customVars from the flag into the lightAnimation object
+            mergeObject(pointSource._source.data.lightAnimation, customVars)
+        }
+
+    }
+
     static async removeAllCustomProperties(html) {
         html.find(".community-lighting-custom-property").hide('normal', function () {
             $(this).remove();
@@ -8,36 +47,10 @@ class CLCustomPropertyManager {
 
     static async addCustomProperties(objectConfig, customPropertySibling, customAnimationProperties, animateShow = false) {
 
-        // TODO: Save custom values to flags
-        // Grab custom values from flags, and update the lights with them
-        // This ^ needs to be done before now. Flag values should be loaded and added to lights without opening the config
-
-        // Foreach light, if light.getFlag("CommunityLighting", "customProps") mergeObject(light.animation, customProps) // Something like that...
-
         var isToken = false;
         if (objectConfig.object.light) {
             isToken = true;
         }
-
-        // Delete unused props when changing type. Maybe not needed, and needs fixed
-        // if(isToken){
-        //     Object.keys(objectConfig.object.light.animation).forEach(key=>{
-        //         if(key != "type" && key != "intensity" && key != "speed"){
-        //             if(!customAnimationProperties.find(prop=>{return prop.varName == key})){
-        //                 delete objectConfig.object.light.animation[key];
-        //             }
-        //         }
-        //     });
-        // }else{
-        //     Object.keys(objectConfig.object.source.animation).forEach(key=>{
-        //         if(key != "type" && key != "intensity" && key != "speed"){
-        //             if(!customAnimationProperties.find(prop=>{return prop.varName == key})){
-        //                 delete objectConfig.object.source.animation[key];
-        //             }
-        //         }
-        //     });
-        // }
-
 
         var customAnimationPropertiesClone = JSON.parse(JSON.stringify(customAnimationProperties)); // Clone object so we can reverse it without reversing original
         
@@ -157,6 +170,12 @@ class CLCustomPropertyManager {
                 CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, CONFIG.Canvas.lightAnimations[this.value].customProperties, true);
             }
         });
+    }
+    
+    static onUpdateLightOrToken(scene, object, changes){
+        if(changes.lightAnimation){ // Only attempt to save if the lightAnimation prop has changed
+            CLCustomPropertyManager.saveCustomVars(object, changes);
+        }
     }
 
 }

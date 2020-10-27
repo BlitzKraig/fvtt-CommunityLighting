@@ -24,6 +24,10 @@ class CLPreAnimation {
         CLAnimationHelpers.removeBlur(pointSource); // Ensure blur is removed. Animations using blur will re-add it if they need it
         CLPreAnimation.cachePlaceable(pointSource); // Find and cache AmbientLight or Token placeable as _source
 
+        if (animationName) { // Only bother loading vars if we have an animation on this pointSource
+            CLCustomPropertyManager.loadCustomVars(pointSource);
+        }
+
         // Clear some common custom properties
         pointSource._flipped = undefined;
         pointSource._originalColorAlpha = undefined;
@@ -32,9 +36,7 @@ class CLPreAnimation {
         // Before specific animation. Maybe useful in some very specific cases
         // switch (animationName) {
         //     case "myAnimation":
-                
         //         break;
-        
         //     default:
         //         break;
         // }

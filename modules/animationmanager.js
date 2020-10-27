@@ -5,6 +5,8 @@ class CLAnimationManager {
         this.communityAnimations = new CLAnimations();
         Hooks.on("renderTokenConfig", CLCustomPropertyManager.onRenderTokenOrLightConfig);
         Hooks.on("renderLightConfig", CLCustomPropertyManager.onRenderTokenOrLightConfig);
+        Hooks.on("updateAmbientLight", CLCustomPropertyManager.onUpdateLightOrToken);
+        Hooks.on("updateToken", CLCustomPropertyManager.onUpdateLightOrToken);
     }
 
     async addAnimations(animations) {
