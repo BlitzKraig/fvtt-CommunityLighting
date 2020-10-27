@@ -32,7 +32,6 @@ class CLAnimations {
         intensity = 5
     }) {
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
-        CLAnimationHelpers.cachePlaceable(this);
 
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -51,7 +50,6 @@ class CLAnimations {
         // Use binaryRandomInterval to flip on at random
         // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
-        CLAnimationHelpers.cachePlaceable(this);
 
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -78,7 +76,6 @@ class CLAnimations {
         // Use binaryRandomInterval to flip on at random
         // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
-        CLAnimationHelpers.cachePlaceable(this);
 
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -107,7 +104,6 @@ class CLAnimations {
 
         CLAnimationHelpers.binaryTimer(this, speed, dt);
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
-        CLAnimationHelpers.cachePlaceable(this);
 
         // Cause the torch to flicker by not changing every frame
         const t = Date.now();
@@ -170,7 +166,6 @@ class CLAnimations {
     }) {
 
         CLAnimationHelpers.binaryTimer(this, speed, dt);
-        CLAnimationHelpers.cachePlaceable(this);
 
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;

@@ -1,25 +1,6 @@
 class CLAnimationHelpers {
 
     /**
-     * Finds and caches the AmbientLight placeable as _source, and sets _placeableType to "AmbientLight" or "Token"
-     * 
-     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
-     */
-    static cachePlaceable(source){
-        if(!source._source){
-            source._source = canvas.lighting.placeables.find(t => t.source == source);
-            if(source._source){
-                source._placeableType = "AmbientLight";
-            } else {
-                source._source = canvas.tokens.placeables.find(t => t.light == source);
-                if(source._source){
-                    source._placeableType = "Token";
-                }
-            }
-        }
-    }
-
-    /**
      * Creates and flips a _flipped flag on your light source after maxTime divided by speed. Useful for flashing animations
      * Call at the start of your animation function.
      * 
@@ -291,7 +272,6 @@ class CLAnimationHelpers {
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      */
     static async forceColorationShader(source, color = '#000001') {
-        CLAnimationHelpers.cachePlaceable(source);
         if (source._source) {
             if (!source._source.data.tintColor || source._source.data.tintColor === '#000000') {
                 await source._source.update({
