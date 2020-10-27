@@ -1,3 +1,7 @@
+// Setup intellisense for deps
+/// <reference path="../dependencies/chroma.min.js"/>
+/// <reference path="../dependencies/pixi-filters.js"/>
+
 class CLAnimations {
 
     constructor() {
