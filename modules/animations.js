@@ -14,36 +14,6 @@ class CLAnimations {
 
     /* Author: Blitz */
 
-    // Not in use: example only
-    blitzPulseTest(dt, {
-        speed = 5,
-        intensity = 5
-    }) {
-
-        // Cosine wave
-        const di = 1;
-        const ms = 30000 / speed;
-        const da = (2 * Math.PI) * ((60 * dt) / ms);
-        const a = this._pulseAngle = (this._pulseAngle ?? 0) + da;
-        const delta = (Math.cos(a) + 1) / 2;
-
-        // Evolve illumination
-        const iu = this.illumination.uniforms;
-        const r = this.bright / this.dim;
-        const min = (1 - di) * r;
-        iu.ratio = (delta * min) + ((1 - delta) * r);
-        iu.alpha = (delta * 0.75) + (1 - delta);
-
-        // Evolve coloration
-        const cu = this.coloration.uniforms;
-        const cMin = this.alpha / 2;
-        cu.alpha = (delta * cMin) + ((1 - delta) * this.alpha);
-
-        // Switch direction
-        if (a > (2 * Math.PI)) this._pulseAngle = 0;
-
-    }
-
     blitzShaderTest(dt, {
         speed = 5,
         intensity = 5

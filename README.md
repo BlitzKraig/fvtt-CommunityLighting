@@ -203,7 +203,7 @@ Some useful uniforms:
 
 > You can change a lot more than just the shader uniforms, but you'll have to experiment to see exactly what you can do.
 
-Keep in mind that to 'animate' a light, you will need to alter these values based on something else (usually time, often using a wave function). You can check `blitzPulseTest` inside `animations.js` to see how the pulse animation works, based on Pulse in Foundry Core.
+Keep in mind that to 'animate' a light, you will need to alter these values based on something else (usually time, often using a wave function). You can use any of the current animations inside `animations.js` as a starting point.
 
 You can also use the static methods in `CLAnimationHelpers` to help simplify some of the process. See `blitzSimpleFlash` for a fairly easy example, using the `binaryTimer` helper to flip a light between two states at regular intervals.
 
