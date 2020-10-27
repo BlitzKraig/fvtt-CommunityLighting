@@ -70,13 +70,31 @@
                 "translationName": "torch",
                 "name": "Alternate Torch",
                 "animationFunction": "blitzTorch",
-                "description": "A deeper, alternative version of the torch"
+                "description": "A deeper, alternative version of the torch",
+                "customProperties":[{
+                    "title": "Ratio Damper",
+                    "varName": "ratioDamper",
+                    "type": "range",
+                    "min": 1,
+                    "max": 50,
+                    "step": 1,
+                    "default": 1
+                }]
             },
             {
                 "translationName": "blurtorch",
                 "name": "Blurred Torch",
                 "animationFunction": "blitzTorchBlur",
-                "description": "A deeper, alternative version of the torch"
+                "description": "A deeper, alternative version of the torch",
+                "customProperties":[{
+                    "title": "Ratio Damper",
+                    "varName": "ratioDamper",
+                    "type": "range",
+                    "min": 1,
+                    "max": 50,
+                    "step": 1,
+                    "default": 1
+                }]
             },
             {
                 "name": "Grid Force-Field Colorshift",

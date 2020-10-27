@@ -98,10 +98,10 @@ class CLAnimations {
     // Based on the 0.7 beta torch
     blitzTorch(dt, {
         speed = 5,
-        intensity = 5
+        intensity = 5,
+        ratioDamper = 1
     }) {
-
-
+        
         CLAnimationHelpers.binaryTimer(this, speed, dt);
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
 
@@ -132,7 +132,7 @@ class CLAnimations {
         // Evolve illumination
         iu.ratio = this._ar1(iu.ratio, {
             center: this.bright / this.dim,
-            sigma: 0.002 * intensity
+            sigma: (0.002 * intensity) / ratioDamper
         });
         iu.alpha = this._ar1(iu.alpha, {
             center: 0.9,
@@ -153,10 +153,11 @@ class CLAnimations {
     // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
     blitzTorchBlur(dt, {
         speed = 5,
-        intensity = 5
+        intensity = 5,
+        ratioDamper = 1
     }) {
         CLAnimationHelpers.addIlluminationBlur(this, 20);
-        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, speed, intensity);
+        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, ratioDamper});
     }
 
 
