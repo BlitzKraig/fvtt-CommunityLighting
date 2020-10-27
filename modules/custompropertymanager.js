@@ -1,37 +1,38 @@
 class CLCustomPropertyManager {
 
+    static async saveCustomProperties(object, changes) {
+        var customProperties = JSON.parse(JSON.stringify(changes.lightAnimation)); // Clone changes
     
-
-    static saveCustomVars(object, changes) {
-        var customVars = JSON.parse(JSON.stringify(changes.lightAnimation)); // Clone changes
-
         // Ensure we are not saving the data core stores in the db
-        Object.keys(customVars).forEach(key=>{
+        Object.keys(customProperties).forEach(key=>{
             if(key == "type" || key == "intensity" || key == "speed"){
-                delete customVars[key];
+                delete customProperties[key];
             }               
         });
-
-        if(!customVars || Object.getOwnPropertyNames(customVars).length == 0){
-            canvas.lighting.get(object._id).unsetFlag("CommunityLighting", "customVars"); // Remove flag if no custom vars
+        var placeable = canvas.lighting.get(object._id) || canvas.tokens.get(object._id);
+        if(!customProperties || Object.getOwnPropertyNames(customProperties).length == 0){
+            await placeable.unsetFlag("CommunityLighting", "customProperties"); // Remove flag if no custom vars
         } else {
-            canvas.lighting.get(object._id).setFlag("CommunityLighting", "customVars", customVars); // Set flag with custom vars
+            await placeable.setFlag("CommunityLighting", "customProperties", customProperties); // Set flag with custom vars
         }
     }
 
-    static loadCustomVars(pointSource) {
+    static loadCustomProperties(pointSource) {
         if(!pointSource._source){
             return; // Source is not cached yet, return
         }
-        var customVars = pointSource._source.getFlag("CommunityLighting", "customVars");
+        var customProperties = pointSource._source.getFlag("CommunityLighting", "customProperties");
 
-        // Remove any customVars from the current lightAnimation object
+        // Remove any customProperties from the current lightAnimation object
         Object.keys(pointSource._source.data.lightAnimation).forEach(key=>{
             if(key != "type" && key != "intensity" && key != "speed"){
                 delete pointSource._source.data.lightAnimation[key];
             }               
         });
 
+        if(customProperties){
+            // Add customProperties from the flag into the lightAnimation object
+            mergeObject(pointSource._source.data.lightAnimation, customProperties)
         if(customVars){
             // Add customVars from the flag into the lightAnimation object
             mergeObject(pointSource._source.data.lightAnimation, customVars)
@@ -55,10 +56,19 @@ class CLCustomPropertyManager {
         var customAnimationPropertiesClone = JSON.parse(JSON.stringify(customAnimationProperties)); // Clone object so we can reverse it without reversing original
         
         customAnimationPropertiesClone.reverse().forEach((customPropertyObject) => {
+            var currentValue;
             if (isToken) {
-                var currentValue = objectConfig.object.light.animation[customPropertyObject.varName] || customPropertyObject.default;
+                if (objectConfig.object.light.animation) {
+                    currentValue = objectConfig.object.light.animation[customPropertyObject.varName] || customPropertyObject.default;
+                } else {
+                    currentValue = customPropertyObject.default;
+                }
             } else {
-                var currentValue = objectConfig.object.source.animation[customPropertyObject.varName] || customPropertyObject.default;
+                if (objectConfig.object.source.animation) {
+                    currentValue = objectConfig.object.source.animation[customPropertyObject.varName] || customPropertyObject.default;
+            } else {
+                    currentValue = customPropertyObject.default;
+                }
             }
             switch (customPropertyObject.type) {
                 case "color":
@@ -172,9 +182,9 @@ class CLCustomPropertyManager {
         });
     }
     
-    static onUpdateLightOrToken(scene, object, changes){
-        if(changes.lightAnimation){ // Only attempt to save if the lightAnimation prop has changed
-            CLCustomPropertyManager.saveCustomVars(object, changes);
+    static onUpdateLightOrToken(scene, object, changes, diff){
+        if(changes.lightAnimation && !diff.loadedProperty && !diff.colorForce){ // Only attempt to save if the lightAnimation prop has changed
+            CLCustomPropertyManager.saveCustomProperties(object, changes);
         }
     }
 

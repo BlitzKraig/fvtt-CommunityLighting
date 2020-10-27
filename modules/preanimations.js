@@ -25,7 +25,7 @@ class CLPreAnimation {
         CLPreAnimation.cachePlaceable(pointSource); // Find and cache AmbientLight or Token placeable as _source
 
         if (animationName) { // Only bother loading vars if we have an animation on this pointSource
-            CLCustomPropertyManager.loadCustomVars(pointSource);
+            CLCustomPropertyManager.loadCustomProperties(pointSource);
         }
 
         // Clear some common custom properties
