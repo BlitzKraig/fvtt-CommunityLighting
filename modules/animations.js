@@ -231,7 +231,7 @@ class CLAnimations {
         // Track _flipped value at start of cycle
         let flipped = this._flipped;
 
-        CLAnimationHelpers.forceColorationShader(this);
+        CLAnimationHelpers.forceColorationShader(this, "#ff0000");
         CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
 
         // Only run if _flipped is false, and has changed in this cycle
@@ -261,7 +261,7 @@ class CLAnimations {
     }) {
         // Track _flipped value at start of cycle
         let flipped = this._flipped;
-        CLAnimationHelpers.forceColorationShader(this);
+        CLAnimationHelpers.forceColorationShader(this, "#ff0000");
         CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
 
         // Only run if _flipped is false, and has changed in this cycle
