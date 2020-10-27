@@ -20,7 +20,7 @@ class CLAnimations {
     }) {
         CLAnimationHelpers.addIlluminationBlur(this, 20);
         CLAnimationHelpers.addColorationBlur(this, 20, 10);
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity);
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity});
 
         CLAnimationHelpers.cosineWave(this, speed, 6, dt);
         this.coloration.filters[0].blur = 100 * this._wave.simplifiedValue;
@@ -197,7 +197,7 @@ class CLAnimations {
         let flipped = this._flipped;
 
         CLAnimationHelpers.forceColorationShader(this, "#ff0000");
-        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
+        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, {speed, intensity}); // Run blitzSimpleFlash
 
         // Only run if _flipped is false, and has changed in this cycle
         if (flipped && !this._flipped) {
@@ -227,7 +227,7 @@ class CLAnimations {
         // Track _flipped value at start of cycle
         let flipped = this._flipped;
         CLAnimationHelpers.forceColorationShader(this, "#ff0000");
-        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, speed, intensity); // Run blitzSimpleFlash
+        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, {speed, intensity}); // Run blitzSimpleFlash
 
         // Only run if _flipped is false, and has changed in this cycle
         if (flipped && !this._flipped) {
@@ -268,7 +268,7 @@ class CLAnimations {
         }
 
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity);
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity});
 
         CLAnimationHelpers.cosineWave(this, useColorSpeed?colorSpeed*colorSpeedMult:speed, 10, dt);
 
@@ -284,7 +284,7 @@ class CLAnimations {
         intensity = 5
     }) {
         CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity); // Call `foundryTime` to manipulate the custom shaders based on time
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity}); // Call `foundryTime` to manipulate the custom shaders based on time
     }
 
     // Your Lighting Code Here ⬆

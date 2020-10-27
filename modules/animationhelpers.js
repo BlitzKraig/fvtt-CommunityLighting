@@ -303,12 +303,12 @@ class CLAnimationHelpers {
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {String} animationName - The function name of the animation to include
      * @param {float} dt - The dt variable, passed into your animation
-     * @param {int} speed - The speed variable, passed into your animation
+     * @param {Object} parameters - An object filled with parameters to pass to the animation. Should at least contain speed and intensity, along with any other custom properties the animation supports (if any)
      * @param {int} intensity - The intensity variable, passed into your animation
      */
-    static includeAnimation(source, animationName, dt, speed, intensity) {
+    static includeAnimation(source, animationName, dt, parameters) {
         try{
-            CommunityLighting.animationManager.communityAnimations[animationName].call(source, dt, {speed, intensity});
+            CommunityLighting.animationManager.communityAnimations[animationName].call(source, dt, parameters);
         } catch(e){
             console.log(`Attempt to include animation ${animationName} failed`);
         }
