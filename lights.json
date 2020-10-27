@@ -84,6 +84,9 @@
                 "shaders": {
                     "coloration": "CLForceGridColorationShader"
                 },
+                "description": "A color-changing pulsating grid force-field, based on Grid Force-Field by SecretFire",
+                "intensityDescription": "Controls the pulsating power",
+                "speedDescription": "Controls how quickly the grid is pulsating",
                 "customProperties": [
                     {
                         "title": "Secondary Color",
@@ -130,10 +133,7 @@
                         ],
                         "default": "defaultValue"
                     }
-                ],
-                "description": "A color-changing pulsating grid force-field, based on Grid Force-Field by SecretFire",
-                "intensityDescription": "Controls the pulsating power",
-                "speedDescription": "Controls how quickly the grid is pulsating"
+                ]
             }
         ]
     },
