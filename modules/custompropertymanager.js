@@ -62,13 +62,13 @@ class CLCustomPropertyManager {
             var currentValue;
             if (isToken) {
                 if (objectConfig.object.light.animation) {
-                    currentValue = objectConfig.object.light.animation[customPropertyObject.varName] || customPropertyObject.default;
+                    currentValue = objectConfig.object.light.animation[customPropertyObject.varName] ?? customPropertyObject.default;
                 } else {
                     currentValue = customPropertyObject.default;
                 }
             } else {
                 if (objectConfig.object.source.animation) {
-                    currentValue = objectConfig.object.source.animation[customPropertyObject.varName] || customPropertyObject.default;
+                    currentValue = objectConfig.object.source.animation[customPropertyObject.varName] ?? customPropertyObject.default;
                 } else {
                     currentValue = customPropertyObject.default;
                 }
