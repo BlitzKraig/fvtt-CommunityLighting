@@ -132,7 +132,7 @@ class CLCustomPropertyManager {
                         <label>${customPropertyObject.title}</label>
                         <div class="form-fields">
                             <select name="lightAnimation.${customPropertyObject.varName}">
-                                <option value="">None</option>${options}
+                                ${options}
                             </select>
                         </div>
                     </div>`);
