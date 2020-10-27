@@ -77,6 +77,63 @@
                 "name": "Blurred Torch",
                 "animationFunction": "blitzTorchBlur",
                 "description": "A deeper, alternative version of the torch"
+            },
+            {
+                "name": "Grid Force-Field Colorshift",
+                "animationFunction": "blitzForceFieldExtension",
+                "shaders": {
+                    "coloration": "CLForceGridColorationShader"
+                },
+                "customProperties": [
+                    {
+                        "title": "Secondary Color",
+                        "varName": "secondaryColor",
+                        "type": "color",
+                        "default": "#00ff00"
+                    },
+                    {
+                        "title": "Color Speed",
+                        "varName": "colorSpeed",
+                        "type": "range",
+                        "min": 1,
+                        "max": 10,
+                        "step": 1,
+                        "default": 5
+                    },
+                    {
+                        "title": "Checkbox Test",
+                        "varName": "checkboxTest",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Select Test",
+                        "varName": "selectTest",
+                        "type": "select",
+                        "options":[
+                            {
+                                "label":"Default",
+                                "value": "defaultValue"
+                            },
+                            {
+                                "label":"Second",
+                                "value": "secondValue"
+                            },
+                            {
+                                "label":"Third",
+                                "value": "thirdValue"
+                            },
+                            {
+                                "label":"Fourth",
+                                "value": "fourthValue"
+                            }
+                        ],
+                        "default": "defaultValue"
+                    }
+                ],
+                "description": "A color-changing pulsating grid force-field, based on Grid Force-Field by SecretFire",
+                "intensityDescription": "Controls the pulsating power",
+                "speedDescription": "Controls how quickly the grid is pulsating"
             }
         ]
     },

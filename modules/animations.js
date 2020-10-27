@@ -286,6 +286,31 @@ class CLAnimations {
         }
     }
 
+    blitzForceFieldExtension(dt, {
+        speed = 5,
+        intensity = 5,
+        secondaryColor = '#00ff00',
+        colorSpeed = 5
+    }) {
+        CLAnimationHelpers.cachePlaceable(this);
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+            this._originalColor = this?._source?.data?.tintColor;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+            this._originalColor = this?._source?.data?.lightColor;
+        }
+
+        CLAnimationHelpers.forceColorationShader(this, '#ff0000');
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity);
+
+        CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
+
+        let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original and secondaryColor, mapped from 0 to 1
+        
+        this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+    }
+
     /* Author: SecretFire */
     secretFireAnimateTimeForceColor(dt, {
         speed = 5,
