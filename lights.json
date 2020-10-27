@@ -87,12 +87,19 @@
                 "description": "A color-changing pulsating grid force-field, based on Grid Force-Field by SecretFire",
                 "intensityDescription": "Controls the pulsating power",
                 "speedDescription": "Controls how quickly the grid is pulsating",
+                "customPropertiesComment": "!AUTHORS! All possible property types are provided below for demonstration purposes.",
                 "customProperties": [
                     {
                         "title": "Secondary Color",
                         "varName": "secondaryColor",
                         "type": "color",
                         "default": "#00ff00"
+                    },
+                    {
+                        "title": "Use Color Speed",
+                        "varName": "useColorSpeed",
+                        "type": "checkbox",
+                        "default": true
                     },
                     {
                         "title": "Color Speed",
@@ -104,34 +111,32 @@
                         "default": 5
                     },
                     {
-                        "title": "Checkbox Test",
-                        "varName": "checkboxTest",
-                        "type": "checkbox",
-                        "default": false
-                    },
-                    {
-                        "title": "Select Test",
-                        "varName": "selectTest",
+                        "title": "Color Speed Multiplier",
+                        "varName": "colorSpeedMult",
                         "type": "select",
                         "options":[
                             {
-                                "label":"Default",
-                                "value": "defaultValue"
+                                "label": "Quarter Speed",
+                                "value": 0.25
                             },
                             {
-                                "label":"Second",
-                                "value": "secondValue"
+                                "label": "Half Speed",
+                                "value": 0.5
                             },
                             {
-                                "label":"Third",
-                                "value": "thirdValue"
+                                "label": "Full Speed",
+                                "value": 1
                             },
                             {
-                                "label":"Fourth",
-                                "value": "fourthValue"
+                                "label": "Double Speed",
+                                "value": 2
+                            },
+                            {
+                                "label": "Triple Speed",
+                                "value": 3
                             }
                         ],
-                        "default": "defaultValue"
+                        "default": 1
                     }
                 ]
             }

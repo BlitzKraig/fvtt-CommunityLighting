@@ -255,7 +255,9 @@ class CLAnimations {
         speed = 5,
         intensity = 5,
         secondaryColor = '#00ff00',
-        colorSpeed = 5
+        useColorSpeed = true,
+        colorSpeed = 5,
+        colorSpeedMult = 1
     }) {
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -268,7 +270,7 @@ class CLAnimations {
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
         CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, speed, intensity);
 
-        CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
+        CLAnimationHelpers.cosineWave(this, useColorSpeed?colorSpeed*colorSpeedMult:speed, 10, dt);
 
         if(this._originalColor && secondaryColor){
             let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original and secondaryColor, mapped from 0 to 1
