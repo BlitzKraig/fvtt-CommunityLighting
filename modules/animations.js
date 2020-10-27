@@ -257,7 +257,6 @@ class CLAnimations {
         secondaryColor = '#00ff00',
         colorSpeed = 5
     }) {
-        CLAnimationHelpers.cachePlaceable(this);
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
             this._originalColor = this?._source?.data?.tintColor;
@@ -271,9 +270,10 @@ class CLAnimations {
 
         CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
 
-        let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original and secondaryColor, mapped from 0 to 1
-        
-        this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+        if(this._originalColor && secondaryColor){
+            let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original and secondaryColor, mapped from 0 to 1
+            this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+        }
     }
 
     /* Author: SecretFire */
