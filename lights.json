@@ -6,7 +6,8 @@
             "twitter": "",
             "youtube": ""
         },
-        "lights": [{
+        "lights": [
+            {
                 "translationName": "shadertest",
                 "name": "Custom Shader Example",
                 "animationFunction": "blitzShaderTest",
@@ -78,7 +79,7 @@
                         "title": "Band",
                         "varName": "listeningBand",
                         "type": "select",
-                        "options":[
+                        "options": [
                             {
                                 "label": "Low",
                                 "value": "low"
@@ -102,7 +103,7 @@
                         "title": "Source",
                         "varName": "gainNode",
                         "type": "select",
-                        "options":[
+                        "options": [
                             {
                                 "label": "Master",
                                 "value": "master"
@@ -149,7 +150,7 @@
                         "title": "Band",
                         "varName": "listeningBand",
                         "type": "select",
-                        "options":[
+                        "options": [
                             {
                                 "label": "Low",
                                 "value": "low"
@@ -173,7 +174,7 @@
                         "title": "Source",
                         "varName": "gainNode",
                         "type": "select",
-                        "options":[
+                        "options": [
                             {
                                 "label": "Master",
                                 "value": "master"
@@ -188,34 +189,78 @@
                 ]
             },
             {
+                "translationName": "blurStatic",
+                "name": "Static Blur",
+                "animationFunction": "blitzStaticBlur",
+                "description": "A static, blurrable light",
+                "intensityDescription": "Not used",
+                "speedDescription": "Not used",
+                "customProperties": [
+                    {
+                        "title": "Blur Strength",
+                        "varName": "blurStrength",
+                        "type": "range",
+                        "min": 1,
+                        "max": 50,
+                        "step": 1,
+                        "default": 20
+                    }
+                ]
+            },
+            {
                 "translationName": "torch",
                 "name": "Alternate Torch",
                 "animationFunction": "blitzTorch",
                 "description": "A deeper, alternative version of the torch",
-                "customProperties":[{
-                    "title": "Ratio Damper",
-                    "varName": "ratioDamper",
-                    "type": "range",
-                    "min": 1,
-                    "max": 50,
-                    "step": 1,
-                    "default": 1
-                }]
+                "customProperties": [
+                    {
+                        "title": "Secondary Color",
+                        "varName": "secondaryColor",
+                        "type": "color",
+                        "default": "#f0ba5c"
+                    },
+                    {
+                        "title": "Ratio Damper",
+                        "varName": "ratioDamper",
+                        "type": "range",
+                        "min": 1,
+                        "max": 50,
+                        "step": 1,
+                        "default": 1
+                    }
+                ]
             },
             {
                 "translationName": "blurtorch",
                 "name": "Blurred Torch",
                 "animationFunction": "blitzTorchBlur",
                 "description": "A deeper, alternative version of the torch",
-                "customProperties":[{
-                    "title": "Ratio Damper",
-                    "varName": "ratioDamper",
-                    "type": "range",
-                    "min": 1,
-                    "max": 50,
-                    "step": 1,
-                    "default": 1
-                }]
+                "customProperties": [
+                    {
+                        "title": "Secondary Color",
+                        "varName": "secondaryColor",
+                        "type": "color",
+                        "default": "#f0ba5c"
+                    },
+                    {
+                        "title": "Ratio Damper",
+                        "varName": "ratioDamper",
+                        "type": "range",
+                        "min": 1,
+                        "max": 50,
+                        "step": 1,
+                        "default": 1
+                    },
+                    {
+                        "title": "Blur Strength",
+                        "varName": "blurStrength",
+                        "type": "range",
+                        "min": 1,
+                        "max": 50,
+                        "step": 1,
+                        "default": 20
+                    }
+                ]
             },
             {
                 "name": "Grid Force-Field Colorshift",
@@ -253,7 +298,7 @@
                         "title": "Color Speed Multiplier",
                         "varName": "colorSpeedMult",
                         "type": "select",
-                        "options":[
+                        "options": [
                             {
                                 "label": "Quarter Speed",
                                 "value": 0.25
@@ -288,7 +333,8 @@
             "twitter": "",
             "youtube": ""
         },
-        "lights": [{
+        "lights": [
+            {
                 "translationName": "gridForceField",
                 "name": "Grid Force-Field",
                 "animationFunction": "secretFireAnimateTimeForceColor",

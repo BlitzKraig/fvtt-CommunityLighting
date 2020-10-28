@@ -27,6 +27,14 @@ class CLAnimations {
         this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
     }
 
+    blitzStaticBlur(dt, {
+        speed = 5,
+        intensity = 5,
+        blurStrength = 20
+    }) {
+        CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
+    }
+
     blitzFadeSimple(dt, {
         speed = 5,
         intensity = 5
@@ -99,7 +107,8 @@ class CLAnimations {
     blitzTorch(dt, {
         speed = 5,
         intensity = 5,
-        ratioDamper = 1
+        ratioDamper = 1,
+        secondaryColor = "#f0ba5c"
     }) {
         
         CLAnimationHelpers.binaryTimer(this, speed, dt);
@@ -112,7 +121,17 @@ class CLAnimations {
         const iu = this.illumination.uniforms;
         const cu = this.coloration.uniforms;
 
-        this._originalColor = hexToRGB(this.color);
+        if(!this._colorScale){
+            this._colorScale = 0.5;
+        }
+
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+            this._originalColor = this?._source?.data?.tintColor;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+            this._originalColor = this?._source?.data?.lightColor;
+        }
 
         if ((t - this._animTime) < targetMS) {
             var alteredValue = Math.random() * 0.001;
@@ -120,10 +139,18 @@ class CLAnimations {
                 iu.ratio -= alteredValue;
                 iu.alpha -= alteredValue;
                 cu.alpha -= alteredValue;
+                if(this._originalColor && secondaryColor){
+                    let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
+                    this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale -= alteredValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+                }
             } else {
                 iu.ratio += alteredValue;
                 iu.alpha += alteredValue;
                 cu.alpha += alteredValue;
+                if(this._originalColor && secondaryColor){
+                    let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
+                    this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale += alteredValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+                }
             }
             return;
         }
@@ -145,19 +172,36 @@ class CLAnimations {
             center: this.alpha,
             sigma: 0.005 * intensity
         });
-        cu.color.forEach((channel, index) => {
-            cu.color[index] = this._originalColor[index] + ((1 - this._originalColor[index]) * this._wave.simplifiedValue / 2); // Bring the color closer to bright white
-        });
+
+        
+
+        this._colorScale = this._ar1(this._colorScale, {
+            center: 0.5,
+            sigma: 0.05 * intensity,
+            max: 1.0,
+            min: 0.0
+        })
+
+        
+        if(this._originalColor && secondaryColor){
+            let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
+            this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+        }
+        // cu.color.forEach((channel, index) => {
+        //     cu.color[index] = this._originalColor[index] + ((1 - this._originalColor[index]) * this._wave.simplifiedValue / 2); // Bring the color closer to bright white
+        // });
     }
 
     // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
     blitzTorchBlur(dt, {
         speed = 5,
         intensity = 5,
-        ratioDamper = 1
+        ratioDamper = 1,
+        secondaryColor = "#f0ba5c",
+        blurStrength = 20
     }) {
-        CLAnimationHelpers.addIlluminationBlur(this, 20);
-        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, ratioDamper});
+        CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
+        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, ratioDamper, secondaryColor});
     }
 
 
