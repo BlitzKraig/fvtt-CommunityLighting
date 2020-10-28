@@ -379,14 +379,37 @@ class CLAnimations {
     secretFireAnimateStarLightMusic(dt, {
         speed = 5,
         intensity = 5,
-        secondaryColor = '#00ff00'
+        secondaryColor = '#00ff00',
+        listeningBand = "mid",
+        gainNode = "master"
     }) {
 
         if (!this._currentPeak) {
-            this._currentPeak = 0;
+            this._currentPeak = 0; // store currentPeak inside the pointSource
         }
+        switch (listeningBand) {
+            case "low":
+                listeningBand = [0, 4];
+                break;
+            case "mid":
+                listeningBand = [5, 30];
+                break;
+            case "high":
+                listeningBand = [31, 63];
+                break;
+            case "all":
+                listeningBand = undefined;
+                break
 
-        this._currentPeak = CLAnimationHelpers.getAudioPower(this, this._currentPeak, 11 - intensity, speed); // Update currentPeak
+            default:
+                listeningBand = [5, 30];
+                break;
+        }
+        if (listeningBand) {
+            this._currentPeak = CLAnimationHelpers.getAudioFrequencyPower(this, this._currentPeak, 11 - speed, listeningBand, 1, 0.1, gainNode == "soundboard"); // Update currentPeak
+        } else {
+            this._currentPeak = CLAnimationHelpers.getAudioPeak(this, this._currentPeak, 11 - speed, 1, 0.1, gainNode == "soundboard");
+        }
 
         CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
         CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, { speed, intensity }); // Call `foundryTime` to manipulate the custom shaders based on time
