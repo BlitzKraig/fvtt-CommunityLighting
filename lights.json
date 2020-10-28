@@ -288,7 +288,8 @@
             "twitter": "",
             "youtube": ""
         },
-        "lights": [{
+        "lights": [
+            {
                 "translationName": "gridForceField",
                 "name": "Grid Force-Field",
                 "animationFunction": "secretFireAnimateTimeForceColor",
@@ -310,6 +311,48 @@
                 "description": "A billow of smoke",
                 "intensityDescription": "Controls the intensity of the smoke",
                 "speedDescription": "Controls how quickly the smoke swirls"
+            },
+            {
+                "translationName": "starLight",
+                "name": "Star Light",
+                "animationFunction": "secretFireAnimateStarLight",
+                "shaders": {
+                    "coloration": "CLStarLightColorationShader",
+                    "illumination": "CLSmoothTransitionIlluminationShader"
+                },
+                "description": "A shining star light",
+                "intensityDescription": "Controls the intensity of the star light",
+                "speedDescription": "Controls how quickly the star shines",
+                "customPropertiesComment": "test",
+                "customProperties": [
+                    {
+                        "title": "Secondary Color",
+                        "varName": "secondaryColor",
+                        "type": "color",
+                        "default": "#00ff00"
+                    }
+                ]
+            },
+            {
+                "translationName": "starLightMusic",
+                "name": "Star Light Disco",
+                "animationFunction": "secretFireAnimateStarLightMusic",
+                "shaders": {
+                    "coloration": "CLStarLightColorationShader",
+                    "illumination": "CLSmoothTransitionIlluminationShader"
+                },
+                "description": "An audio-reactive disco star light",
+                "intensityDescription": "Controls the intensity of the rays shifting according to music",
+                "speedDescription": "Controls how quickly the star shines",
+                "customPropertiesComment": "test",
+                "customProperties": [
+                    {
+                        "title": "Secondary Color",
+                        "varName": "secondaryColor",
+                        "type": "color",
+                        "default": "#00ff00"
+                    }
+                ]
             }
         ]
     }

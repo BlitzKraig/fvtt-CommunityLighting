@@ -363,6 +363,43 @@ class CLAnimations {
         CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity}); // Call `foundryTime` to manipulate the custom shaders based on time
     }
 
+    secretFireAnimateStarLight(dt, {
+        speed = 5,
+        intensity = 5,
+        secondaryColor = '#00ff00'
+    }) {
+        CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, { speed, intensity }); // Call `foundryTime` to manipulate the custom shaders based on time
+
+        this.coloration.uniforms.musicmode = false;
+        this.coloration.uniforms.scolor = hexToRGB(colorStringToHex(secondaryColor));
+        this.coloration.uniforms.musicwave = 1;
+    }
+
+    secretFireAnimateStarLightMusic(dt, {
+        speed = 5,
+        intensity = 5,
+        secondaryColor = '#00ff00'
+    }) {
+
+        if (!this._currentPeak) {
+            this._currentPeak = 0;
+        }
+
+        this._currentPeak = CLAnimationHelpers.getAudioPower(this, this._currentPeak, 11 - intensity, speed); // Update currentPeak
+
+        CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, { speed, intensity }); // Call `foundryTime` to manipulate the custom shaders based on time
+
+        this.coloration.uniforms.musicmode = true;
+        this.coloration.uniforms.scolor = hexToRGB(colorStringToHex(secondaryColor));
+        this.coloration.uniforms.musicwave = 1 + this._currentPeak * 2;
+
+        // Set uniforms based on currentPeak value
+        this.illumination.uniforms.alpha = 0.75 + (this._currentPeak * 0.5);
+        this.illumination.uniforms.ratio = this._currentPeak;
+    }
+
     // Your Lighting Code Here ⬆
     // Precede your code with /* Author: Authorname */
 }

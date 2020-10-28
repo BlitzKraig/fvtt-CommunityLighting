@@ -240,3 +240,94 @@ class CLSmokePatchIlluminationShader extends StandardIlluminationShader {
         gl_FragColor = vec4(color * smokefading(dist) * alpha, 1.0);
     }`;
 }
+
+/**
+ * Star Light animation coloration shader
+ * @implements {StandardColorationShader}
+ * @author SecretFire
+ */
+class CLStarLightColorationShader extends StandardColorationShader {
+    static fragmentShader = `
+    precision mediump float;
+    uniform float time;
+    uniform float intensity;
+    uniform float alpha;
+    uniform float musicwave;
+    uniform bool musicmode;
+    uniform vec3 color;
+    uniform vec3 scolor;
+    varying vec2 vUvs;
+
+    ${AbstractBaseShader.PRNG}
+    ${AbstractBaseShader.NOISE}
+    ${AbstractBaseShader.FBM(2)}
+
+    vec2 transform(in vec2 uv, in float dist) {
+        float t = time * 0.40;
+        float cost = cos(t);
+        float sint = sin(t);
+    
+        mat2 rotmat = mat2(cost, -sint, sint, cost);
+        uv *= rotmat;
+        return uv;
+    }
+
+    float makerays(in vec2 uv, in float t) {
+        float sw = (musicmode ? musicwave * (intensity * 0.1) : intensity);
+        vec2 uvn = normalize(uv * (uv + t)) * (5.0 + sw);
+        return max(clamp(0.5 * tan(fbm(uvn - t)), 0.0, 2.25),
+                   clamp(3.0 - tan(fbm(uvn + t * 2.0)), 0.0, 2.25));
+    }
+
+    float starlight(in float dist) {
+        //float t = time;
+        vec2 uv = (vUvs - 0.5);
+        uv = transform(uv, dist);
+        float rays = makerays(uv, time);
+        return pow(1.0 - dist, rays) * pow(1.0 - dist, 0.25);
+    }
+
+    void main() {
+        float dist = distance(vUvs, vec2(0.50)) * 2.0;
+        vec3 fcolor = mix(scolor, 
+                          color,
+                          clamp(1.0 - dist, 0.0, 1.0)) * musicwave;
+        gl_FragColor = vec4(clamp(fcolor * starlight(dist) * alpha, 0.0, 1.0), 1.0);
+    }
+    `;
+
+    static defaultUniforms = mergeObject(super.defaultUniforms, {
+        musicwave: 1,
+        scolor: [1.0, 1.0, 0.0],
+        musicmode: false,
+    });
+}
+
+/**
+ * Reusable smooth transition illumination shader
+ * @implements {StandardIlluminationShader}
+ * @author SecretFire
+ */
+class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
+    static fragmentShader = `
+    precision mediump float;
+    uniform float time;
+    uniform float intensity;
+    uniform float alpha;
+    uniform float ratio;
+    uniform vec3 colorDim;
+    uniform vec3 colorBright;
+    varying vec2 vUvs;
+
+    void main() {
+        float dist = distance(vUvs, vec2(0.5)) * 2.0;
+        vec3 color = mix(colorDim, 
+                         colorBright,
+                         smoothstep(
+                             clamp(0.8 - ratio, 0.0, 1.0),
+                             clamp(1.2 - ratio, 0.0, 1.0),
+                             1.0 - dist));
+        gl_FragColor = vec4(color * alpha, 1.0);
+    }`;
+}
+
