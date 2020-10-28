@@ -7,7 +7,9 @@
 
 ## Community Lighting for 0.7.5+
 
-This module aims to provide a platform for FVTT users to create and publish their own lighting animations, and provide a good selection of community made lighting animations to GameMasters.
+This module aims to provide a platform for FVTT users to create and publish their own lighting animations, and provide a good selection of community made lighting animations to GameMasters
+
+Additionally, we provide and manage extended user-settable custom variables, and advanced helpers to pass values into your animation, including audio-reactive functionality!
 
 ### Demo scene ft. custom shaders provided by SecretFire
 
@@ -141,7 +143,153 @@ Finally, you can add an optional `translationName`, which will allow all of thes
 
 Your JSON is complete! Make sure you have your commas in the right places, and you've not mangled any other author objects in the process.
 
-#### A note on Custom Shaders
+### 1a. JSON - Custom Properties
+
+CommunityLighting 0.3.0 brings Custom Properties into your animations.
+
+These are user-settable properties, such as colors and range sliders, which are passed into your animation function.
+
+There are currently 4 supported property types: `checkbox`, `color`, `range` and `select`.
+
+To add custom properties to your animation, first you'll need to add a new `customProperties` array inside the light object.
+
+``` JSON
+
+"ExampleUser": {
+           "discord": "ExampleUser#00000",
+           "links": {
+               "github": "https://githubhere",
+               "twitter": "https://twitterhere",
+               "youtube": "https://youtubehere"
+           },
+            "lights": [
+               {
+                   "translationName": "coolLight",
+                   "name": "My Cool Light",
+                   "animationFunction": "coolLight",
+                   "description": "A basic, but very cool light",
+                   "intensityDescription": "Controls how radical the light will be!",
+                   "speedDescription": "Controls how often the light will be radical.",
+                   "customProperties":[
+
+                   ]
+               },
+               {
+                   "name": "My Less Cool Light",
+                   "animationFunction": "boringLight"
+               }
+            ]
+   }
+
+```
+
+Inside this array, you can describe the properties you want to pass into your animation function, and the module will handle the UI for tokens and lights automatically.
+
+Below is an example of all the possible types, and their required properties.
+
+All properties listed must be added for their respective type.
+
+``` JSON
+
+"customProperties": [
+    {
+        "type": "color",
+        "title": "Secondary Color",
+        "varName": "secondaryColor",
+        "default": "#00ff00"
+    },
+    {
+        "type": "checkbox",
+        "title": "Use Color Speed",
+        "varName": "useColorSpeed",
+        "default": true
+    },
+    {
+        "type": "range",
+        "title": "Color Speed",
+        "varName": "colorSpeed",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 5
+    },
+    {
+        "type": "select",
+        "title": "Color Speed Multiplier",
+        "varName": "colorSpeedMult",
+        "options": [{
+                "label": "Quarter Speed",
+                "value": 0.25
+            },
+            {
+                "label": "Half Speed",
+                "value": 0.5
+            },
+            {
+                "label": "Full Speed",
+                "value": 1
+            },
+            {
+                "label": "Double Speed",
+                "value": 2
+            },
+            {
+                "label": "Triple Speed",
+                "value": 3
+            }
+        ],
+        "default": 1
+    }
+]
+
+```
+
+#### Adding a checkbox
+
+Checkboxes require the following properties:
+
+* `type` - Should be "checkbox",
+* `title` - A string to identify this customproperty in the light/token config
+* `varName` - The variable name for this customproperty, passed into your animation function
+* `default` - The initial value of this customproperty, should be a Boolean
+
+#### Adding a color
+
+Colors require the following properties:
+
+* `type` - Should be "color",
+* `title` - A string to identify this customproperty in the light/token config
+* `varName` - The variable name for this customproperty, passed into your animation function
+* `default` - The initial value of this customproperty, should be a valid color hexstring
+
+#### Adding a range slider
+
+Range Sliders require the following properties:
+
+* `type` - Should be "range",
+* `title` - A string to identify this customproperty in the light/token config
+* `varName` - The variable name for this customproperty, passed into your animation function
+* `default` - The initial value of this customproperty, should be an int or float
+* `min` - The minimum value of this slider, int or float
+* `max` - The maximum value of this slider, int or float
+* `step` - The smallest changeable value when dragging the slider, int or float
+* `default` - The initial value of this customproperty, should be an int or float between `min` and `max`
+
+#### Adding a dropdown
+
+Dropdown Selectors require the following properties:
+
+* `type` - Should be "color",
+* `title` - A string to identify this customproperty in the light/token config
+* `varName` - The variable name for this customproperty, passed into your animation function
+* `default` - The initial value of this customproperty, should equal a `value` from `options`
+* `options` - An array of options to select from in this dropdown
+  * `label` - A string to identify this option in the dropdown
+  * `value` - The value passed to your animation function as `varName` if this option is selected
+
+Your Custom Properties are now defined in the JSON file. Later, we'll reference these in your animation code.
+
+### 1c. A note on Custom Shaders
 
 Custom Shaders are supported, but not yet fully documented.
 
@@ -207,6 +355,8 @@ Keep in mind that to 'animate' a light, you will need to alter these values base
 
 You can also use the static methods in `CLAnimationHelpers` to help simplify some of the process. See `blitzSimpleFlash` for a fairly easy example, using the `binaryTimer` helper to flip a light between two states at regular intervals.
 
+The helpers in `CLAnimationHelpers` have docstrings associated with them, and should give you some basic documentation in your IDE.
+
 >If you've come up with something useful that can be easily re-used by other animations, feel free to add it into `animationhelpers.js`, and it will appear in the `CLAnimationHelpers` class for other authors to use if approved.
 
 Additionally, if you need to keep track of any specific value, it is recommended to add a property to `this`, prefixed with an underscore, eg. `this._myCustomVar = 0`
@@ -246,7 +396,49 @@ Refresh Foundry, and double click on an Ambient Light, or create a new one.
 Find your animation in the `Light Animation Type` dropdown, and select it.
 Save the light and see how your animation looks!
 
+### 2a. Javascript - Custom Properties
+
+If you set up some Custom Properties in your JSON, you can reference them here.
+
+Any `varName`s you defined should be added into the object where `speed` and `intensity` are referenced.
+
+Provide them a default value, and you can now call them in your animation code.
+
+Below is a short example using one of the properties added in the JSON example.
+
+You can also check the `blitzForceFieldExtension` function inside `animations.js` for a working animation that uses one of every valid Custom Property
+
+``` javascript
+coolLight(dt, {
+    speed = 5,
+    intensity = 5,
+    secondaryColor = '#ff0000'
+}) {
+    /* Example code for a simple flashing light */
+    /* `speed` controls how quickly the light will flip on and off */
+    /* `intensity` controls how dim the light will be when it is 'off' */
+
+    CLAnimationHelpers.binaryTimer(this, speed); // Use the binaryTimer helper to set `this._flipped` to true/false, based on speed
+
+        if (this._flipped) {
+            // Set the alpha somewhere between 0 and 0.9, depending on intensity
+            let alpha = 1 - (0.1 * intensity);
+            this.illumination.uniforms.alpha = alpha; // Update the shader displaying the light emission
+            this.coloration.uniforms.alpha = alpha; // Update the shader displaying the color of the light
+            setColor(this._originalColor); // Note: this is not valid code, but just an example of how you might use a custom property
+        } else {
+            // Set the alpha back to full
+            this.illumination.uniforms.alpha = 1;
+            this.coloration.uniforms.alpha = 1;
+            setColor(secondaryColor);
+        }
+    }
+}
+```
+
 ### 3. Translation
+
+Note: Translations are not yet available for Custom Properties.
 
 If you want to support translating your light names, descriptions etc., you need to make sure you have a `translationName` setup in the light object inside `lights.json`, as described in step 1
 
