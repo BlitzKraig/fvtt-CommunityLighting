@@ -252,6 +252,52 @@ class CLAnimations {
         }
     }
 
+    blitzPulseMusic(dt, {
+        speed = 5,
+        intensity = 5
+    }) {
+        if(!this._currentPeak){
+            this._currentPeak = 0; // store currentPeak inside the pointSource
+        }
+
+        this._currentPeak = CLAnimationHelpers.getAudioPower(this, this._currentPeak, 11 - intensity, speed); // Update currentPeak
+
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+        }
+
+        // Set uniforms based on currentPeak value
+        this.illumination.uniforms.alpha = this._currentPeak;
+        this.coloration.uniforms.alpha = this._currentPeak * this._originalColorAlpha;
+        this.illumination.uniforms.ratio = this._currentPeak;
+    }
+
+    blitzPulseMusicColorshift(dt, {
+        speed = 5,
+        intensity = 5,
+        secondaryColor = '#00ff00',
+        tertiaryColor = '#0000ff'
+    }) {
+        if (this._placeableType == "AmbientLight") {
+            this._originalColorAlpha = this?._source?.data?.tintAlpha;
+            this._originalColor = this?._source?.data?.tintColor;
+        } else if (this._placeableType == "Token") {
+            this._originalColorAlpha = this?._source?.data?.lightAlpha;
+            this._originalColor = this?._source?.data?.lightColor;
+        }
+        CLAnimationHelpers.forceColorationShader(this, '#ff0000');
+        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity});
+
+        CLAnimationHelpers.cosineWave(this, speed, 10, dt);
+
+        if(this._originalColor && secondaryColor && tertiaryColor){
+            let colorScale = chroma.scale([this._originalColor, secondaryColor, tertiaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
+            this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
+        }
+    }
+
     blitzForceFieldExtension(dt, {
         speed = 5,
         intensity = 5,

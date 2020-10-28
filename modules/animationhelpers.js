@@ -1,6 +1,20 @@
 class CLAnimationHelpers {
 
     /**
+     * EXPERIMENTAL - Cache or get-cached audio analyser and return a float representing the current relative peak of playing audio
+     * 
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     * @param {float} currentPeak - The current audio power peak, used to smooth between peaks
+     * @param {int} smoothing - How much smoothing to apply to peak changes from 1 to 10
+     * @param {int} band - Which frequency band to listen to, from 1 to 10
+     * @param {float} minIncrease - How quickly the minimum decibel range slides up to meet the currently playing audio - Helps fill out the whole range
+     * @param {float} maxDecrease - How quickly the maxumum decibel range slides down to meet the currently playing audio - Helps fill out the whole range
+     */
+    static getAudioPower(source, currentPeak, smoothing = 5, band = 5, minIncrease = 1, maxDecrease = 0.1) {
+        return CLAudioReactor.getAudioPower(source, currentPeak, smoothing, band, minIncrease, maxDecrease);
+    }
+
+    /**
      * Creates and flips a _flipped flag on your light source after maxTime divided by speed. Useful for flashing animations
      * Call at the start of your animation function.
      * 

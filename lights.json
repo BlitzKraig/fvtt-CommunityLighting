@@ -67,6 +67,36 @@
                 "speedDescription": "Controls how often the light will flash"
             },
             {
+                "translationName": "pulseMusic",
+                "name": "Music Pulse",
+                "animationFunction": "blitzPulseMusic",
+                "description": "An audio-reactive pulsing light",
+                "intensityDescription": "Controls smoothing on peak changes",
+                "speedDescription": "Controls listening band"
+            },
+            {
+                "translationName": "pulseMusicColorshift",
+                "name": "Music Pulse Colorshift",
+                "animationFunction": "blitzPulseMusicColorshift",
+                "description": "An audio-reactive pulsing light that shifts between three colors",
+                "intensityDescription": "Controls smoothing on peak changes",
+                "speedDescription": "Controls listening band, and speed-change color",
+                "customProperties": [
+                    {
+                        "title": "Secondary Color",
+                        "varName": "secondaryColor",
+                        "type": "color",
+                        "default": "#00ff00"
+                    },
+                    {
+                        "title": "Tertiary Color",
+                        "varName": "tertiaryColor",
+                        "type": "color",
+                        "default": "#0000ff"
+                    }
+                ]
+            },
+            {
                 "translationName": "torch",
                 "name": "Alternate Torch",
                 "animationFunction": "blitzTorch",
