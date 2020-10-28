@@ -297,7 +297,7 @@ class CLAnimations {
     }
 
     // EXPERIMENTAL
-    blitzPulseMusic(dt, {
+    blitzFadeMusic(dt, {
         speed = 5,
         intensity = 5,
         listeningBand = "mid",
@@ -336,12 +336,21 @@ class CLAnimations {
             this._originalColorAlpha = this?._source?.data?.lightAlpha;
         }
 
-        var calculatedIntensity = this.ratio + (((this._currentPeak - this.ratio) / 10) * intensity);
+        this._calculatedIntensity = this.ratio + (((this._currentPeak - this.ratio) / 10) * intensity);
 
         // Set uniforms based on currentPeak value
-        this.illumination.uniforms.alpha = calculatedIntensity;
-        this.coloration.uniforms.alpha = calculatedIntensity * this._originalColorAlpha;
-        this.illumination.uniforms.ratio = calculatedIntensity;
+        this.illumination.uniforms.alpha = this._calculatedIntensity;
+        this.coloration.uniforms.alpha = this._calculatedIntensity * this._originalColorAlpha;
+    }
+
+    blitzPulseMusic(dt, {
+        speed = 5,
+        intensity = 5,
+        listeningBand = "mid",
+        gainNode = "master"
+    }) {
+        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {speed, intensity, listeningBand, gainNode})
+        this.illumination.uniforms.ratio = this._calculatedIntensity;
     }
 
     blitzPulseMusicColorshift(dt, {

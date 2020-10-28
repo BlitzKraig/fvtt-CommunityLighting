@@ -68,8 +68,58 @@
                 "speedDescription": "Controls how often the light will flash"
             },
             {
+                "translationName": "fadeMusic",
+                "name": "Audio Fade",
+                "animationFunction": "blitzFadeMusic",
+                "description": "An audio-reactive fading light",
+                "intensityDescription": "Controls how extreme the fade will be",
+                "speedDescription": "Controls smoothing on peak changes",
+                "customProperties": [
+                    {
+                        "title": "Band",
+                        "varName": "listeningBand",
+                        "type": "select",
+                        "options": [
+                            {
+                                "label": "Low",
+                                "value": "low"
+                            },
+                            {
+                                "label": "Mid",
+                                "value": "mid"
+                            },
+                            {
+                                "label": "High",
+                                "value": "high"
+                            },
+                            {
+                                "label": "All",
+                                "value": "all"
+                            }
+                        ],
+                        "default": "mid"
+                    },
+                    {
+                        "title": "Source",
+                        "varName": "gainNode",
+                        "type": "select",
+                        "options": [
+                            {
+                                "label": "Master",
+                                "value": "master"
+                            },
+                            {
+                                "label": "SoundBoard by Blitz (requires module)",
+                                "value": "soundboard"
+                            }
+                        ],
+                        "default": "master"
+                    }
+                ]
+            },
+            {
                 "translationName": "pulseMusic",
-                "name": "Music Pulse",
+                "name": "Audio Pulse",
                 "animationFunction": "blitzPulseMusic",
                 "description": "An audio-reactive pulsing light",
                 "intensityDescription": "Controls how far the light will animate from the center value",
@@ -119,7 +169,7 @@
             },
             {
                 "translationName": "pulseMusicColorshift",
-                "name": "Music Pulse Colorshift",
+                "name": "Audio Pulse Colorshift",
                 "animationFunction": "blitzPulseMusicColorshift",
                 "description": "An audio-reactive pulsing light that shifts between three colors",
                 "intensityDescription": "Controls how far the light will animate from the center value",
