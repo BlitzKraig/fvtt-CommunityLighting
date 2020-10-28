@@ -232,6 +232,9 @@ class CLAnimationHelpers {
      * @param {int} strength - Blur Strength
      */
     static addIlluminationBlur(source, strength = 10, quality = 4) {
+        if(source.illumination._blurred && source.illumination._blurred != strength){
+            CLAnimationHelpers.removeIlluminationBlur(source);
+        }
         if(!source.illumination._blurred){
             let blurFilter = new PIXI.filters.BlurFilter(strength, quality)
             blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
@@ -240,7 +243,7 @@ class CLAnimationHelpers {
             } else {
                 source.illumination.filters = [blurFilter];
             }
-            source.illumination._blurred = true;
+            source.illumination._blurred = strength;
         }
     }
     /**
@@ -250,6 +253,9 @@ class CLAnimationHelpers {
      * @param {int} strength - Blur Strength
      */
     static addColorationBlur(source, strength = 10, quality = 4) {
+        if(source.coloration._blurred && source.coloration._blurred != strength){
+            CLAnimationHelpers.removeColorationBlur(source);
+        }
         if(!source.coloration._blurred){
             let blurFilter = new PIXI.filters.BlurFilter(strength, quality);
             blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
@@ -258,7 +264,7 @@ class CLAnimationHelpers {
             } else {
                 source.coloration.filters = [blurFilter];
             }
-            source.coloration._blurred = true;
+            source.coloration._blurred = strength;
         }
     }
 
