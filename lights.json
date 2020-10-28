@@ -29,7 +29,7 @@
             },
             {
                 "translationName": "lightning",
-                "name": "Lightning",
+                "name": "Lightning (Experimental!)",
                 "animationFunction": "blitzLightningSimple",
                 "description": "A basic Lightning strike, randomly flashes on for a short time",
                 "intensityDescription": "Controls how bright the flash will be",

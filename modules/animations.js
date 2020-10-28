@@ -55,6 +55,7 @@ class CLAnimations {
         speed = 5,
         intensity = 5
     }) {
+        var flipped = this._flipped;
         // Use binaryRandomInterval to flip on at random
         // light, speed, delay before attempting to flip, frame-range light can remain flipped 'on'
         CLAnimationHelpers.binaryFlashRandomInterval(this, speed, dt, 50, [1, 10]);
@@ -70,10 +71,20 @@ class CLAnimations {
             let alpha = 0.1 * intensity;
             this.illumination.uniforms.alpha = alpha;
             this.coloration.uniforms.alpha = this._originalColorAlpha; // Don't bother multiplying this with alpha, users can use the opacity slider to set this directly, since the light only has 2 phases
+            if(flipped != this._flipped){
+                // Experimental: Force light visible
+                this._source.layer.sources.set(this._source.sourceId, this);
+                canvas.sight.refresh();
+            }
         } else {
             // Set the alpha to zero
             this.illumination.uniforms.alpha = 0;
             this.coloration.uniforms.alpha = 0;
+            if(flipped != this._flipped || this._source.layer.sources.get(this._source.sourceId)){
+                // Experimental: Force light fully hidden without stopping animation
+                this._source.layer.sources.delete(this._source.sourceId)
+                canvas.sight.refresh();
+            }
         }
     }
 
