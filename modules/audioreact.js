@@ -42,6 +42,11 @@ class CLAudioReactor {
 
         var analyser = soundBoard?CLAudioReactor.soundboardAnalyser:CLAudioReactor.analyser;
         var sampleBuffer = soundBoard?CLAudioReactor.soundboardSampleBuffer:CLAudioReactor.sampleBuffer;
+
+        if(!analyser || !sampleBuffer){
+            console.log("Analyser not ready");
+            return;
+        }
         
         if(!pointSource.maxdb || !pointSource.mindb){
             pointSource.maxdb = analyser.maxDecibels;
@@ -98,6 +103,11 @@ class CLAudioReactor {
 
         var analyser = soundBoard?CLAudioReactor.soundboardAnalyser:CLAudioReactor.analyser;
         var sampleBuffer = soundBoard?CLAudioReactor.soundboardSampleBuffer:CLAudioReactor.sampleBuffer;
+
+        if(!analyser || !sampleBuffer){
+            console.log("Analyser not ready");
+            return;
+        }
         
         if(!pointSource.maxdb || !pointSource.mindb){
             pointSource.maxdb = analyser.maxDecibels;
