@@ -9,7 +9,7 @@ class CLAnimations {
     }
 
     /* Author: Global - Core helper - Normally used with custom shaders */
-    foundryTime = PointSource.prototype.animateTime
+    foundryTime = PointSource.prototype.animateTime;
     /* Global End */
 
     /* Author: Blitz */
@@ -252,15 +252,39 @@ class CLAnimations {
         }
     }
 
+    // EXPERIMENTAL
     blitzPulseMusic(dt, {
         speed = 5,
-        intensity = 5
+        intensity = 5,
+        listeningBand = "mid",
+        gainNode = "master"
     }) {
         if(!this._currentPeak){
             this._currentPeak = 0; // store currentPeak inside the pointSource
         }
-
-        this._currentPeak = CLAnimationHelpers.getAudioPower(this, this._currentPeak, 11 - intensity, speed); // Update currentPeak
+        switch (listeningBand) {
+            case "low":
+                listeningBand = [0,4];
+                break;
+            case "mid":
+                listeningBand = [5,30];
+                break;
+            case "high":
+                listeningBand = [31,63];
+                break;
+            case "all":
+                listeningBand = undefined;
+                break
+        
+            default:
+                listeningBand = [5,30];
+                break;
+        }
+        if(listeningBand){
+            this._currentPeak = CLAnimationHelpers.getAudioFrequencyPower(this, this._currentPeak, 11 - speed, listeningBand, 1, 0.1, gainNode=="soundboard"); // Update currentPeak
+        }else{
+            this._currentPeak = CLAnimationHelpers.getAudioPeak(this,this._currentPeak,11 - speed, 1, 0.1, gainNode=="soundboard");
+        }
 
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -268,17 +292,22 @@ class CLAnimations {
             this._originalColorAlpha = this?._source?.data?.lightAlpha;
         }
 
+        var calculatedIntensity = this.ratio + (((this._currentPeak - this.ratio) / 10) * intensity);
+
         // Set uniforms based on currentPeak value
-        this.illumination.uniforms.alpha = this._currentPeak;
-        this.coloration.uniforms.alpha = this._currentPeak * this._originalColorAlpha;
-        this.illumination.uniforms.ratio = this._currentPeak;
+        this.illumination.uniforms.alpha = calculatedIntensity;
+        this.coloration.uniforms.alpha = calculatedIntensity * this._originalColorAlpha;
+        this.illumination.uniforms.ratio = calculatedIntensity;
     }
 
     blitzPulseMusicColorshift(dt, {
         speed = 5,
         intensity = 5,
         secondaryColor = '#00ff00',
-        tertiaryColor = '#0000ff'
+        tertiaryColor = '#0000ff',
+        listeningBand = "mid",
+        colorSpeed = 5,
+        gainNode = "master"
     }) {
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -288,9 +317,9 @@ class CLAnimations {
             this._originalColor = this?._source?.data?.lightColor;
         }
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
-        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity});
+        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity, listeningBand, gainNode});
 
-        CLAnimationHelpers.cosineWave(this, speed, 10, dt);
+        CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
 
         if(this._originalColor && secondaryColor && tertiaryColor){
             let colorScale = chroma.scale([this._originalColor, secondaryColor, tertiaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1

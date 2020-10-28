@@ -6,12 +6,25 @@ class CLAnimationHelpers {
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {float} currentPeak - The current audio power peak, used to smooth between peaks
      * @param {int} smoothing - How much smoothing to apply to peak changes from 1 to 10
-     * @param {int} band - Which frequency band to listen to, from 1 to 10
      * @param {float} minIncrease - How quickly the minimum decibel range slides up to meet the currently playing audio - Helps fill out the whole range
      * @param {float} maxDecrease - How quickly the maxumum decibel range slides down to meet the currently playing audio - Helps fill out the whole range
      */
-    static getAudioPower(source, currentPeak, smoothing = 5, band = 5, minIncrease = 1, maxDecrease = 0.1) {
-        return CLAudioReactor.getAudioPower(source, currentPeak, smoothing, band, minIncrease, maxDecrease);
+    static getAudioPeak(source, currentPeak, smoothing = 5, minIncrease = 1, maxDecrease = 0.1, soundBoard = false) {
+        return CLAudioReactor.getAudioPeak(source, currentPeak, smoothing, minIncrease, maxDecrease, soundBoard);
+    }
+
+    /**
+     * EXPERIMENTAL - Cache or get-cached audio analyser and return a float representing the current relative peak of a frequency band
+     * 
+     * @param {PointSource} source - The animations PointSource, 'this' from your animation function
+     * @param {float} currentPeak - The current audio power peak, used to smooth between peaks
+     * @param {int} smoothing - How much smoothing to apply to peak changes from 1 to 10
+     * @param {Array[int]} band - 2 values from 0-63, determines the range of frequencies to analyze
+     * @param {float} minIncrease - How quickly the minimum decibel range slides up to meet the currently playing audio - Helps fill out the whole range
+     * @param {float} maxDecrease - How quickly the maxumum decibel range slides down to meet the currently playing audio - Helps fill out the whole range
+     */
+    static getAudioFrequencyPower(source, currentPeak, smoothing = 5, band = [0, 63], minIncrease = 1, maxDecrease = 0.1, soundBoard = false) {
+        return CLAudioReactor.getAudioFreqPower(source, currentPeak, smoothing, band, minIncrease, maxDecrease, soundBoard);
     }
 
     /**
