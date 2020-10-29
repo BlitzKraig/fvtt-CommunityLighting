@@ -76,6 +76,12 @@
                 "speedDescription": "Controls smoothing on peak changes",
                 "customProperties": [
                     {
+                        "title": "Hide when silent",
+                        "varName": "silentHidden",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
                         "title": "Band",
                         "varName": "listeningBand",
                         "type": "select",
@@ -126,6 +132,12 @@
                 "speedDescription": "Controls smoothing on peak changes",
                 "customProperties": [
                     {
+                        "title": "Hide when silent",
+                        "varName": "silentHidden",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
                         "title": "Band",
                         "varName": "listeningBand",
                         "type": "select",
@@ -175,6 +187,12 @@
                 "intensityDescription": "Controls how far the light will animate from the center value",
                 "speedDescription": "Controls smoothing on peak changes",
                 "customProperties": [
+                    {
+                        "title": "Hide when silent",
+                        "varName": "silentHidden",
+                        "type": "checkbox",
+                        "default": false
+                    },
                     {
                         "title": "Secondary Color",
                         "varName": "secondaryColor",

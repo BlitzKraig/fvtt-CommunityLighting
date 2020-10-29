@@ -312,7 +312,8 @@ class CLAnimations {
         speed = 5,
         intensity = 5,
         listeningBand = "mid",
-        gainNode = "master"
+        gainNode = "master",
+        silentHidden = false
     }) {
         if(!this._currentPeak){
             this._currentPeak = 0; // store currentPeak inside the pointSource
@@ -347,9 +348,17 @@ class CLAnimations {
             this._originalColorAlpha = this?._source?.data?.lightAlpha;
         }
 
-        this._calculatedIntensity = this.ratio + (((this._currentPeak - this.ratio) / 10) * intensity);
+        if(silentHidden && this._currentPeak == 0 && this._calculatedIntensity != undefined){
+            this._calculatedIntensity -= 0.02
+            if(this._calculatedIntensity < 0){
+                this._calculatedIntensity = 0;
+            }
+        } else {
+            this._calculatedIntensity = this.ratio + (((this._currentPeak - this.ratio) / 10) * intensity);
+        }
 
         // Set uniforms based on currentPeak value
+        
         this.illumination.uniforms.alpha = this._calculatedIntensity;
         this.coloration.uniforms.alpha = this._calculatedIntensity * this._originalColorAlpha;
     }
@@ -358,9 +367,10 @@ class CLAnimations {
         speed = 5,
         intensity = 5,
         listeningBand = "mid",
-        gainNode = "master"
+        gainNode = "master",
+        silentHidden = false
     }) {
-        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {speed, intensity, listeningBand, gainNode})
+        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {speed, intensity, listeningBand, gainNode, silentHidden})
         this.illumination.uniforms.ratio = this._calculatedIntensity;
     }
 
@@ -371,7 +381,8 @@ class CLAnimations {
         tertiaryColor = '#0000ff',
         listeningBand = "mid",
         colorSpeed = 5,
-        gainNode = "master"
+        gainNode = "master",
+        silentHidden = false
     }) {
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -381,7 +392,7 @@ class CLAnimations {
             this._originalColor = this?._source?.data?.lightColor;
         }
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
-        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity, listeningBand, gainNode});
+        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity, listeningBand, gainNode, silentHidden});
 
         CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
 
