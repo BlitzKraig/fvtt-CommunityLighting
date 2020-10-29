@@ -13,15 +13,20 @@
       "name": "English",
       "path": "lang/en.json"
     },
-	  {
+    {
       "lang": "pt-BR",
       "name": "Português (Brasil)",
       "path": "lang/pt-BR.json"
     },
-	{
+    {
       "lang": "es",
       "name": "Spanish",
       "path": "lang/es.json"
+    },
+    {
+      "lang": "cn",
+      "name": "中文",
+      "path": "lang/cn.json"
     }
   ],
   "minimumCoreVersion": "0.7.5",
