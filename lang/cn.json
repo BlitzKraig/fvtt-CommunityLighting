@@ -1,0 +1,46 @@
+{
+    "COMMUNITYLIGHTING": {
+        "authors": {
+            "Blitz": {
+                "lights": {
+                    "lightning": {
+                        "name": "闪电（实验性）",
+                        "description": "基本的闪电霹雳效果，短时间内随机闪烁",
+                        "intensityDescription": "控制闪光亮度",
+                        "speedDescription": "控制闪电劈下速度"
+                    },
+                    "flash": {
+                        "name": "简单闪光",
+                        "description": "一种简单的闪光灯效果",
+                        "intensityDescription": "控制关光后的模糊度",
+                        "speedDescription": "控制闪光速度"        
+                    },
+                    "rgbflash": {
+                        "name": "RGB闪光",
+                        "description": "一种简单的闪光灯效果，在红绿蓝之间循环切换",
+                        "intensityDescription": "控制关光后的模糊度",
+                        "speedDescription": "控制闪光速度"
+                    },
+                    "policeflash": {
+                        "name": "警车灯",
+                        "description": "一种简单的闪光灯效果，在红蓝之间循环切换，模拟警车灯光",
+                        "intensityDescription": "控制关光后的模糊度",
+                        "speedDescription": "控制闪光速度"
+                    },
+                    "torch": {
+                        "name": "深邃火把",
+                        "description": "一种更深邃的替代版本的火把效果"
+                    }
+                },
+                "misc": {
+                    "otherString":"杂项字符串可以放在你的Author集的misc对象中"
+                }
+            }
+        },
+        "settings": {
+            "title": "Community Lighting",
+            "name": "Community Lighting设置",
+            "label": "打开设置"
+        }
+    }
+}
