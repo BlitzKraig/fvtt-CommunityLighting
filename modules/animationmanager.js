@@ -14,7 +14,7 @@ class CLAnimationManager {
     }
 
     async getCommunityLights() {
-        const src = '/modules/CommunityLighting/lights.json'
+        const src = ROUTE_PREFIX?`/${ROUTE_PREFIX}/modules/CommunityLighting/lights.json`:'/modules/CommunityLighting/lights.json';
         const resp = await fetch(src);
         if (resp.status !== 200) {
             console.warn(`Unable to load community lighting file: ${src}`);
