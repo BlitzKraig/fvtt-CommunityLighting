@@ -51,19 +51,9 @@ class CLCustomPropertyManager {
         });
     }
 
-    static async addCustomProperties(objectConfig, customPropertySibling, customAnimationProperties, animateShow = false) {
+    static async addCustomProperties(objectConfig, customPropertySibling, customAnimationProperties, animationName, isToken, animateShow = false) {
 
-        var isToken = false;
-        if (objectConfig.object.light) {
-            isToken = true;
-        }
-
-        var supports;
-        if(isToken){
-            supports = { ...objectConfig.object.light.source.illumination.shader.constructor.supports,  ...objectConfig.object.light.source.coloration.shader.constructor.supports};
-        } else {
-            supports = { ...objectConfig.object.source.illumination.shader.constructor.supports,  ...objectConfig.object.source.coloration.shader.constructor.supports};
-        }
+        var supports = { ...CONFIG.Canvas.lightAnimations[animationName].illuminationShader.supports, ...CONFIG.Canvas.lightAnimations[animationName].colorationShader.supports}
 
         var customAnimationPropertiesClone = JSON.parse(JSON.stringify(customAnimationProperties)); // Clone object so we can reverse it without reversing original
         
@@ -204,6 +194,10 @@ class CLCustomPropertyManager {
     }
 
     static async onRenderTokenOrLightConfig(objectConfig, html, data) {
+        var isToken = false;
+        if (objectConfig.object.light) {
+            isToken = true;
+        }
         var animTypeSelector = html.find("[name='lightAnimation.type']"); // Get the animation type selector element
         var customPropertySibling = html.find('[name="lightAnimation.intensity"]').parent().parent(); // Get the div holding the intensity slider so we can add our props after it
         CLCustomPropertyManager.addOptGroups(html);
@@ -214,7 +208,7 @@ class CLCustomPropertyManager {
         CLCustomPropertyManager.removeAllCustomProperties(html);
 
         if (customAnimationProperties && customAnimationProperties.length > 0) {
-            CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, customAnimationProperties);
+            CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, customAnimationProperties, animTypeSelector.val(), isToken);
             objectConfig.activateListeners(html);
         }
 
@@ -224,19 +218,22 @@ class CLCustomPropertyManager {
             CLCustomPropertyManager.removeAllCustomProperties(html);
             customAnimationProperties = CONFIG.Canvas.lightAnimations[this.value]?.customProperties;
             if (customAnimationProperties && customAnimationProperties.length > 0) {
-                this.disabled = true;
-                CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, CONFIG.Canvas.lightAnimations[this.value].customProperties, true);
-                if(activateListenersTimeout){
-                    clearTimeout(activateListenersTimeout);
+                CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, CONFIG.Canvas.lightAnimations[this.value].customProperties, this.value, isToken, true);
+                // TODO: Disabled as it causes animations to change, but not shaders. If we can force a shader change, all the better...
+                if(!isToken){
+                    this.disabled = true;
+                    if(activateListenersTimeout){
+                        clearTimeout(activateListenersTimeout);
+                    }
+                    activateListenersTimeout = setTimeout(() => {
+                        objectConfig.activateListeners(html);
+                        var fd = new FormDataExtended(objectConfig.form);
+                        objectConfig.object.data = mergeObject(objectConfig.object.data, fd.toObject(), {inplace: false});
+                        objectConfig.object.updateSource();
+                        objectConfig.object.refresh();
+                        this.disabled = false;
+                    }, 500);
                 }
-                activateListenersTimeout = setTimeout(() => {
-                    objectConfig.activateListeners(html);
-                    var fd = new FormDataExtended(objectConfig.form);
-                    objectConfig.object.data = mergeObject(objectConfig.object.data, fd.toObject(), {inplace: false});
-                    objectConfig.object.updateSource();
-                    objectConfig.object.refresh();
-                    this.disabled = false;
-                }, 500);
             }
         });
     }
