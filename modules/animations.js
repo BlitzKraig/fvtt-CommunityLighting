@@ -13,7 +13,8 @@ class CLAnimations {
         const cu = this.coloration.uniforms;
         if (!this._goboTexPath || this._goboTexPath != variables.goboTexture) {
             this._goboTexPath = variables.goboTexture;
-            iu.sampler = undefined;
+            iu.sampler = "";
+            cu.sampler = "";
         }
         if (!variables.useGobo) {
             iu.useSampler = false;
