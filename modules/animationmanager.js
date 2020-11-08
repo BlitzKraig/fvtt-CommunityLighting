@@ -60,25 +60,29 @@ class CLAnimationManager {
                         "min": 0,
                         "max": 100,
                         "step": 1,
-                        "default": 0
+                        "default": 0,
+                        "supports": "blur"
                     },
                     {
                         "title": "Use Gobo",
                         "varName": "useGobo",
                         "type": "checkbox",
-                        "default": false
+                        "default": false,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Image",
                         "varName": "goboTexture",
                         "type": "image",
-                        "default": ""
+                        "default": "",
+                        "supports": "gobo"
                     }, 
                     {
                         "title": "Invert Gobo",
                         "varName": "invert",
                         "type": "checkbox",
-                        "default": false
+                        "default": false,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Type",
@@ -98,7 +102,8 @@ class CLAnimationManager {
                                "value": 2.0
                            }
                         ],
-                        "default": 0.0
+                        "default": 0.0,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Rotation",
@@ -107,7 +112,8 @@ class CLAnimationManager {
                         "min": -180,
                         "max": 180,
                         "step": 1,
-                        "default": 0
+                        "default": 0,
+                        "supports": "gobo"
                     }, {
                         "title": "Gobo Scale",
                         "varName": "scale",
@@ -115,7 +121,8 @@ class CLAnimationManager {
                         "min": 0.1,
                         "max": 3.0,
                         "step": 0.1,
-                        "default": 1.0
+                        "default": 1.0,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Stretch Width",
@@ -124,7 +131,8 @@ class CLAnimationManager {
                         "min": 0.1,
                         "max": 2.0,
                         "step": 0.1,
-                        "default": 1.0
+                        "default": 1.0,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Stretch Height",
@@ -133,7 +141,8 @@ class CLAnimationManager {
                         "min": 0.1,
                         "max": 2.0,
                         "step": 0.1,
-                        "default": 1.0
+                        "default": 1.0,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Translate Horizontal",
@@ -142,7 +151,8 @@ class CLAnimationManager {
                         "min": 0.1,
                         "max": 2.0,
                         "step": 0.01,
-                        "default": 1.0
+                        "default": 1.0,
+                        "supports": "gobo"
                     },
                     {
                         "title": "Gobo Translate Vertical",
@@ -151,7 +161,8 @@ class CLAnimationManager {
                         "min": 0.1,
                         "max": 2.0,
                         "step": 0.01,
-                        "default": 1.0
+                        "default": 1.0,
+                        "supports": "gobo"
                     }
                     );
                     animations[`${author}${light.name}`].customProperties = light.customProperties;

@@ -58,9 +58,19 @@ class CLCustomPropertyManager {
             isToken = true;
         }
 
+        var supports;
+        if(isToken){
+            supports = { ...objectConfig.object.light.source.illumination.shader.constructor.supports,  ...objectConfig.object.light.source.coloration.shader.constructor.supports};
+        } else {
+            supports = { ...objectConfig.object.source.illumination.shader.constructor.supports,  ...objectConfig.object.source.coloration.shader.constructor.supports};
+        }
+
         var customAnimationPropertiesClone = JSON.parse(JSON.stringify(customAnimationProperties)); // Clone object so we can reverse it without reversing original
         
         customAnimationPropertiesClone.reverse().forEach((customPropertyObject) => {
+            if(customPropertyObject.supports && !supports[customPropertyObject.supports]){
+                return;
+            }
             var currentValue;
             if (isToken) {
                 if (objectConfig.object.light.animation) {

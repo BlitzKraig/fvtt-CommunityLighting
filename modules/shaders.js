@@ -110,6 +110,11 @@ class CLShaderFunctions {
    * @implements {AbstractBaseShader}
    */
   class CLStandardIlluminationShader extends AbstractBaseShader {
+      
+    static supports = {
+        gobo: true,
+        blur: true
+    }
     static fragmentShader = `
     precision mediump float;
     uniform float alpha;
@@ -167,6 +172,10 @@ class CLShaderFunctions {
    * @implements {AbstractBaseShader}
    */
   class CLStandardColorationShader extends AbstractBaseShader {
+    static supports = {
+        gobo: true,
+        blur: true
+    }
     static fragmentShader = `
     precision mediump float;
     uniform bool darkness;
