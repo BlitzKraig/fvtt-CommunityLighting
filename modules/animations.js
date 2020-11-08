@@ -9,29 +9,31 @@ class CLAnimations {
     }
 
     masterAnimation = function (dt, variables) {
+        const iu = this.illumination.uniforms;
+        const cu = this.coloration.uniforms;
         if (!this._goboTexPath || this._goboTexPath != variables.goboTexture) {
             this._goboTexPath = variables.goboTexture;
-            this.illumination.uniforms.uSampler = undefined;
+            iu.sampler = undefined;
         }
         if (!variables.useGobo) {
-            this.illumination.uniforms.useSampler = false;
-            this.coloration.uniforms.useSampler = false;
+            iu.useSampler = false;
+            cu.useSampler = false;
         } else {
-            if (!this.illumination.uniforms.uSampler && this._goboTexPath && this._goboTexPath != '') {
-                // this.illumination.uniforms.uSampler = undefined;
-                // this.coloration.uniforms.uSampler = undefined
-                this.illumination.uniforms.uSampler = PIXI.Texture.from(this._goboTexPath);
-                this.coloration.uniforms.uSampler = PIXI.Texture.from(this._goboTexPath);
+            if (!iu.sampler && this._goboTexPath && this._goboTexPath != '') {
+                // iu.sampler = undefined;
+                // cu.sampler = undefined
+                iu.sampler = PIXI.Texture.from(this._goboTexPath);
+                cu.sampler = PIXI.Texture.from(this._goboTexPath);
             }
-            if (this.illumination.uniforms.uSampler?.valid) {
-                this.illumination.uniforms.useSampler = true;
-                this.coloration.uniforms.useSampler = true;
+            if (iu.sampler?.valid) {
+                iu.useSampler = true;
+                cu.useSampler = true;
             } else {
-                this.illumination.uniforms.useSampler = false;
-                this.coloration.uniforms.useSampler = false;
+                iu.useSampler = false;
+                cu.useSampler = false;
             }
-            if (this.illumination.uniforms?.uSampler?.baseTexture?.resource?.source) {
-                let baseSource = this.illumination.uniforms.uSampler.baseTexture.resource.source;
+            if (this.illumination.uniforms?.sampler?.baseTexture?.resource?.source) {
+                let baseSource = iu.sampler.baseTexture.resource.source;
                 baseSource.loop = true
                 if (baseSource.play) {
                     baseSource.play();
@@ -43,22 +45,22 @@ class CLAnimations {
         //     this._rotato = variables.rotation;
         // }
         // this._rotato += 2;
-        // this.illumination.uniforms.rotation = this._rotato;
-        // this.coloration.uniforms.rotation = this._rotato;
-        this.illumination.uniforms.rotation = variables.rotation;
-        this.coloration.uniforms.rotation = variables.rotation;
-        this.coloration.uniforms.scale = variables.scale;
-        this.illumination.uniforms.scale = variables.scale;
-        this.illumination.uniforms.stretchX = variables.stretchX;
-        this.illumination.uniforms.stretchY = variables.stretchY;
-        this.coloration.uniforms.stretchX = variables.stretchX;
-        this.coloration.uniforms.stretchY = variables.stretchY;
-        this.illumination.uniforms.goboType = variables.goboType;
-        this.coloration.uniforms.goboType = variables.goboType;
-        this.illumination.uniforms.invert = variables.invert;
-        this.coloration.uniforms.invert = variables.invert;
-        this.illumination.uniforms.smoothness = variables.smoothness;
-        this.coloration.uniforms.smoothness = variables.smoothness;
+        // iu.rotation = this._rotato;
+        // cu.rotation = this._rotato;
+        iu.rotation = variables.rotation;
+        cu.rotation = variables.rotation;
+        cu.scale = variables.scale;
+        iu.scale = variables.scale;
+        iu.stretchX = variables.stretchX;
+        iu.stretchY = variables.stretchY;
+        cu.stretchX = variables.stretchX;
+        cu.stretchY = variables.stretchY;
+        iu.goboType = variables.goboType;
+        cu.goboType = variables.goboType;
+        iu.invert = variables.invert;
+        cu.invert = variables.invert;
+        iu.smoothness = variables.smoothness;
+        cu.smoothness = variables.smoothness;
         CLAnimationHelpers.includeAnimation(this, variables.animationName, dt, variables);
     }
 

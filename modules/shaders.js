@@ -38,7 +38,7 @@ class CLShaderFunctions {
       }`;
     static gobo = {
         uniforms: `
-        uniform sampler2D uSampler;
+        uniform sampler2D sampler;
         uniform bool useSampler;
         uniform bool invert;
         uniform float goboType;
@@ -54,7 +54,7 @@ class CLShaderFunctions {
         ${CLShaderFunctions.stretch}
         `,
         gsColAvg: `
-        vec4 pix = texture2D(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
         float avg = (pix.r + pix.g + pix.b) / 3.0;
         if(invert) {
             avg = 1.0 - avg;
@@ -62,7 +62,7 @@ class CLShaderFunctions {
         gsCol = vec3(avg);
         `,
         gsColSilhouette: `
-        vec4 pix = texture2D(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
         float avg = (pix.r + pix.g + pix.b) / 3.0;
         if(avg > 0.0){
             avg = 1.0;
@@ -73,7 +73,7 @@ class CLShaderFunctions {
         gsCol = vec3(avg);
         `,
         gsColReal: `
-        vec4 pix = texture2D(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
         if(invert){
             gsCol = vec3(1.0 - pix.r, 1.0 - pix.g, 1.0 - pix.b);
         } else {
@@ -81,7 +81,7 @@ class CLShaderFunctions {
         }
         `,
         gsColBlur: `
-        vec4 pix = blur(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)), vec2(100.0,100.0), vec2(smoothness/500.0,-smoothness/500.0));
+        vec4 pix = blur(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)), vec2(100.0,100.0), vec2(smoothness/500.0,-smoothness/500.0));
         //pix = blur(pix, vUvs, vec2(100.0,100.0, vec2(smoothness,-smoothness)))
         float avg = (pix.r + pix.g + pix.b) / 3.0;
         if(invert) {
@@ -137,7 +137,7 @@ class CLShaderFunctions {
       intensity: 5,
       // Global custom properties
       smoothness: 0,
-      uSampler: '',
+      sampler: '',
       rotation: 0,
       scale: 1,
       stretchX: 1,
@@ -194,7 +194,7 @@ class CLShaderFunctions {
       darkness: false,
       // Global custom properties
       smoothness: 0,
-      uSampler: '',
+      sampler: '',
       rotation: 0,
       scale: 1,
       stretchX: 1,
