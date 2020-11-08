@@ -1,3 +1,208 @@
+class CLShaderFunctions {
+    static rotate = `
+    vec2 rotateUV(in vec2 uv, in float rotation, in vec2 mid)
+    {
+        return vec2(
+            cos(rotation) * (uv.x - mid.x) + sin(rotation) * (uv.y - mid.y) + mid.x,
+            cos(rotation) * (uv.y - mid.y) - sin(rotation) * (uv.x - mid.x) + mid.y
+        );
+    }`;
+    static scale = `
+    vec2 scaleUV(in vec2 uv, in float scale)
+    {
+        uv -= 0.5;
+        uv *= 1.0 / scale;
+        uv += 0.5;
+        return uv;
+    }`;
+    static stretch = `
+    vec2 stretchUV(in vec2 uv, in vec2 stretch)
+    {
+        uv -= 0.5;
+        uv.x *= 1.0 / stretch.x;
+        uv.y *= 1.0 / stretch.y;
+        uv += 0.5;
+        return uv;
+    }`;
+    static blur = `
+    vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
+        vec4 color = vec4(0.0);
+        vec2 off1 = vec2(1.3846153846) * direction;
+        vec2 off2 = vec2(3.2307692308) * direction;
+        color += texture2D(image, uv) * 0.2270270270;
+        color += texture2D(image, uv + (off1 / resolution)) * 0.3162162162;
+        color += texture2D(image, uv - (off1 / resolution)) * 0.3162162162;
+        color += texture2D(image, uv + (off2 / resolution)) * 0.0702702703;
+        color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;
+        return color;
+      }`;
+    static gobo = {
+        uniforms: `
+        uniform sampler2D uSampler;
+        uniform bool useSampler;
+        uniform bool useColor;
+        uniform bool invert;
+        uniform float rotation;
+        uniform float scale;
+        uniform float stretchX;
+        uniform float stretchY;
+        uniform float smoothness;
+        `,
+        functions: `
+        ${CLShaderFunctions.rotate}
+        ${CLShaderFunctions.scale}
+        ${CLShaderFunctions.stretch}
+        `,
+        gsColAvg: `
+        vec4 pix = texture2D(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        float avg = (pix.r + pix.g + pix.b) / 3.0;
+        if(invert) {
+            avg = 1.0 - avg;
+        }
+        gsCol = vec3(avg);
+        `,
+        gsColSilhouette: `
+        vec4 pix = texture2D(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        float avg = (pix.r + pix.g + pix.b) / 3.0;
+        if(avg > 0.0){
+            avg = 1.0;
+        }
+        if(invert) {
+            avg = 1.0 - avg;
+        }
+        gsCol = vec3(avg);
+        `,
+        gsColReal: `
+        vec4 pix = texture2D(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        if(invert){
+            gsCol = vec3(1.0 - pix.r, 1.0 - pix.g, 1.0 - pix.b);
+        } else {
+            gsCol = vec3(pix.r, pix.g, pix.b);
+        }
+        `,
+        gsColBlur: `
+        vec4 pix = blur(uSampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)), vec2(100.0,100.0), vec2(smoothness/500.0,-smoothness/500.0));
+        //pix = blur(pix, vUvs, vec2(100.0,100.0, vec2(smoothness,-smoothness)))
+        float avg = (pix.r + pix.g + pix.b) / 3.0;
+        if(invert) {
+            avg = 1.0 - avg;
+        }
+        gsCol = vec3(avg);
+        `
+    }
+}
+
+
+  
+  /**
+   * The default coloration shader used by standard rendering and animations
+   * A fragment shader which creates a solid light source.
+   * @implements {AbstractBaseShader}
+   */
+  class CLStandardIlluminationShader extends AbstractBaseShader {
+    static fragmentShader = `
+    precision mediump float;
+    uniform float alpha;
+    uniform float ratio;
+    uniform vec3 colorDim;
+    uniform vec3 colorBright;
+    varying vec2 vUvs;
+    ${CLShaderFunctions.gobo.uniforms}
+    
+    ${CLShaderFunctions.gobo.functions}
+
+    void main() {
+        float dist = distance(vUvs, vec2(0.5)) * 2.0;
+        vec3 color = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 500.0), dist + (smoothness / 500.0), ratio));
+        if(useSampler){
+            vec3 gsCol;
+          if(useColor){
+            ${CLShaderFunctions.gobo.gsColReal}
+          } else {
+            ${CLShaderFunctions.gobo.gsColAvg}
+          }
+          gl_FragColor = vec4(clamp(gsCol * color, 0.0, 1.0) * alpha, 1.0);
+        } else {
+          gl_FragColor = vec4((color * alpha), 1.0);
+        }
+    }`;
+    static defaultUniforms = {
+      alpha: 1,
+      ratio: 0.5,
+      colorDim: [0.5, 0.5, 0.5],
+      colorBright: [1.0, 1.0, 1.0],
+      time: 0,
+      intensity: 5,
+      // Global custom properties
+      smoothness: 0,
+      uSampler: '',
+      rotation: 0,
+      scale: 1,
+      stretchX: 1,
+      stretchY: 1,
+      useSampler: false,
+      useColor: true
+    }
+  }
+  
+  /* -------------------------------------------- */
+  
+  /**
+   * The default coloration shader used by standard rendering and animations.
+   * A fragment shader which creates a light source.
+   * @implements {AbstractBaseShader}
+   */
+  class CLStandardColorationShader extends AbstractBaseShader {
+    static fragmentShader = `
+    precision mediump float;
+    uniform bool darkness;
+    uniform float alpha;
+    uniform vec3 color;
+    varying vec2 vUvs;
+    ${CLShaderFunctions.gobo.uniforms}
+    
+    ${CLShaderFunctions.gobo.functions}
+    ${CLShaderFunctions.blur}
+
+    ${AbstractBaseShader.FADE(3, 1)}
+      
+    void main() {
+      
+        float dist = distance(vUvs, vec2(0.5)) * 2.0;
+        vec3 fcolor = (darkness ? vec3(0.0) : color * fade(dist) * alpha);
+        if(useSampler){
+            vec3 gsCol;
+            if(useColor){
+              ${CLShaderFunctions.gobo.gsColBlur}
+            } else {
+              ${CLShaderFunctions.gobo.gsColAvg}
+            }
+          gl_FragColor = vec4(clamp(gsCol * fcolor, 0.0, 1.0), 1.0);
+        } else {
+          gl_FragColor = vec4(fcolor, 1.0);
+        }
+    }`;
+    static defaultUniforms = {
+      alpha: 1.0,
+      color: [1.0, 1.0, 1.0],
+      time: 0,
+      intensity: 5,
+      darkness: false,
+      // Global custom properties
+      smoothness: 0,
+      uSampler: '',
+      rotation: 0,
+      scale: 1,
+      stretchX: 1,
+      stretchY: 1,
+      useSampler: false,
+      useColor: true
+    }
+  }
+
+
+// === CUSTOM SHADERS ===
+
 /**
  * Wave animation illumination shader
  * @implements {StandardIlluminationShader}
