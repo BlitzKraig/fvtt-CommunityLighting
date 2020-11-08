@@ -44,6 +44,8 @@ class CLCustomPropertyManager {
     }
 
     static async removeAllCustomProperties(html) {
+        html.find("#community-lighting-custom-image").attr('name', 'removing');
+        html.find(".community-lighting-custom-property").children('input').attr('name', 'removing');
         html.find(".community-lighting-custom-property").hide('normal', function () {
             $(this).remove();
         });
@@ -206,11 +208,18 @@ class CLCustomPropertyManager {
         }
 
         // When the type changes, set up any custom properties
-        animTypeSelector.on('change', function () {
+        var activateListenersTimeout;
+        animTypeSelector.on('change', await function () {
             CLCustomPropertyManager.removeAllCustomProperties(html);
             customAnimationProperties = CONFIG.Canvas.lightAnimations[this.value]?.customProperties;
             if (customAnimationProperties && customAnimationProperties.length > 0) {
                 CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, CONFIG.Canvas.lightAnimations[this.value].customProperties, true);
+                if(activateListenersTimeout){
+                    clearTimeout(activateListenersTimeout);
+                }
+                activateListenersTimeout = setTimeout(() => {
+                    objectConfig.activateListeners(html);
+                }, 1000);
             }
         });
     }
