@@ -207,6 +207,7 @@ class CLCustomPropertyManager {
         var animTypeSelector = html.find("[name='lightAnimation.type']"); // Get the animation type selector element
         var customPropertySibling = html.find('[name="lightAnimation.intensity"]').parent().parent(); // Get the div holding the intensity slider so we can add our props after it
         CLCustomPropertyManager.addOptGroups(html);
+
         // Grab the current value, and set any custom properties up
         var customAnimationProperties = CONFIG.Canvas.lightAnimations[animTypeSelector.val()]?.customProperties;
 
@@ -223,13 +224,19 @@ class CLCustomPropertyManager {
             CLCustomPropertyManager.removeAllCustomProperties(html);
             customAnimationProperties = CONFIG.Canvas.lightAnimations[this.value]?.customProperties;
             if (customAnimationProperties && customAnimationProperties.length > 0) {
+                this.disabled = true;
                 CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, CONFIG.Canvas.lightAnimations[this.value].customProperties, true);
                 if(activateListenersTimeout){
                     clearTimeout(activateListenersTimeout);
                 }
                 activateListenersTimeout = setTimeout(() => {
                     objectConfig.activateListeners(html);
-                }, 1000);
+                    var fd = new FormDataExtended(objectConfig.form);
+                    objectConfig.object.data = mergeObject(objectConfig.object.data, fd.toObject(), {inplace: false});
+                    objectConfig.object.updateSource();
+                    objectConfig.object.refresh();
+                    this.disabled = false;
+                }, 500);
             }
         });
     }
