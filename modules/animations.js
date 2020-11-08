@@ -47,20 +47,15 @@ class CLAnimations {
         // this._rotato += 2;
         // iu.rotation = this._rotato;
         // cu.rotation = this._rotato;
-        iu.rotation = variables.rotation;
-        cu.rotation = variables.rotation;
-        cu.scale = variables.scale;
-        iu.scale = variables.scale;
-        iu.stretchX = variables.stretchX;
-        iu.stretchY = variables.stretchY;
-        cu.stretchX = variables.stretchX;
-        cu.stretchY = variables.stretchY;
-        iu.goboType = variables.goboType;
-        cu.goboType = variables.goboType;
-        iu.invert = variables.invert;
-        cu.invert = variables.invert;
-        iu.smoothness = variables.smoothness;
-        cu.smoothness = variables.smoothness;
+        iu.rotation = cu.rotation = variables.rotation || 0;
+        iu.scale = cu.scale = variables.scale || 1;
+        iu.stretchX = cu.stretchX = variables.stretchX || 1;
+        iu.stretchY = cu.stretchY = variables.stretchY || 1;
+        iu.translateX = cu.translateX = variables.translateX || 1;
+        iu.translateY = cu.translateY = variables.translateY || 1;
+        iu.goboType = cu.goboType = variables.goboType || 0;
+        iu.invert = cu.invert = variables.invert || false;
+        iu.smoothness = cu.smoothness = variables.smoothness || 0;
         CLAnimationHelpers.includeAnimation(this, variables.animationName, dt, variables);
     }
 

@@ -134,6 +134,24 @@ class CLAnimationManager {
                         "max": 2.0,
                         "step": 0.1,
                         "default": 1.0
+                    },
+                    {
+                        "title": "Gobo Translate Horizontal",
+                        "varName": "translateX",
+                        "type": "range",
+                        "min": 0.1,
+                        "max": 2.0,
+                        "step": 0.01,
+                        "default": 1.0
+                    },
+                    {
+                        "title": "Gobo Translate Vertical",
+                        "varName": "translateY",
+                        "type": "range",
+                        "min": 0.1,
+                        "max": 2.0,
+                        "step": 0.01,
+                        "default": 1.0
                     }
                     );
                     animations[`${author}${light.name}`].customProperties = light.customProperties;

@@ -24,6 +24,12 @@ class CLShaderFunctions {
         uv += 0.5;
         return uv;
     }`;
+    static translate = `
+    vec2 translateUV(in vec2 uv, in vec2 translate)
+    {
+        uv += translate - 1.0;
+        return uv;
+    }`
     static blur = `
     vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
         vec4 color = vec4(0.0);
@@ -36,6 +42,7 @@ class CLShaderFunctions {
         color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;
         return color;
       }`;
+    static getPix = `vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(translateUV(vUvs, vec2(translateX, translateY)), scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));`;
     static gobo = {
         uniforms: `
         uniform sampler2D sampler;
@@ -46,15 +53,18 @@ class CLShaderFunctions {
         uniform float scale;
         uniform float stretchX;
         uniform float stretchY;
+        uniform float translateX;
+        uniform float translateY;
         uniform float smoothness;
         `,
         functions: `
         ${CLShaderFunctions.rotate}
         ${CLShaderFunctions.scale}
         ${CLShaderFunctions.stretch}
+        ${CLShaderFunctions.translate}
         `,
         gsColAvg: `
-        vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        ${CLShaderFunctions.getPix}
         float avg = (pix.r + pix.g + pix.b) / 3.0;
         if(invert) {
             avg = 1.0 - avg;
@@ -62,7 +72,7 @@ class CLShaderFunctions {
         gsCol = vec3(avg);
         `,
         gsColSilhouette: `
-        vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        ${CLShaderFunctions.getPix}
         float avg = (pix.r + pix.g + pix.b) / 3.0;
         if(avg > 0.0){
             avg = 1.0;
@@ -73,7 +83,7 @@ class CLShaderFunctions {
         gsCol = vec3(avg);
         `,
         gsColReal: `
-        vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));
+        ${CLShaderFunctions.getPix}
         if(invert){
             gsCol = vec3(1.0 - pix.r, 1.0 - pix.g, 1.0 - pix.b);
         } else {
@@ -142,6 +152,8 @@ class CLShaderFunctions {
       scale: 1,
       stretchX: 1,
       stretchY: 1,
+      translateX: 1,
+      translateY: 1,
       useSampler: false,
       goboType: 0.0
     }
@@ -199,6 +211,8 @@ class CLShaderFunctions {
       scale: 1,
       stretchX: 1,
       stretchY: 1,
+      translateX: 1,
+      translateY: 1,
       useSampler: false,
       goboType: 0.0
     }
