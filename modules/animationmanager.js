@@ -32,8 +32,7 @@ class CLAnimationManager {
     async registerAnimations() {
         let customLightsObject = await this.getCommunityLights();
         let animations = {};
-        await
-        function () {
+        await function () {
             for (var author in customLightsObject) {
                 animations[`${author}CommunityLightingSeparatorStart`] = {
                     label: `${author}`
@@ -42,13 +41,89 @@ class CLAnimationManager {
                 lightsArray?.forEach(light => {
                     animations[`${author}${light.name}`] = {
                         label: light.name,
-                        animation: this.communityAnimations[light.animationFunction],
-                        illuminationShader: CLAnimationManager.getShaderClass(light.shaders?.illumination) || StandardIlluminationShader,
-                        colorationShader: CLAnimationManager.getShaderClass(light.shaders?.coloration) || StandardColorationShader
+                        animation: this.communityAnimations.masterAnimation, // Use masterAnimation, include animationName
+                        illuminationShader: CLAnimationManager.getShaderClass(light.shaders?.illumination) || CLStandardIlluminationShader,
+                        colorationShader: CLAnimationManager.getShaderClass(light.shaders?.coloration) || CLStandardColorationShader
                     }
-                    if(light.customProperties){
-                        animations[`${author}${light.name}`].customProperties = light.customProperties;
+
+                    if (!light.customProperties) {
+                        light.customProperties = [];
                     }
+                    light.customProperties.push({
+                        "default": light.animationFunction,
+                        "type": "animationName"
+                    }, 
+                    {
+                        "title": "Light Circle Smoothness",
+                        "varName": "smoothness",
+                        "type": "range",
+                        "min": 0,
+                        "max": 100,
+                        "step": 1,
+                        "default": 0
+                    },
+                    {
+                        "title": "Use Gobo",
+                        "varName": "useGobo",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Gobo Image",
+                        "varName": "goboTexture",
+                        "type": "image",
+                        "default": ""
+                    }, 
+                    {
+                        "title": "Invert Gobo",
+                        "varName": "invert",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Show Colors",
+                        "varName": "useColor",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Gobo Rotation",
+                        "varName": "rotation",
+                        "type": "range",
+                        "min": -180,
+                        "max": 180,
+                        "step": 1,
+                        "default": 0
+                    }, {
+                        "title": "Gobo Scale",
+                        "varName": "scale",
+                        "type": "range",
+                        "min": 0.1,
+                        "max": 3.0,
+                        "step": 0.1,
+                        "default": 1.0
+                    },
+                    {
+                        "title": "Gobo Stretch Width",
+                        "varName": "stretchX",
+                        "type": "range",
+                        "min": 0.1,
+                        "max": 2.0,
+                        "step": 0.1,
+                        "default": 1.0
+                    },
+                    {
+                        "title": "Gobo Stretch Height",
+                        "varName": "stretchY",
+                        "type": "range",
+                        "min": 0.1,
+                        "max": 2.0,
+                        "step": 0.1,
+                        "default": 1.0
+                    }
+                    );
+                    animations[`${author}${light.name}`].customProperties = light.customProperties;
+
                 });
                 animations[`${author}CommunityLightingSeparatorEnd`] = {
                     label: `${author}`
@@ -60,7 +135,7 @@ class CLAnimationManager {
 
     static _cls_ = {}; // cache
     static getShaderClass(name) {
-        if(!name){
+        if (!name) {
             return false;
         }
         if (!CLAnimationManager._cls_[name]) {
