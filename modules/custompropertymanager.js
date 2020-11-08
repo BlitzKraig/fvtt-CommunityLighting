@@ -173,6 +173,7 @@ class CLCustomPropertyManager {
 
         if (customAnimationProperties && customAnimationProperties.length > 0) {
             CLCustomPropertyManager.addCustomProperties(objectConfig, customPropertySibling, customAnimationProperties);
+            objectConfig.activateListeners(html);
         }
 
         // When the type changes, set up any custom properties
