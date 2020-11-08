@@ -8,6 +8,60 @@ class CLAnimations {
         Hooks.on("initializePointSourceShaders", CLPreAnimation.onPointSourceInit);
     }
 
+    masterAnimation = function (dt, variables) {
+        if (!this._goboTexPath || this._goboTexPath != variables.goboTexture) {
+            this._goboTexPath = variables.goboTexture;
+            this.illumination.uniforms.uSampler = undefined;
+        }
+        if (!variables.useGobo) {
+            this.illumination.uniforms.useSampler = false;
+            this.coloration.uniforms.useSampler = false;
+        } else {
+            if (!this.illumination.uniforms.uSampler && this._goboTexPath && this._goboTexPath != '') {
+                // this.illumination.uniforms.uSampler = undefined;
+                // this.coloration.uniforms.uSampler = undefined
+                this.illumination.uniforms.uSampler = PIXI.Texture.from(this._goboTexPath);
+                this.coloration.uniforms.uSampler = PIXI.Texture.from(this._goboTexPath);
+            }
+            if (this.illumination.uniforms.uSampler?.valid) {
+                this.illumination.uniforms.useSampler = true;
+                this.coloration.uniforms.useSampler = true;
+            } else {
+                this.illumination.uniforms.useSampler = false;
+                this.coloration.uniforms.useSampler = false;
+            }
+            if (this.illumination.uniforms?.uSampler?.baseTexture?.resource?.source) {
+                let baseSource = this.illumination.uniforms.uSampler.baseTexture.resource.source;
+                baseSource.loop = true
+                if (baseSource.play) {
+                    baseSource.play();
+                }
+            }
+        }
+
+        // if(!this._rotato){
+        //     this._rotato = variables.rotation;
+        // }
+        // this._rotato += 2;
+        // this.illumination.uniforms.rotation = this._rotato;
+        // this.coloration.uniforms.rotation = this._rotato;
+        this.illumination.uniforms.rotation = variables.rotation;
+        this.coloration.uniforms.rotation = variables.rotation;
+        this.coloration.uniforms.scale = variables.scale;
+        this.illumination.uniforms.scale = variables.scale;
+        this.illumination.uniforms.stretchX = variables.stretchX;
+        this.illumination.uniforms.stretchY = variables.stretchY;
+        this.coloration.uniforms.stretchX = variables.stretchX;
+        this.coloration.uniforms.stretchY = variables.stretchY;
+        this.illumination.uniforms.useColor = variables.useColor;
+        this.coloration.uniforms.useColor = variables.useColor;
+        this.illumination.uniforms.invert = variables.invert;
+        this.coloration.uniforms.invert = variables.invert;
+        this.illumination.uniforms.smoothness = variables.smoothness;
+        this.coloration.uniforms.smoothness = variables.smoothness;
+        CLAnimationHelpers.includeAnimation(this, variables.animationName, dt, variables);
+    }
+
     /* Author: Global - Core helper - Normally used with custom shaders */
     foundryTime = PointSource.prototype.animateTime;
     // foundryTime = function (dt, {
@@ -137,7 +191,7 @@ class CLAnimations {
         ratioDamper = 1,
         secondaryColor = "#f0ba5c"
     }) {
-        
+
         CLAnimationHelpers.binaryTimer(this, speed, dt);
         CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
 
@@ -200,7 +254,7 @@ class CLAnimations {
             sigma: 0.005 * intensity
         });
 
-        
+
 
         this._colorScale = this._ar1(this._colorScale, {
             center: 0.5,
@@ -209,7 +263,7 @@ class CLAnimations {
             min: 0.0
         })
 
-        
+
         if (this._originalColor && secondaryColor) {
             let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
             this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
@@ -358,7 +412,7 @@ class CLAnimations {
             case "all":
                 listeningBand = undefined;
                 break
-        
+
             default:
                 listeningBand = [5, 30];
                 break;
@@ -385,9 +439,12 @@ class CLAnimations {
         }
 
         // Set uniforms based on currentPeak value
-        
+
         this.illumination.uniforms.alpha = this._calculatedIntensity;
         this.coloration.uniforms.alpha = this._calculatedIntensity * this._originalColorAlpha;
+        // this._rotato = this._currentPeak * 360;
+        // this.coloration.uniforms.scale = this._calculatedIntensity;
+        // this.illumination.uniforms.scale = this._calculatedIntensity;
     }
 
     blitzPulseMusic(dt, {
