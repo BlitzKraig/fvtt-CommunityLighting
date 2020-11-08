@@ -20,7 +20,10 @@ class CLAnimations {
     }) {
         CLAnimationHelpers.addIlluminationBlur(this, 20);
         CLAnimationHelpers.addColorationBlur(this, 20, 10);
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity});
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
+            speed,
+            intensity
+        });
 
         CLAnimationHelpers.cosineWave(this, speed, 6, dt);
         this.coloration.filters[0].blur = 100 * this._wave.simplifiedValue;
@@ -71,7 +74,7 @@ class CLAnimations {
             let alpha = 0.1 * intensity;
             this.illumination.uniforms.alpha = alpha;
             this.coloration.uniforms.alpha = this._originalColorAlpha; // Don't bother multiplying this with alpha, users can use the opacity slider to set this directly, since the light only has 2 phases
-            if(flipped != this._flipped){
+            if (flipped != this._flipped) {
                 // Experimental: Force light visible
                 this._source.layer.sources.set(this._source.sourceId, this);
                 canvas.sight.refresh();
@@ -80,7 +83,7 @@ class CLAnimations {
             // Set the alpha to zero
             this.illumination.uniforms.alpha = 0;
             this.coloration.uniforms.alpha = 0;
-            if(flipped != this._flipped || this._source.layer.sources.get(this._source.sourceId)){
+            if (flipped != this._flipped || this._source.layer.sources.get(this._source.sourceId)) {
                 // Experimental: Force light fully hidden without stopping animation
                 this._source.layer.sources.delete(this._source.sourceId)
                 canvas.sight.refresh();
@@ -132,7 +135,7 @@ class CLAnimations {
         const iu = this.illumination.uniforms;
         const cu = this.coloration.uniforms;
 
-        if(!this._colorScale){
+        if (!this._colorScale) {
             this._colorScale = 0.5;
         }
 
@@ -150,7 +153,7 @@ class CLAnimations {
                 iu.ratio -= alteredValue;
                 iu.alpha -= alteredValue;
                 cu.alpha -= alteredValue;
-                if(this._originalColor && secondaryColor){
+                if (this._originalColor && secondaryColor) {
                     let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
                     this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale -= alteredValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
                 }
@@ -158,7 +161,7 @@ class CLAnimations {
                 iu.ratio += alteredValue;
                 iu.alpha += alteredValue;
                 cu.alpha += alteredValue;
-                if(this._originalColor && secondaryColor){
+                if (this._originalColor && secondaryColor) {
                     let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
                     this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale += alteredValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
                 }
@@ -194,7 +197,7 @@ class CLAnimations {
         })
 
         
-        if(this._originalColor && secondaryColor){
+        if (this._originalColor && secondaryColor) {
             let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
             this.coloration.uniforms.color = hexToRGB(colorScale(this._colorScale).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
         }
@@ -212,7 +215,12 @@ class CLAnimations {
         blurStrength = 20
     }) {
         CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
-        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, ratioDamper, secondaryColor});
+        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {
+            speed,
+            intensity,
+            ratioDamper,
+            secondaryColor
+        });
     }
 
 
@@ -253,7 +261,10 @@ class CLAnimations {
         let flipped = this._flipped;
 
         CLAnimationHelpers.forceColorationShader(this, "#ff0000");
-        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, {speed, intensity}); // Run blitzSimpleFlash
+        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, {
+            speed,
+            intensity
+        }); // Run blitzSimpleFlash
 
         // Only run if _flipped is false, and has changed in this cycle
         if (flipped && !this._flipped) {
@@ -283,7 +294,10 @@ class CLAnimations {
         // Track _flipped value at start of cycle
         let flipped = this._flipped;
         CLAnimationHelpers.forceColorationShader(this, "#ff0000");
-        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, {speed, intensity}); // Run blitzSimpleFlash
+        CLAnimationHelpers.includeAnimation(this, "blitzSimpleFlash", dt, {
+            speed,
+            intensity
+        }); // Run blitzSimpleFlash
 
         // Only run if _flipped is false, and has changed in this cycle
         if (flipped && !this._flipped) {
@@ -315,31 +329,31 @@ class CLAnimations {
         gainNode = "master",
         silentHidden = false
     }) {
-        if(!this._currentPeak){
+        if (!this._currentPeak) {
             this._currentPeak = 0; // store currentPeak inside the pointSource
         }
         switch (listeningBand) {
             case "low":
-                listeningBand = [0,4];
+                listeningBand = [0, 4];
                 break;
             case "mid":
-                listeningBand = [5,30];
+                listeningBand = [5, 30];
                 break;
             case "high":
-                listeningBand = [31,63];
+                listeningBand = [31, 63];
                 break;
             case "all":
                 listeningBand = undefined;
                 break
         
             default:
-                listeningBand = [5,30];
+                listeningBand = [5, 30];
                 break;
         }
-        if(listeningBand){
-            this._currentPeak = CLAnimationHelpers.getAudioFrequencyPower(this, this._currentPeak, 11 - speed, listeningBand, 1, 0.1, gainNode=="soundboard"); // Update currentPeak
-        }else{
-            this._currentPeak = CLAnimationHelpers.getAudioPeak(this,this._currentPeak,11 - speed, 1, 0.1, gainNode=="soundboard");
+        if (listeningBand) {
+            this._currentPeak = CLAnimationHelpers.getAudioFrequencyPower(this, this._currentPeak, 11 - speed, listeningBand, 1, 0.1, gainNode == "soundboard"); // Update currentPeak
+        } else {
+            this._currentPeak = CLAnimationHelpers.getAudioPeak(this, this._currentPeak, 11 - speed, 1, 0.1, gainNode == "soundboard");
         }
 
         if (this._placeableType == "AmbientLight") {
@@ -348,9 +362,9 @@ class CLAnimations {
             this._originalColorAlpha = this?._source?.data?.lightAlpha;
         }
 
-        if(silentHidden && this._currentPeak == 0 && this._calculatedIntensity != undefined){
+        if (silentHidden && this._currentPeak == 0 && this._calculatedIntensity != undefined) {
             this._calculatedIntensity -= 0.02
-            if(this._calculatedIntensity < 0){
+            if (this._calculatedIntensity < 0) {
                 this._calculatedIntensity = 0;
             }
         } else {
@@ -370,7 +384,13 @@ class CLAnimations {
         gainNode = "master",
         silentHidden = false
     }) {
-        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {speed, intensity, listeningBand, gainNode, silentHidden})
+        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {
+            speed,
+            intensity,
+            listeningBand,
+            gainNode,
+            silentHidden
+        })
         this.illumination.uniforms.ratio = this._calculatedIntensity;
     }
 
@@ -392,11 +412,17 @@ class CLAnimations {
             this._originalColor = this?._source?.data?.lightColor;
         }
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
-        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity, listeningBand, gainNode, silentHidden});
+        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {
+            speed,
+            intensity,
+            listeningBand,
+            gainNode,
+            silentHidden
+        });
 
         CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
 
-        if(this._originalColor && secondaryColor && tertiaryColor){
+        if (this._originalColor && secondaryColor && tertiaryColor) {
             let colorScale = chroma.scale([this._originalColor, secondaryColor, tertiaryColor]).domain([0, 1]); // Get a color between original, secondaryColor and tertiaryColor, mapped from 0 to 1
             this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
         }
@@ -419,11 +445,14 @@ class CLAnimations {
         }
 
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity});
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
+            speed,
+            intensity
+        });
 
-        CLAnimationHelpers.cosineWave(this, useColorSpeed?colorSpeed*colorSpeedMult:speed, 10, dt);
+        CLAnimationHelpers.cosineWave(this, useColorSpeed?colorSpeed * colorSpeedMult:speed, 10, dt);
 
-        if(this._originalColor && secondaryColor){
+        if (this._originalColor && secondaryColor) {
             let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original and secondaryColor, mapped from 0 to 1
             this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
         }
@@ -435,7 +464,10 @@ class CLAnimations {
         intensity = 5
     }) {
         CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {speed, intensity}); // Call `foundryTime` to manipulate the custom shaders based on time
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
+            speed,
+            intensity
+        }); // Call `foundryTime` to manipulate the custom shaders based on time
     }
 
     secretFireAnimateStarLight(dt, {
@@ -444,7 +476,10 @@ class CLAnimations {
         secondaryColor = '#00ff00'
     }) {
         CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, { speed, intensity }); // Call `foundryTime` to manipulate the custom shaders based on time
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
+            speed,
+            intensity
+        }); // Call `foundryTime` to manipulate the custom shaders based on time
 
         this.coloration.uniforms.musicmode = false;
         this.coloration.uniforms.scolor = hexToRGB(colorStringToHex(secondaryColor));
@@ -487,7 +522,10 @@ class CLAnimations {
         }
 
         CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, { speed, intensity }); // Call `foundryTime` to manipulate the custom shaders based on time
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
+            speed,
+            intensity
+        }); // Call `foundryTime` to manipulate the custom shaders based on time
 
         this.coloration.uniforms.musicmode = true;
         this.coloration.uniforms.scolor = hexToRGB(colorStringToHex(secondaryColor));
