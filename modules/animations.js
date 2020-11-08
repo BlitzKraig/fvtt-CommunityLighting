@@ -10,6 +10,19 @@ class CLAnimations {
 
     /* Author: Global - Core helper - Normally used with custom shaders */
     foundryTime = PointSource.prototype.animateTime;
+    // foundryTime = function (dt, {
+    //     speed = 5,
+    //     intensity = 5
+    // } = {}) {
+    //     this._animTime = (canvas.app.ticker.lastTime / (5000 / speed)) + this._animateSeed;
+    //     const co = this.coloration;
+    //     co.uniforms.intensity = intensity;
+    //     co.uniforms.time = this._animTime;
+    //     const il = this.illumination;
+    //     il.uniforms.intensity = intensity;
+    //     il.uniforms.time = this._animTime;
+
+    // }
     /* Global End */
 
     /* Author: Blitz */
