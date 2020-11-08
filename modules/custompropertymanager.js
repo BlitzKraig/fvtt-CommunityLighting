@@ -145,6 +145,28 @@ class CLCustomPropertyManager {
                     }
                     
                     break;
+                case "image":
+                    var customPropertyEl = 
+                    $(`
+                    <div class="form-group community-lighting-custom-property">
+                        <label>${customPropertyObject.title}</label>
+                        <div class="form-fields">
+                            <button type="button" class="file-picker" data-type="imagevideo" data-target="lightAnimation.${customPropertyObject.varName}" title="Browse Files" tabindex="-1">
+                                <i class="fas fa-file-import fa-fw"></i>
+                            </button>
+                            <input id="community-lighting-custom-image" class="image" type="text" name="lightAnimation.${customPropertyObject.varName}" placeholder="path/image.png" value="${currentValue}">
+                        </div>
+                    </div>`)
+
+                    if (animateShow) {
+                        customPropertyEl.hide();
+                    }
+                    customPropertySibling.after(customPropertyEl);
+                    if (animateShow) {
+                        customPropertyEl.show('normal');
+                    }
+                    
+                    break;
 
                 default:
                     break;
