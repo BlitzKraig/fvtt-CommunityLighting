@@ -81,10 +81,24 @@ class CLAnimationManager {
                         "default": false
                     },
                     {
-                        "title": "Show Colors",
-                        "varName": "useColor",
-                        "type": "checkbox",
-                        "default": false
+                        "title": "Gobo Type",
+                        "varName": "goboType",
+                        "type": "select",
+                        "options": [
+                           {
+                               "label": "Standard",
+                               "value": 0.0
+                           },
+                           {
+                               "label": "Colored",
+                               "value": 1.0
+                           },
+                           {
+                               "label": "Silhouette",
+                               "value": 2.0
+                           }
+                        ],
+                        "default": 0.0
                     },
                     {
                         "title": "Gobo Rotation",

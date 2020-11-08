@@ -53,8 +53,8 @@ class CLAnimations {
         this.illumination.uniforms.stretchY = variables.stretchY;
         this.coloration.uniforms.stretchX = variables.stretchX;
         this.coloration.uniforms.stretchY = variables.stretchY;
-        this.illumination.uniforms.useColor = variables.useColor;
-        this.coloration.uniforms.useColor = variables.useColor;
+        this.illumination.uniforms.goboType = variables.goboType;
+        this.coloration.uniforms.goboType = variables.goboType;
         this.illumination.uniforms.invert = variables.invert;
         this.coloration.uniforms.invert = variables.invert;
         this.illumination.uniforms.smoothness = variables.smoothness;

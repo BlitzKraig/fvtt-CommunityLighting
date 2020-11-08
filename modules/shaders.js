@@ -40,8 +40,8 @@ class CLShaderFunctions {
         uniforms: `
         uniform sampler2D uSampler;
         uniform bool useSampler;
-        uniform bool useColor;
         uniform bool invert;
+        uniform float goboType;
         uniform float rotation;
         uniform float scale;
         uniform float stretchX;
@@ -116,11 +116,13 @@ class CLShaderFunctions {
         vec3 color = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 500.0), dist + (smoothness / 500.0), ratio));
         if(useSampler){
             vec3 gsCol;
-          if(useColor){
-            ${CLShaderFunctions.gobo.gsColReal}
-          } else {
-            ${CLShaderFunctions.gobo.gsColAvg}
-          }
+            if(goboType == 1.0){
+              ${CLShaderFunctions.gobo.gsColReal}
+            } else if(goboType == 2.0) {
+              ${CLShaderFunctions.gobo.gsColSilhouette}
+            } else {
+              ${CLShaderFunctions.gobo.gsColAvg}
+            }
           gl_FragColor = vec4(clamp(gsCol * color, 0.0, 1.0) * alpha, 1.0);
         } else {
           gl_FragColor = vec4((color * alpha), 1.0);
@@ -141,7 +143,7 @@ class CLShaderFunctions {
       stretchX: 1,
       stretchY: 1,
       useSampler: false,
-      useColor: true
+      goboType: 0.0
     }
   }
   
@@ -172,8 +174,10 @@ class CLShaderFunctions {
         vec3 fcolor = (darkness ? vec3(0.0) : color * fade(dist) * alpha);
         if(useSampler){
             vec3 gsCol;
-            if(useColor){
-              ${CLShaderFunctions.gobo.gsColBlur}
+            if(goboType == 1.0){
+              ${CLShaderFunctions.gobo.gsColReal}
+            } else if(goboType == 2.0) {
+              ${CLShaderFunctions.gobo.gsColSilhouette}
             } else {
               ${CLShaderFunctions.gobo.gsColAvg}
             }
@@ -196,7 +200,7 @@ class CLShaderFunctions {
       stretchX: 1,
       stretchY: 1,
       useSampler: false,
-      useColor: true
+      goboType: 0.0
     }
   }
 
