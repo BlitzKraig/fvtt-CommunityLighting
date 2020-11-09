@@ -52,8 +52,8 @@ class CLAnimations {
         iu.scale = cu.scale = variables.scale || 1;
         iu.stretchX = cu.stretchX = variables.stretchX || 1;
         iu.stretchY = cu.stretchY = variables.stretchY || 1;
-        iu.translateX = cu.translateX = variables.translateX || 1;
-        iu.translateY = cu.translateY = variables.translateY || 1;
+        iu.translateX = cu.translateX = variables.translateX || 0;
+        iu.translateY = cu.translateY = variables.translateY || 0;
         iu.goboType = cu.goboType = variables.goboType || 0;
         iu.invert = cu.invert = variables.invert || false;
         iu.smoothness = cu.smoothness = variables.smoothness || 0;

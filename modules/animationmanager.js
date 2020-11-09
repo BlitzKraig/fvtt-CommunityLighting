@@ -148,20 +148,20 @@ class CLAnimationManager {
                         "title": "Gobo Translate Horizontal",
                         "varName": "translateX",
                         "type": "range",
-                        "min": 0.1,
-                        "max": 2.0,
+                        "min": -1.0,
+                        "max": 1.0,
                         "step": 0.01,
-                        "default": 1.0,
+                        "default": 0.0,
                         "supports": "gobo"
                     },
                     {
                         "title": "Gobo Translate Vertical",
                         "varName": "translateY",
                         "type": "range",
-                        "min": 0.1,
-                        "max": 2.0,
+                        "min": -1.0,
+                        "max": 1.0,
                         "step": 0.01,
-                        "default": 1.0,
+                        "default": 0.0,
                         "supports": "gobo"
                     }
                     );

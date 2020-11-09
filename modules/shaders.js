@@ -27,7 +27,7 @@ class CLShaderFunctions {
     static translate = `
     vec2 translateUV(in vec2 uv, in vec2 translate)
     {
-        uv += translate - 1.0;
+        uv += translate;
         return uv;
     }`
     static blur = `
@@ -42,7 +42,7 @@ class CLShaderFunctions {
         color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;
         return color;
       }`;
-    static getPix = `vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(translateUV(vUvs, vec2(translateX, translateY)), scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));`;
+    static getPix = `vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(translateUV(vUvs, vec2(-translateX, -translateY)), scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));`;
     static gobo = {
         uniforms: `
         uniform sampler2D sampler;
@@ -157,8 +157,8 @@ class CLShaderFunctions {
       scale: 1,
       stretchX: 1,
       stretchY: 1,
-      translateX: 1,
-      translateY: 1,
+      translateX: 0,
+      translateY: 0,
       useSampler: false,
       goboType: 0.0
     }
@@ -220,8 +220,8 @@ class CLShaderFunctions {
       scale: 1,
       stretchX: 1,
       stretchY: 1,
-      translateX: 1,
-      translateY: 1,
+      translateX: 0,
+      translateY: 0,
       useSampler: false,
       goboType: 0.0
     }
