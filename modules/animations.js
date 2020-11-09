@@ -57,6 +57,23 @@ class CLAnimations {
         iu.goboType = cu.goboType = variables.goboType || 0;
         iu.invert = cu.invert = variables.invert || false;
         iu.smoothness = cu.smoothness = variables.smoothness || 0;
+
+        // 0.7.6 color fix
+        if(game.data.version == '0.7.6'){
+            var typesToSkip = ["blitzRGBFlash", "blitzPoliceFlash"]
+            if(!typesToSkip.includes(this.animation.animationName)){
+                if (this._placeableType == "AmbientLight") {
+                    this._originalColorAlpha = this?._source?.data?.tintAlpha;
+                    this._originalColor = this?._source?.data?.tintColor;
+                } else if (this._placeableType == "Token") {
+                    this._originalColorAlpha = this?._source?.data?.lightAlpha;
+                    this._originalColor = this?._source?.data?.lightColor;
+                }
+                this.coloration.uniforms.color = hexToRGB(colorStringToHex(this._originalColor));
+                this.coloration.uniforms.alpha = this._originalColorAlpha;
+            }
+        }
+        
         CLAnimationHelpers.includeAnimation(this, variables.animationName, dt, variables);
     }
 
