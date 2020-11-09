@@ -56,6 +56,7 @@ class CLAnimationManager {
                     {
                         "title": "Light Circle Smoothness",
                         "varName": "smoothness",
+                        "hint": "Blur between bright and dim radii",
                         "type": "range",
                         "min": 0,
                         "max": 100,
@@ -73,6 +74,7 @@ class CLAnimationManager {
                     {
                         "title": "Gobo Image",
                         "varName": "goboTexture",
+                        "hint": "Supports png, jpg, mp4 and webm",
                         "type": "image",
                         "default": "",
                         "supports": "gobo"
@@ -80,6 +82,7 @@ class CLAnimationManager {
                     {
                         "title": "Invert Gobo",
                         "varName": "invert",
+                        "hint": "Inverts all colors. Useful with a black and white gobo to change which section is illuminated",
                         "type": "checkbox",
                         "default": false,
                         "supports": "gobo"
@@ -87,6 +90,7 @@ class CLAnimationManager {
                     {
                         "title": "Gobo Type",
                         "varName": "goboType",
+                        "hint": "Sillhouette only works using a gobo with a strong black, white or transparent color",
                         "type": "select",
                         "options": [
                            {
