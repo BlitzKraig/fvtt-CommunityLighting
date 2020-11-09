@@ -79,28 +79,12 @@ class CLAnimations {
 
     /* Author: Blitz */
 
-    blitzShaderTest(dt, {
-        speed = 5,
-        intensity = 5
-    }) {
-        CLAnimationHelpers.addIlluminationBlur(this, 20);
-        CLAnimationHelpers.addColorationBlur(this, 20, 10);
-        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
-            speed,
-            intensity
-        });
-
-        CLAnimationHelpers.cosineWave(this, speed, 6, dt);
-        this.coloration.filters[0].blur = 100 * this._wave.simplifiedValue;
-        this.illumination.uniforms.alpha = this._wave.invertedSimplifiedValue;
-    }
-
-    blitzStaticBlur(dt, {
+    blitzStatic(dt, {
         speed = 5,
         intensity = 5,
         blurStrength = 20
     }) {
-        CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
+        // Does nothing. Allows users to have a static light with support for blur, gobos etc.
     }
 
     blitzFadeSimple(dt, {
@@ -270,24 +254,6 @@ class CLAnimations {
         //     cu.color[index] = this._originalColor[index] + ((1 - this._originalColor[index]) * this._wave.simplifiedValue / 2); // Bring the color closer to bright white
         // });
     }
-
-    // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
-    blitzTorchBlur(dt, {
-        speed = 5,
-        intensity = 5,
-        ratioDamper = 1,
-        secondaryColor = "#f0ba5c",
-        blurStrength = 20
-    }) {
-        CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
-        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {
-            speed,
-            intensity,
-            ratioDamper,
-            secondaryColor
-        });
-    }
-
 
     blitzSimpleFlash(dt, {
         speed = 5,

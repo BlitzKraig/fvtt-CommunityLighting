@@ -8,18 +8,6 @@
         },
         "lights": [
             {
-                "translationName": "shadertest",
-                "name": "Custom Shader Example",
-                "animationFunction": "blitzShaderTest",
-                "shaders": {
-                    "coloration": "CLCustomWaveColorationShader",
-                    "illumination": "CLCustomWaveIlluminationShader"
-                },
-                "description": "A pulsing light using a custom shader",
-                "intensityDescription": "Controls how extreme the fade will be",
-                "speedDescription": "Controls how quickly the light will fade in and out"
-            },
-            {
                 "translationName": "fade",
                 "name": "Fader",
                 "animationFunction": "blitzFadeSimple",
@@ -257,23 +245,12 @@
                 ]
             },
             {
-                "translationName": "blurStatic",
-                "name": "Static Blur",
-                "animationFunction": "blitzStaticBlur",
-                "description": "A static, blurrable light",
+                "translationName": "static",
+                "name": "Static",
+                "animationFunction": "blitzStatic",
+                "description": "A static light. Allows extended options like blurring and gobos on a non-animated light",
                 "intensityDescription": "Not used",
-                "speedDescription": "Not used",
-                "customProperties": [
-                    {
-                        "title": "Blur Strength",
-                        "varName": "blurStrength",
-                        "type": "range",
-                        "min": 1,
-                        "max": 50,
-                        "step": 1,
-                        "default": 20
-                    }
-                ]
+                "speedDescription": "Not used"
             },
             {
                 "translationName": "torch",
@@ -295,38 +272,6 @@
                         "max": 50,
                         "step": 1,
                         "default": 1
-                    }
-                ]
-            },
-            {
-                "translationName": "blurtorch",
-                "name": "Blurred Torch",
-                "animationFunction": "blitzTorchBlur",
-                "description": "A deeper, alternative version of the torch",
-                "customProperties": [
-                    {
-                        "title": "Secondary Color",
-                        "varName": "secondaryColor",
-                        "type": "color",
-                        "default": "#f0ba5c"
-                    },
-                    {
-                        "title": "Ratio Damper",
-                        "varName": "ratioDamper",
-                        "type": "range",
-                        "min": 1,
-                        "max": 50,
-                        "step": 1,
-                        "default": 1
-                    },
-                    {
-                        "title": "Blur Strength",
-                        "varName": "blurStrength",
-                        "type": "range",
-                        "min": 1,
-                        "max": 50,
-                        "step": 1,
-                        "default": 20
                     }
                 ]
             },
