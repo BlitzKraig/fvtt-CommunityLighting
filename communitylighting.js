@@ -42,5 +42,4 @@ class CommunityLighting {
     }
 }
 
-
-Hooks.on("init", CommunityLighting.onInit);
+Hooks.on("setup", CommunityLighting.onInit);
