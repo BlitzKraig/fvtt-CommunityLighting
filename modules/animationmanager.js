@@ -54,9 +54,9 @@ class CLAnimationManager {
                         "type": "animationName"
                     }, 
                     {
-                        "title": "Light Circle Smoothness",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.blur",
                         "varName": "smoothness",
-                        "hint": "Blur between bright and dim radii",
+                        "hint": "COMMUNITYLIGHTING.builtinProperties.hint.blur",
                         "type": "range",
                         "min": 0,
                         "max": 100,
@@ -65,32 +65,32 @@ class CLAnimationManager {
                         "supports": "blur"
                     },
                     {
-                        "title": "Use Gobo",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.useGobo",
                         "varName": "useGobo",
                         "type": "checkbox",
                         "default": false,
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Image",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboImage",
                         "varName": "goboTexture",
-                        "hint": "Supports png, jpg, mp4 and webm",
+                        "hint": "COMMUNITYLIGHTING.builtinProperties.hint.goboImage",
                         "type": "image",
                         "default": "",
                         "supports": "gobo"
                     }, 
                     {
-                        "title": "Invert Gobo",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboInvert",
                         "varName": "invert",
-                        "hint": "Inverts all colors. Useful with a black and white gobo to change which section is illuminated",
+                        "hint": "COMMUNITYLIGHTING.builtinProperties.hint.goboInvert",
                         "type": "checkbox",
                         "default": false,
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Type",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboType",
                         "varName": "goboType",
-                        "hint": "Sillhouette only works using a gobo with a strong black, white or transparent color",
+                        "hint": "COMMUNITYLIGHTING.builtinProperties.hint.goboType",
                         "type": "select",
                         "options": [
                            {
@@ -110,7 +110,7 @@ class CLAnimationManager {
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Rotation",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboRotation",
                         "varName": "rotation",
                         "type": "range",
                         "min": -180,
@@ -119,7 +119,7 @@ class CLAnimationManager {
                         "default": 0,
                         "supports": "gobo"
                     }, {
-                        "title": "Gobo Scale",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboScale",
                         "varName": "scale",
                         "type": "range",
                         "min": 0.1,
@@ -129,7 +129,7 @@ class CLAnimationManager {
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Stretch Width",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboStretchX",
                         "varName": "stretchX",
                         "type": "range",
                         "min": 0.1,
@@ -139,7 +139,7 @@ class CLAnimationManager {
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Stretch Height",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboStretchY",
                         "varName": "stretchY",
                         "type": "range",
                         "min": 0.1,
@@ -149,7 +149,7 @@ class CLAnimationManager {
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Translate Horizontal",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboTranslateX",
                         "varName": "translateX",
                         "type": "range",
                         "min": -1.0,
@@ -159,7 +159,7 @@ class CLAnimationManager {
                         "supports": "gobo"
                     },
                     {
-                        "title": "Gobo Translate Vertical",
+                        "title": "COMMUNITYLIGHTING.builtinProperties.title.goboTranslateY",
                         "varName": "translateY",
                         "type": "range",
                         "min": -1.0,

@@ -41,6 +41,30 @@
             "title": "Community Lighting",
             "name": "Community Lighting Settings",
             "label": "Open Settings"
+        },
+        "builtinProperties":{
+            "title":{
+                "blur": "Bright Radius Blur",
+                "useGobo": "Use Gobo",
+                "goboImage": "Gobo Image",
+                "goboInvert": "Invert Gobo",
+                "goboType": "Gobo Type",
+                "goboRotation": "Gobo Rotation",
+                "goboScale": "Gobo Scale",
+                "goboStretchX": "Gobo Stretch Width",
+                "goboStretchY": "Gobo Stretch Height",
+                "goboTranslateX": "Gobo Translate Horizontal",
+                "goboTranslateY": "Gobo Translate Vertical"
+            },
+            "hint": {
+                "blur": "Blur between bright and dim radii",
+                "goboImage": "Supports png, jpg, mp4 and webm",
+                "goboInvert": "Inverts all colors. Useful with a black and white gobo to change which section is illuminated",
+                "goboType": "Sillhouette only works using a gobo with a strong black, white or transparent color"
+            }
+        },
+        "ui": {
+            "propertiesHeader":"Custom Properties"
         }
     }
 }

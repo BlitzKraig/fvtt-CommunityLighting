@@ -86,10 +86,10 @@ class CLCustomPropertyManager {
                 case "color":
                     var customPropertyEl = $(
                         `<div class="form-group community-lighting-custom-property">
-                            <label>${customPropertyObject.title}</label>
+                            <label>${game.i18n.localize(customPropertyObject.title)}</label>
                             <input class="color" type="text" name="lightAnimation.${customPropertyObject.varName}" value="${currentValue}">
                             <input type="color" value="${currentValue}" data-edit="lightAnimation.${customPropertyObject.varName}">
-                            ${customPropertyObject.hint?`<p class="hint">${customPropertyObject.hint}</p>`:''}
+                            ${customPropertyObject.hint?`<p class="hint">${game.i18n.localize(customPropertyObject.hint)}</p>`:''}
                         </div>`)
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -102,12 +102,12 @@ class CLCustomPropertyManager {
                 case "range":
                     var customPropertyEl = $(
                     `<div class="form-group community-lighting-custom-property">
-                        <label>${customPropertyObject.title}</label>
+                        <label>${game.i18n.localize(customPropertyObject.title)}</label>
                         <div class="form-fields">
                             <input type="range" name="lightAnimation.${customPropertyObject.varName}" value="${currentValue}" min="${customPropertyObject.min}" max="${customPropertyObject.max}" step="${customPropertyObject.step}" data-dtype="Number">
                             <span class="range-value">${currentValue}</span>
                         </div>
-                        ${customPropertyObject.hint?`<p class="hint">${customPropertyObject.hint}</p>`:''}
+                        ${customPropertyObject.hint?`<p class="hint">${game.i18n.localize(customPropertyObject.hint)}</p>`:''}
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -121,9 +121,9 @@ class CLCustomPropertyManager {
                     var customPropertyEl = 
                     $(
                     `<div class="form-group community-lighting-custom-property">
-                        <label>${customPropertyObject.title}</label>
+                        <label>${game.i18n.localize(customPropertyObject.title)}</label>
                         <input type="checkbox" name="lightAnimation.${customPropertyObject.varName}" data-dtype="Boolean" ${currentValue?"checked":""}>
-                        ${customPropertyObject.hint?`<p class="hint">${customPropertyObject.hint}</p>`:''}
+                        ${customPropertyObject.hint?`<p class="hint">${game.i18n.localize(customPropertyObject.hint)}</p>`:''}
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -141,13 +141,13 @@ class CLCustomPropertyManager {
                     })
                     var customPropertyEl = $(
                     `<div class="form-group community-lighting-custom-property">
-                        <label>${customPropertyObject.title}</label>
+                        <label>${game.i18n.localize(customPropertyObject.title)}</label>
                         <div class="form-fields">
                             <select name="lightAnimation.${customPropertyObject.varName}">
                                 ${options}
                             </select>
                         </div>
-                        ${customPropertyObject.hint?`<p class="hint">${customPropertyObject.hint}</p>`:''}
+                        ${customPropertyObject.hint?`<p class="hint">${game.i18n.localize(customPropertyObject.hint)}</p>`:''}
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -162,14 +162,14 @@ class CLCustomPropertyManager {
                     var customPropertyEl = 
                     $(`
                     <div class="form-group community-lighting-custom-property">
-                        <label>${customPropertyObject.title}</label>
+                        <label>${game.i18n.localize(customPropertyObject.title)}</label>
                         <div class="form-fields">
                             <button type="button" class="file-picker" data-type="imagevideo" data-target="lightAnimation.${customPropertyObject.varName}" title="Browse Files" tabindex="-1">
                                 <i class="fas fa-file-import fa-fw"></i>
                             </button>
                             <input id="community-lighting-custom-image" class="image" type="text" name="lightAnimation.${customPropertyObject.varName}" placeholder="path/image.png" value="${currentValue}">
                         </div>
-                        ${customPropertyObject.hint?`<p class="hint">${customPropertyObject.hint}</p>`:''}
+                        ${customPropertyObject.hint?`<p class="hint">${game.i18n.localize(customPropertyObject.hint)}</p>`:''}
                     </div>`)
 
                     if (animateShow) {
