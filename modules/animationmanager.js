@@ -39,6 +39,12 @@ class CLAnimationManager {
                 }
                 let lightsArray = customLightsObject[author].lights;
                 lightsArray?.forEach(light => {
+                    
+                    if(light.translationName){
+                        var translation = game.i18n.translations?.COMMUNITYLIGHTING?.authors[author]?.lights[light.translationName];
+                        light = {...light, ...translation}
+                    }
+
                     animations[`${author}${light.name}`] = {
                         label: light.name,
                         animation: this.communityAnimations.masterAnimation, // Use masterAnimation, include animationName
