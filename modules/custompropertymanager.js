@@ -80,7 +80,7 @@ class CLCustomPropertyManager {
             switch (customPropertyObject.type) {
                 case "animationName":
                     // Add hidden animation name
-                    var customPropertyEl = $(`<div class="form-group community-lighting-custom-property" style="display:none">
+                    var customPropertyEl = $(`<div class="form-group community-lighting-custom-property-noanim" style="display:none">
                     <input class="text" type="text" name="lightAnimation.animationName" value="${currentValue}">
                     </div>`);
                     customPropertySibling.after(customPropertyEl);
