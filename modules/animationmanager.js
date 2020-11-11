@@ -52,7 +52,15 @@ class CLAnimationManager {
                     light.customProperties.push({
                         "default": light.animationFunction,
                         "type": "animationName"
-                    }, 
+                    },
+                    {
+                        "default": light.speedDescription,
+                        "type": "speedDescription"
+                    },
+                    {
+                        "default": light.intensityDescription,
+                        "type": "intensityDescription"
+                    },
                     {
                         "title": "COMMUNITYLIGHTING.builtinProperties.title.blur",
                         "varName": "smoothness",
