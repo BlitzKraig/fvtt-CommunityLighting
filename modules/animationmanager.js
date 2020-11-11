@@ -90,7 +90,7 @@ class CLAnimationManager {
                         "varName": "goboTexture",
                         "hint": "COMMUNITYLIGHTING.builtinProperties.hint.goboImage",
                         "type": "image",
-                        "default": "",
+                        "default": "./modules/CommunityLighting/gobos/soft_square.png",
                         "supports": "gobo"
                     }, 
                     {
