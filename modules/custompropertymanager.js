@@ -45,6 +45,8 @@ class CLCustomPropertyManager {
 
     static async removeAllCustomProperties(html) {
         html.find("#community-lighting-custom-image").attr('name', 'removing');
+        html.find(".community-lighting-custom-property-noanim").remove();
+        html.find(".community-lighting-custom-property").attr('name', 'removing');
         html.find(".community-lighting-custom-property").children('input').attr('name', 'removing');
         html.find(".community-lighting-custom-property").hide('normal', function () {
             $(this).remove();
@@ -57,7 +59,7 @@ class CLCustomPropertyManager {
 
         var customAnimationPropertiesClone = JSON.parse(JSON.stringify(customAnimationProperties)); // Clone object so we can reverse it without reversing original
         
-        customAnimationPropertiesClone.reverse().forEach((customPropertyObject) => {
+        customAnimationPropertiesClone.reverse().forEach((customPropertyObject, index) => {
             if(customPropertyObject.supports && !supports[customPropertyObject.supports]){
                 return;
             }
@@ -184,6 +186,16 @@ class CLCustomPropertyManager {
 
                 default:
                     break;
+            }
+            if(index == customAnimationPropertiesClone.length-1){
+                    var customPropertyEl = $(`<h2 class="community-lighting-custom-property ignore" style="cursor: pointer;" onclick="$('.community-lighting-custom-property').not('.ignore').toggle('normal');">${game.i18n.localize('COMMUNITYLIGHTING.ui.propertiesHeader')}</h2>`);
+                    if (animateShow) {
+                        customPropertyEl.hide();
+                    }
+                    $('.community-lighting-custom-property').not('[name="removing"]').not('.ignore').first().before(customPropertyEl);
+                    if (animateShow) {
+                        customPropertyEl.show('normal');
+                    }
             }
         })
     }
