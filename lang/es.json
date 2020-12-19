@@ -31,10 +31,14 @@
                         "name": "Antorcha Brillante",
                         "description": "Versión alternativa y más brillante de la antorcha"
                     }
+                },
+                "misc": {
+                    "otherString":"Las cadenas que no encajen en otro apartado pueden ponerse en el objeto 'misc' del grupo del Autor"
                 }
             }
         },
         "settings": {
+            "title": "Community Lighting",
             "name": "Ajustes de Iluminación basada en la Comunidad (Community Lighting)",
             "label": "Abrir la configuración"
         }
