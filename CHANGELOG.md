@@ -1,3 +1,7 @@
+# 0.3.1 - 2020/11/06
+
+* Fixed json loading on servers using ROUTE_PREFIX
+
 # 0.3.0 - 2020/10/28
 
 * Added custom properties support
