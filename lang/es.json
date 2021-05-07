@@ -1,5 +1,9 @@
 {
     "COMMUNITYLIGHTING": {
+        "I18N": {
+            "LANGUAGE": "Español",
+            "MAINTAINERS": "@Viriato139ac#0342"
+        },
         "authors": {
             "Blitz": {
                 "lights": {
@@ -10,32 +14,36 @@
                         "speedDescription": "Controla la frecuencia de los relámpagos"
                     },
                     "flash": {
-                        "name": "Fogonazo Simple",
+                        "name": "Fogonazo simple",
                         "description": "Un fogonazo simple",
                         "intensityDescription": "Controla cómo de tenue es la luz cuando termina el fogonazo",
                         "speedDescription": "Controla la frecuencia con la que se producirán los fogonazos"
                     },
                     "rgbflash": {
                         "name": "Fogonazo RGB",
-                        "description": "Un fogonazo simple que va rotando de Rojo-Verde-Azul",
+                        "description": "Un fogonazo simple que va rotando de rojo-verde-azul",
                         "intensityDescription": "Controla cómo de tenue es la luz cuando termina el fogonazo",
                         "speedDescription": "Controla la frecuencia con la que se producirán los fogonazos"
                     },
                     "policeflash": {
-                        "name": "Luces de Policía",
-                        "description": "Una luz simple que va rotando de Rojo-Azul y que imita las luces de la policía",
+                        "name": "Luces de policía",
+                        "description": "Una luz simple que va rotando de rojo-Azul y que imita las luces de la policía",
                         "intensityDescription": "Controla cómo de tenue es la luz cuando termina el fogonazo",
                         "speedDescription": "Controla la frecuencia con la que se producirán los fogonazos"
                     },
                     "torch": {
-                        "name": "Antorcha Brillante",
+                        "name": "Antorcha brillante",
                         "description": "Versión alternativa y más brillante de la antorcha"
                     }
+                },
+                "misc": {
+                    "otherString":"Las cadenas que no encajen en otro apartado pueden ponerse en el objeto 'misc' del grupo del autor"
                 }
             }
         },
         "settings": {
-            "name": "Ajustes de Iluminación basada en la Comunidad (Community Lighting)",
+            "title": "Community Lighting",
+            "name": "Ajustes de iluminación basada en la comunidad (Community Lighting)",
             "label": "Abrir la configuración"
         }
     }
