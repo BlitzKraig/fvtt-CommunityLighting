@@ -1,3 +1,7 @@
+# 0.3.4 - 2021/06/03
+
+* Moved 0.7 version to legacy branch
+
 # 0.3.1 - 2020/11/06
 
 * Fixed json loading on servers using ROUTE_PREFIX
