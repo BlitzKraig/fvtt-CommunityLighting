@@ -39,24 +39,7 @@ class CommunityLighting {
 
         Handlebars.registerHelper(CommunityLighting.handlebarsHelpers);
 
-        const baseSoundLoad = Sound.prototype.load;
-
-        Sound.prototype.load = async function load(...args) {
-            console.log(this);
-            // Call base fn
-            await baseSoundLoad.call(this, ...args);
-            if (CLAudioReactor.gainShim) {
-                this.container.gainNode.disconnect()
-                this.container.gainNode.connect(CLAudioReactor.gainShim)
-            }
-        };
-
-        PointSource.prototype.animate = function animate(dt) {
-            const animation = this.object.data?.lightAnimation?._source || this.animation;
-            if (!animation.type || (this.radius === 0) || !this.illumination.shader) return;
-            const fn = CONFIG.Canvas.lightAnimations[animation.type]?.animation;
-            if (fn) fn.call(this, dt, animation);
-        };
+        CLMonkeyPatcher.runPatches()
 
     }
 }

@@ -1,3 +1,7 @@
+# 0.3.5 - 2021/06/03
+
+* Updated for 0.8.6 - Update provided by SecretFire
+
 # 0.3.1 - 2020/11/06
 
 * Fixed json loading on servers using ROUTE_PREFIX
