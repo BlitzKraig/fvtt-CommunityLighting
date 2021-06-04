@@ -3,9 +3,14 @@ class CLMonkeyPatcher {
     static libWrapped = false;
 
     static checkLibWrapper() {
-        if (!game.modules.get("lib-wrapper")?.active && game.user.isGM) {
+        const lwrapper = game.modules.get("lib-wrapper");
+        if (!lwrapper?.active && game.user.isGM) {
             ui.notifications.warn("Community Lighting recommends to install and activate the 'libWrapper' module.");
-        } else this.libWrapped = true;
+        }
+
+        if (lwrapper?.active) {
+            this.libWrapped = true;
+        }
     }
 
     static runPatches() {
