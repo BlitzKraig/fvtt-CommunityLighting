@@ -1,3 +1,7 @@
+# 0.3.6 - 2021/06/04
+
+* Fixed lighting animation monkeypatch
+
 # 0.3.5 - 2021/06/03
 
 * Updated for 0.8.6 - Update provided by SecretFire
