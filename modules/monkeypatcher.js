@@ -5,7 +5,7 @@ class CLMonkeyPatcher {
     static checkLibWrapper() {
         const lwrapper = game.modules.get("lib-wrapper");
         if (!lwrapper?.active && game.user.isGM) {
-            ui.notifications.warn("Community Lighting recommends to install and activate the 'libWrapper' module.");
+            ui.notifications.warn(game.i18n.localize("COMMUNITYLIGHTING.notif.libWrapperMissing"));
         }
 
         if (lwrapper?.active) {

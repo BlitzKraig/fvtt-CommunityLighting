@@ -30,8 +30,8 @@ class CommunityLighting {
         await CommunityLighting.animationManager.registerAnimations();
 
         game.settings.registerMenu(CommunityLighting.moduleName, "mySettingsMenu", {
-            name: "COMMUNITYLIGHTING.settings.name",
-            label: "COMMUNITYLIGHTING.settings.label",
+            name: game.i18n.localize("COMMUNITYLIGHTING.settings.name"),
+            label: game.i18n.localize("COMMUNITYLIGHTING.settings.label"),
             icon: "fas fa-lightbulb",
             type: CommunityLightingSettings,
             restricted: true

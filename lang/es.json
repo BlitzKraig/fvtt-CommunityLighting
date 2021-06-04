@@ -37,7 +37,7 @@
                     }
                 },
                 "misc": {
-                    "otherString":"Las cadenas que no encajen en otro apartado pueden ponerse en el objeto 'misc' del grupo del autor"
+                    "otherString": "Las cadenas que no encajen en otro apartado pueden ponerse en el objeto 'misc' del grupo del autor"
                 }
             }
         },
@@ -45,6 +45,9 @@
             "title": "Community Lighting",
             "name": "Ajustes de iluminación basada en la comunidad (Community Lighting)",
             "label": "Abrir la configuración"
+        },
+        "notif": {
+            "libWrapperMissing": "Community Lighting recomienda instalar y activar el módulo 'libWrapper'."
         }
     }
 }

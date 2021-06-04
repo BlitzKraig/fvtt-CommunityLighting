@@ -1,3 +1,8 @@
+# 0.3.7 - 2021/06/04
+
+* Added libwrapper support - SecretFire
+* Added i18n-ally support
+
 # 0.3.6 - 2021/06/04
 
 * Fixed lighting animation monkeypatch

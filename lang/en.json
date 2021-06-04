@@ -13,7 +13,7 @@
                         "name": "Simple Flash",
                         "description": "A simple flashing light",
                         "intensityDescription": "Controls how dim the light will be when it flashes off",
-                        "speedDescription": "Controls how often the light will flash"        
+                        "speedDescription": "Controls how often the light will flash"
                     },
                     "rgbflash": {
                         "name": "RGB Flash",
@@ -33,7 +33,7 @@
                     }
                 },
                 "misc": {
-                    "otherString":"Miscellaneous strings can go in the 'misc' object of your Author set"
+                    "otherString": "Miscellaneous strings can go in the 'misc' object of your Author set"
                 }
             }
         },
@@ -41,6 +41,13 @@
             "title": "Community Lighting",
             "name": "Community Lighting Settings",
             "label": "Open Settings"
+        },
+        "notif": {
+            "libWrapperMissing": "Community Lighting recommends to install and activate the 'libWrapper' module."
+        },
+        "I18N": {
+            "LANGUAGE": "English",
+            "MAINTAINERS": "@Blitz#6797"
         }
     }
 }
