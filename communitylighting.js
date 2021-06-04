@@ -13,8 +13,8 @@ class CommunityLighting {
         "communitylighting-parseauthors": (obj) => {
             var authors = Object.keys(obj);
             var data = "";
-            authors.forEach((author)=>{
-                data+=`<p>${author}</p>
+            authors.forEach((author) => {
+                data += `<p>${author}</p>
                 `;
             })
             return data;
@@ -39,10 +39,13 @@ class CommunityLighting {
 
         Handlebars.registerHelper(CommunityLighting.handlebarsHelpers);
 
-        CLMonkeyPatcher.runPatches()
+    }
 
+    static async onReady() {
+        // Patching and using libWrapper if available
+        CLMonkeyPatcher.runPatches()
     }
 }
 
-
 Hooks.on("init", CommunityLighting.onInit);
+Hooks.on("ready", CommunityLighting.onReady);

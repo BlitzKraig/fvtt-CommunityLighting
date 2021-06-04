@@ -1,32 +1,60 @@
 class CLMonkeyPatcher {
 
-    static runPatches(){
-        const baseSoundLoad = Sound.prototype.load;
+    static libWrapped = false;
 
-        Sound.prototype.load = async function load(...args) {
+    static checkLibWrapper() {
+        const lwrapper = game.modules.get("lib-wrapper");
+        if (!lwrapper?.active && game.user.isGM) {
+            ui.notifications.warn("Community Lighting recommends to install and activate the 'libWrapper' module.");
+        }
+
+        if (lwrapper?.active) {
+            this.libWrapped = true;
+        }
+    }
+
+    static runPatches() {
+
+        this.checkLibWrapper();
+
+        const wrappedSoundLoad = async function load(wrapped, ...args) {
             // Call base fn
-            await baseSoundLoad.call(this, ...args);
+            await wrapped(...args);
             // Connect the audio up to our gainShim
             if (CLAudioReactor.gainShim) {
                 this.container.gainNode.disconnect()
                 this.container.gainNode.connect(CLAudioReactor.gainShim)
             }
         };
-    
-        const basePointSourceAnimate = PointSource.prototype.animate;
-    
-        PointSource.prototype.animate = function animate(...args) {
-            // if(this.object.data?.lightAnimation?._source){
-            //     this.animation = this.object.data?.lightAnimation?._source
-            // }
-            // basePointSourceAnimate.call(this, ...args)
-    
-            // FULL monkeypatch from SecretFire for future reference
-            const animation = this.object.data?.lightAnimation?._source || this.animation;
-            if (!animation.type || (this.radius === 0) || !this.illumination.shader) return;
-            const fn = CONFIG.Canvas.lightAnimations[animation.type]?.animation;
-            if (fn) fn.call(this, ...args, animation);
+
+        const wrappedPointSourceAnimate = function animate(wrapped, ...args) {
+            // saving animation
+            const animation = this.animation;
+            if (this.object.data?.lightAnimation?._source) {
+                // replacing animation values by CL animation
+                this.animation = this.object.data?.lightAnimation?._source;
+            }
+            wrapped(...args);
+            // restore animation
+            this.animation = animation;
         };
+
+        if (this.libWrapped) {
+            libWrapper.register("CommunityLighting", "Sound.prototype.load", wrappedSoundLoad, "WRAPPER");
+            libWrapper.register("CommunityLighting", "PointSource.prototype.animate", wrappedPointSourceAnimate, "WRAPPER");
+        } else {
+            const baseSoundLoad = Sound.prototype.load;
+            Sound.prototype.load = async function () {
+                return await wrappedSoundLoad.call(this, baseSoundLoad.bind(this), ...arguments);
+            };
+
+            const basePointSourceanimate = PointSource.prototype.animate;
+            PointSource.prototype.animate = function () {
+                return wrappedPointSourceAnimate.call(this, basePointSourceanimate.bind(this), ...arguments);
+            };
+
+        }
+
     }
-    
+
 }
