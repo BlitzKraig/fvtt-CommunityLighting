@@ -39,10 +39,13 @@ class CommunityLighting {
 
         Handlebars.registerHelper(CommunityLighting.handlebarsHelpers);
 
-        CLMonkeyPatcher.runPatches()
+    }
 
+    static async onReady() {
+        // Patching and using libWrapper if available
+        CLMonkeyPatcher.runPatches()
     }
 }
 
-
 Hooks.on("init", CommunityLighting.onInit);
+Hooks.on("ready", CommunityLighting.onReady);
