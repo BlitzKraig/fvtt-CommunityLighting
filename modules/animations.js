@@ -429,6 +429,30 @@ class CLAnimations {
         }
     }
 
+     /* Author: Blitz - Commissions */
+     blitzForgottenAdventuresCustom(dt, {
+        speed = 5,
+        intensity = 5,
+        blurStrength = 1,
+        dimBrightness = 1,
+        brightBrightness = 2,
+        shouldFlicker = false,
+        shouldFlickerAlpha = false,
+        shouldFlickerTranslate = false
+    }) {
+        
+        if(shouldFlicker){
+            CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, blurStrength, alterAlpha : shouldFlickerAlpha, alterTranslation: shouldFlickerTranslate, secondaryColor: this._placeableType == "AmbientLight"?this?._source?.data?.tintColor:this?._source?.data?.lightColor});
+        } else {
+            this.illumination.uniforms.ratio = this.bright / this.dim;
+            this.illumination.uniforms.alpha = 1
+            this.coloration.uniforms.alpha = this.alpha
+            this.illumination.uniforms.smoothness = blurStrength;
+        }
+        this.illumination.uniforms.dimBrightness = dimBrightness;
+        this.illumination.uniforms.brightBrightness = brightBrightness;
+    }
+
     /* Author: SecretFire */
     secretFireAnimateTimeForceColor(dt, {
         speed = 5,

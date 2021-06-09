@@ -489,5 +489,79 @@
                 ]
             }
         ]
+    },
+    "Blitz-Commissioned": {
+        "discord": "Blitz#6797",
+        "links": {
+            "github": "https://github.com/BlitzKraig",
+            "twitter": "",
+            "youtube": ""
+        },
+        "lights": [
+            {
+                "translationName": "forgottenAdventuresCustom",
+                "name": "Forgotten Adventures Customizable",
+                "animationFunction": "blitzForgottenAdventuresCustom",
+                "shaders": {
+                    "illumination": "CLCustomForgottenAdventuresShader"
+                },
+                "description": "A brightness-configurable light that won't dim when scene darkness is increased",
+                "intensityDescription": "Control the intensity of the torch flicker (Requires Should Flicker)",
+                "speedDescription": "Control how fast the animation flickers (Requires Should Flicker)",
+                "customProperties": [
+                    {
+                        "title": "Blur Strength",
+                        "varName": "blurStrength",
+                        "type": "range",
+                        "min": 1,
+                        "max": 50,
+                        "step": 1,
+                        "default": 1
+                    },
+                    {
+                        "title": "Bright Brightness",
+                        "description": "How bright the Bright Radius should be, from 0 to 1.7 (Full, higher than standard)",
+                        "varName": "brightBrightness",
+                        "type": "range",
+                        "min" : 0,
+                        "max": 1.7,
+                        "step": 0.1,
+                        "default": 1.7
+                    },
+                    {
+                        "title": "Dim Brightness",
+                        "varName": "dimBrightness",
+                        "description": "How bright the Dim Radius should be, from 0 to 2.7 (Full, higher than standard)",
+                        "type": "range",
+                        "min" : 0,
+                        "max": 2.7,
+                        "step": 0.1,
+                        "default": 1
+                    },
+                    {
+                        "title": "Should Flicker",
+                        "description": "Enable torch-like flickering",
+                        "varName": "shouldFlicker",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Should Flicker: Alpha",
+                        "description": "Enable to flicker the opacity of the light when using Should Flicker",
+                        "varName": "shouldFlickerAlpha",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Should Flicker: Translate",
+                        "description": "Enable to cause the center circle to move as it flickers when using Should Flicker",
+                        "varName": "shouldFlickerTranslate",
+                        "type": "checkbox",
+                        "default": false
+                    }
+
+                ]
+            }
+        ]
     }
 }
