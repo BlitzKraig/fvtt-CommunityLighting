@@ -1,3 +1,24 @@
+# 0.4.0 - 2021/06/09
+
+* Added module settings to keep sheets open on update
+    * This is a workaround since 'live' updating no longer works.
+* Added property description support
+* Added intensity/speed description display
+* Fixed a bug where changing intensity/speed only would lose custom property changes on refresh
+* Added codesnippets file for custom light authors to make creation easier
+* Added new shader functions from experiments branch to support upcoming features (gobos)
+* Light Update - Alternate Torch
+    * New custom shader
+    * Added blur options
+    * Added movement options
+* Light Removed - Blur Torch
+    * Replaced by Alternate Torch with Blur enabled
+* New Light - Forgotten Adventures Custom
+    * A commissioned light which allows bright and dim regions to have their brightness changed.
+    * Custom shader
+    * Defaults to settings which prevent the light from dimming in darkness
+    * Includes new torch features
+
 # 0.3.7 - 2021/06/04
 
 * Added libwrapper support - SecretFire
