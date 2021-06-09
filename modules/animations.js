@@ -227,19 +227,6 @@ class CLAnimations {
         // });
     }
 
-    // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
-    blitzTorchBlur(dt, {
-        speed = 5,
-        intensity = 5,
-        ratioDamper = 1,
-        secondaryColor = "#f0ba5c",
-        blurStrength = 20
-    }) {
-        CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
-        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, ratioDamper, secondaryColor});
-    }
-
-
     blitzSimpleFlash(dt, {
         speed = 5,
         intensity = 5
