@@ -73,6 +73,18 @@ class CLCustomPropertyManager {
             }
 
             switch (customPropertyObject.type) {
+                case "speedDescription":
+                    if(currentValue){
+                        var customPropertyEl = $(`<p class="hint community-lighting-custom-property-noanim">${currentValue}</p>`);
+                        $('[name="lightAnimation.speed"]').parent().parent().append(customPropertyEl)
+                    }
+                    break;
+                case "intensityDescription":
+                    if(currentValue){
+                        var customPropertyEl = $(`<p class="hint community-lighting-custom-property-noanim">${currentValue}</p>`);
+                        $('[name="lightAnimation.intensity"]').parent().parent().append(customPropertyEl)
+                    }
+                    break;
                 case "color":
                     var customPropertyEl = $(
                         `<div class="form-group community-lighting-custom-property">
