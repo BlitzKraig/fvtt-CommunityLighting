@@ -55,6 +55,7 @@ class CLCustomPropertyManager {
     }
 
     static async removeAllCustomProperties(html) {
+        html.find(".community-lighting-custom-property-noanim").remove();
         html.find(".community-lighting-custom-property").hide('normal', function () {
             $(this).remove();
         });
