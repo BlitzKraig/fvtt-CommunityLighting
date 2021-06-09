@@ -235,7 +235,7 @@ class CLAnimationHelpers {
         if(source.illumination._blurred && source.illumination._blurred != strength){
             CLAnimationHelpers.removeIlluminationBlur(source);
         }
-        if(!source.illumination._blurred){
+        if(!source.illumination._blurred && strength > 0){
             let blurFilter = new PIXI.filters.BlurFilter(strength, quality)
             blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
             if(source.illumination.filters){
