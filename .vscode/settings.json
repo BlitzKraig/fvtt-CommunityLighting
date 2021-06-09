@@ -1,0 +1,14 @@
+{
+    "i18n-ally.localesPaths": [
+        "lang"
+    ],
+    "i18n-ally.keystyle": "nested",
+    "i18n-ally.localeCountryMap": {
+        "en": "gb",
+    },
+    "i18n-ally.keysInUse": [
+        "COMMUNITYLIGHTING\\.authors\\.*"
+    ],
+    "i18n-ally.indent": 4
+    
+}
