@@ -114,12 +114,15 @@ class CLAnimations {
         }
     }
 
-    // Based on the 0.7 beta torch
+    // Custom torch with movement flickering
     blitzTorch(dt, {
         speed = 5,
         intensity = 5,
         ratioDamper = 1,
-        secondaryColor = "#f0ba5c"
+        secondaryColor = "#f0ba5c",
+        alterAlpha = true,
+        alterTranslation = true,
+        blurStrength = 1
     }) {
         
         CLAnimationHelpers.binaryTimer(this, speed, dt);
@@ -131,6 +134,8 @@ class CLAnimations {
 
         const iu = this.illumination.uniforms;
         const cu = this.coloration.uniforms;
+
+        iu.smoothness = blurStrength / ratioDamper;
 
         if(!this._colorScale){
             this._colorScale = 0.5;
@@ -172,19 +177,38 @@ class CLAnimations {
             center: this.bright / this.dim,
             sigma: (0.002 * intensity) / ratioDamper
         });
-        iu.alpha = this._ar1(iu.alpha, {
-            center: 0.9,
-            sigma: 0.005 * intensity,
-            max: 1.0
-        });
 
-        // Evolve coloration
-        cu.alpha = this._ar1(cu.alpha, {
-            center: this.alpha,
-            sigma: 0.005 * intensity
-        });
+        if(alterAlpha){
+            iu.alpha = this._ar1(iu.alpha, {
+                center: 0.9,
+                sigma: 0.005 * intensity,
+                max: 1.0
+            });
+        }
 
-        
+        if(alterAlpha && this.alpha > 0){
+            // Evolve coloration
+            cu.alpha = this._ar1(cu.alpha, {
+                center: this.alpha,
+                sigma: 0.005 * intensity
+            });
+        }
+        if(!alterAlpha){
+            iu.alpha = 1
+            cu.alpha = this.alpha
+        }
+
+        if(alterTranslation){
+            if(iu.translateX != undefined && iu.translateY != undefined){
+                iu.translateX = ((Math.random() * 0.05) - 0.025) * (intensity / 10) / ratioDamper;
+                iu.translateY = ((Math.random() * 0.05) - 0.025) * (intensity / 10) / ratioDamper;
+            }
+        } else {
+            if(iu.translateX != undefined && iu.translateY != undefined){
+                iu.translateX = 0;
+                iu.translateY = 0;
+            }
+        }
 
         this._colorScale = this._ar1(this._colorScale, {
             center: 0.5,

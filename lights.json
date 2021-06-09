@@ -261,7 +261,10 @@
                 "translationName": "torch",
                 "name": "Alternate Torch",
                 "animationFunction": "blitzTorch",
-                "description": "A deeper, alternative version of the torch",
+                "description": "A deeper, alternative version of the torch, supporting Blur and flickering",
+                "shaders": {
+                    "illumination": "CLTorchIlluminationShader"
+                },
                 "customProperties": [
                     {
                         "title": "Secondary Color",
@@ -271,29 +274,7 @@
                     },
                     {
                         "title": "Ratio Damper",
-                        "varName": "ratioDamper",
-                        "type": "range",
-                        "min": 1,
-                        "max": 50,
-                        "step": 1,
-                        "default": 1
-                    }
-                ]
-            },
-            {
-                "translationName": "blurtorch",
-                "name": "Blurred Torch",
-                "animationFunction": "blitzTorchBlur",
-                "description": "A deeper, alternative version of the torch",
-                "customProperties": [
-                    {
-                        "title": "Secondary Color",
-                        "varName": "secondaryColor",
-                        "type": "color",
-                        "default": "#f0ba5c"
-                    },
-                    {
-                        "title": "Ratio Damper",
+                        "description": "Reduce certain values by this factor. Useful if you have a large dim radius, but small bright radius.",
                         "varName": "ratioDamper",
                         "type": "range",
                         "min": 1,
@@ -308,7 +289,21 @@
                         "min": 1,
                         "max": 50,
                         "step": 1,
-                        "default": 20
+                        "default": 1
+                    },
+                    {
+                        "title": "Flicker Movement",
+                        "description": "Enable to cause the center circle to move around as it flickers",
+                        "varName": "alterTranslation",
+                        "type": "checkbox",
+                        "default": true
+                    },
+                    {
+                        "title": "Flicker Alpha",
+                        "description": "Enable to flicker the opacity of the torch",
+                        "varName": "alterAlpha",
+                        "type": "checkbox",
+                        "default": true
                     }
                 ]
             },
