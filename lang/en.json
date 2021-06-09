@@ -51,7 +51,9 @@
             }
         },
         "notif": {
-            "libWrapperMissing": "Community Lighting recommends to install and activate the 'libWrapper' module."
+            "libWrapperMissing": "Community Lighting recommends to install and activate the 'libWrapper' module.",
+            "lightUpdated": "Light Updated",
+            "tokenUpdated": "Token Updated"
         },
         "I18N": {
             "LANGUAGE": "English",
