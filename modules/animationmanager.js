@@ -48,6 +48,18 @@ class CLAnimationManager {
                         illuminationShader: CLAnimationManager.getShaderClass(light.shaders?.illumination) || StandardIlluminationShader,
                         colorationShader: CLAnimationManager.getShaderClass(light.shaders?.coloration) || StandardColorationShader
                     }
+                    if (!light.customProperties) {
+                        light.customProperties = [];
+                    }
+                    light.customProperties.push(
+                    {
+                        "default": light.speedDescription,
+                        "type": "speedDescription"
+                    },
+                    {
+                        "default": light.intensityDescription,
+                        "type": "intensityDescription"
+                    })
                     if(light.customProperties){
                         animations[`${author}${light.name}`].customProperties = light.customProperties;
                     }
