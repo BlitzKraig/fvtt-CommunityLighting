@@ -186,6 +186,11 @@ class CLCustomPropertyManager {
     }
 
     static async onRenderTokenOrLightConfig(objectConfig, html, data) {
+        if(objectConfig.object.documentName === 'AmbientLight'){
+            objectConfig.options.closeOnSubmit = game.settings.get(CommunityLighting.moduleName, "closeLightOnSubmit");
+        } else if (objectConfig.object.documentName === 'Token'){
+            objectConfig.options.closeOnSubmit = game.settings.get(CommunityLighting.moduleName, "closeTokenOnSubmit");
+        }
         var animTypeSelector = html.find("[name='lightAnimation.type']"); // Get the animation type selector element
         var customPropertySibling = html.find('[name="lightAnimation.intensity"]').parent().parent(); // Get the div holding the intensity slider so we can add our props after it
         CLCustomPropertyManager.addOptGroups(html);

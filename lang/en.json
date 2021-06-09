@@ -40,7 +40,15 @@
         "settings": {
             "title": "Community Lighting",
             "name": "Community Lighting Settings",
-            "label": "Open Settings"
+            "label": "Open Settings",
+            "closeLightOnSubmit": {
+                "name": "Close Ambient Light sheet on update",
+                "hint": "Disable this to override the default light config behaviour, allowing you to update a light without closing the sheet"
+            },
+            "closeTokenOnSubmit": {
+                "name": "Close Token sheet on update",
+                "hint": "Disable this to override the default token config behaviour, allowing you to update its light without closing the sheet. Note that this will cause all token updates to keep the sheet open, not just lighting updates."
+            }
         },
         "notif": {
             "libWrapperMissing": "Community Lighting recommends to install and activate the 'libWrapper' module."

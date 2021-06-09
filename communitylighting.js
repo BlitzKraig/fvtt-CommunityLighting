@@ -36,6 +36,22 @@ class CommunityLighting {
             type: CommunityLightingSettings,
             restricted: true
         });
+        game.settings.register(CommunityLighting.moduleName, 'closeLightOnSubmit', {
+            name: game.i18n.localize('COMMUNITYLIGHTING.settings.closeLightOnSubmit.name'),
+            hint: game.i18n.localize('COMMUNITYLIGHTING.settings.closeLightOnSubmit.hint'),
+            scope: 'client',
+            config: true,
+            type: Boolean,
+            default: true
+        });
+        game.settings.register(CommunityLighting.moduleName, 'closeTokenOnSubmit', {
+            name: game.i18n.localize('COMMUNITYLIGHTING.settings.closeTokenOnSubmit.name'),
+            hint: game.i18n.localize('COMMUNITYLIGHTING.settings.closeTokenOnSubmit.hint'),
+            scope: 'client',
+            config: true,
+            type: Boolean,
+            default: true
+        });
 
         Handlebars.registerHelper(CommunityLighting.handlebarsHelpers);
 
