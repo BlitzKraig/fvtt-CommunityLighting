@@ -226,6 +226,7 @@ class CLAnimationHelpers {
     }
 
     /**
+     * @deprecated - Use GLSL blurring instead
      * Add a blur filter to the illumination shader
      * This will be removed once Advanced Lighting Toolkit releases and enables this functionality for all lights
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
