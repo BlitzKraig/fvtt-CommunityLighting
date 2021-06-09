@@ -65,6 +65,10 @@ class CLCustomPropertyManager {
         var customAnimationPropertiesClone = JSON.parse(JSON.stringify(customAnimationProperties)); // Clone object so we can reverse it without reversing original
         const animation = objectConfig.object.data?.lightAnimation?._source || objectConfig.object.light.animation;
 
+        function insertDescription(customPropertyObject){
+            return customPropertyObject.description?`<p class="hint community-lighting-custom-property-noanim">${customPropertyObject.description}</p>`:''
+        }
+
         customAnimationPropertiesClone.reverse().forEach((customPropertyObject) => {
             var currentValue;
             if (animation) {
@@ -92,6 +96,7 @@ class CLCustomPropertyManager {
                             <label>${customPropertyObject.title}</label>
                             <input class="color" type="text" name="lightAnimation.${customPropertyObject.varName}" value="${currentValue}">
                             <input type="color" value="${currentValue}" data-edit="lightAnimation.${customPropertyObject.varName}">
+                            ${insertDescription(customPropertyObject)}
                         </div>`)
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -109,6 +114,7 @@ class CLCustomPropertyManager {
                             <input type="range" name="lightAnimation.${customPropertyObject.varName}" value="${currentValue}" min="${customPropertyObject.min}" max="${customPropertyObject.max}" step="${customPropertyObject.step}" data-dtype="Number">
                             <span class="range-value">${currentValue}</span>
                         </div>
+                        ${insertDescription(customPropertyObject)}
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -119,11 +125,11 @@ class CLCustomPropertyManager {
                     }
                     break;
                 case "checkbox":
-                    var customPropertyEl =
-                        $(
-                            `<div class="form-group community-lighting-custom-property">
+                    var customPropertyEl = $(
+                        `<div class="form-group community-lighting-custom-property">
                         <label>${customPropertyObject.title}</label>
                         <input type="checkbox" name="lightAnimation.${customPropertyObject.varName}" data-dtype="Boolean" ${currentValue ? "checked" : ""}>
+                        ${insertDescription(customPropertyObject)}
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();
@@ -147,6 +153,7 @@ class CLCustomPropertyManager {
                                 ${options}
                             </select>
                         </div>
+                        ${insertDescription(customPropertyObject)}
                     </div>`);
                     if (animateShow) {
                         customPropertyEl.hide();

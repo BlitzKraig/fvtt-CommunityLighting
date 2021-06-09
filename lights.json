@@ -325,18 +325,21 @@
                 "customProperties": [
                     {
                         "title": "Secondary Color",
+                        "description": "The light will morph between the initial color and this color",
                         "varName": "secondaryColor",
                         "type": "color",
                         "default": "#00ff00"
                     },
                     {
                         "title": "Use Color Speed",
+                        "description": "Enable this to separate the speed of the color change from the speed of the rest of the animation",
                         "varName": "useColorSpeed",
                         "type": "checkbox",
                         "default": true
                     },
                     {
                         "title": "Color Speed",
+                        "description": "How fast the color will change. Only if Use Color Speed is enabled.",
                         "varName": "colorSpeed",
                         "type": "range",
                         "min": 1,
@@ -346,6 +349,7 @@
                     },
                     {
                         "title": "Color Speed Multiplier",
+                        "description": "Multiply the Color Speed by this value. Only if Use Color Speed is enabled.",
                         "varName": "colorSpeedMult",
                         "type": "select",
                         "options": [
