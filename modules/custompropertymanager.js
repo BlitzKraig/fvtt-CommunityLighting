@@ -12,7 +12,11 @@ class CLCustomPropertyManager {
 
         let placeableObject = canvas.lighting.get(updateData.id) ?? canvas.tokens.get(updateData.id);
         if (!customProperties || Object.getOwnPropertyNames(customProperties).length == 0) {
-            placeableObject.document.unsetFlag("CommunityLighting", "customProperties");
+            // placeableObject.document.unsetFlag("CommunityLighting", "customProperties");
+
+            // No custom properties detected. Previously, we cleared the flags. However, with 0.8,
+            // this is hit when intensity and/or speed only are changed, causing breakage on refresh.
+            console.log("No C-prop")
         } else {
             //updateData.flags.CommunityLighting = {customProperties: customProperties};
             placeableObject.document.setFlag("CommunityLighting", "customProperties", customProperties);
