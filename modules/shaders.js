@@ -102,6 +102,36 @@ class CLShaderFunctions {
     }
 }
 
+/**
+ * Illumination shader to allow for improved torch animations
+ * @implements {StandardIlluminationShader}
+ * @author Blitz
+ */
+ class CLTorchIlluminationShader extends StandardIlluminationShader {
+    static fragmentShader = `
+    precision mediump float;
+    uniform float alpha;
+    uniform float ratio;
+    uniform vec3 colorDim;
+    uniform vec3 colorBright;
+    varying vec2 vUvs;
+    uniform float smoothness;
+    uniform float translateX;
+    uniform float translateY;
+    
+    void main() {
+        float xdist = 0.5 + translateX;
+        float ydist = 0.5 + translateY;
+        float dist = distance(vUvs, vec2(xdist, ydist)) * 2.0;
+        vec3 color = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 100.0), dist + (smoothness / 100.0), ratio));
+        gl_FragColor = vec4(color * alpha, 1.0);
+    }`;
+    static defaultUniforms = mergeObject(super.defaultUniforms, {
+        smoothness: 1,
+        translateX: 0,
+        translateY: 0
+    });
+  }
 
 /**
  * Wave animation illumination shader
