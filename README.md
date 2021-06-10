@@ -1,5 +1,24 @@
 # Community Lighting for FVTT
 
+## A note on Foundry 0.8+
+
+Foundry 0.8.6 is now supported, thanks to the brilliant work of SecretFire!
+A huge, huge thanks to SecretFire for taking this on ❤
+
+~~CommunityLighting has had a huge update in the pipeline for months now, which I've been dipping in and out of and trying to complete alongside my other modules.~~
+~~I hadn't considered just how much Foundry 0.8 would break the module, and invalidate most of the changes I had made as part of the update.~~
+~~This was not the fault of Foundry - they had published alpha releases well in advance, I had just been putting off the CommunityLighting update since I already had a large 0.7 branch that I'd been chipping away at for months.~~
+
+~~I only have so much free time to work on module development, and I have many other modules that are also free to use.~~
+~~With that time, I wish to focus on the modules that I use in my games more often - unfortunately CL is low on the list, and with the breakages in 0.8 I cannot dedicate the time it would require to keep CL updated.~~
+~~Having previously released DancingLights for 0.6, which then needed to be re-written into CommunityLighting for 0.7, I face a similar task once more for 0.8 - a task which I am not willing to take on.~~
+
+~~Thanks to everyone who has shown their support, and I'm sorry that I'm unable to make the time to fix CommunityLighting. My hope is that someone else can build something better.~~
+
+~~Please note that I'm not giving up on module development - my other active modules have far lower maintenance requirements than the rather clunky and heavy CommunityLighting code. I hope you can give them a try.~~
+
+-- Blitz
+
 ![CommunityLighting Release](https://github.com/BlitzKraig/fvtt-CommunityLighting/workflows/CommunityLighting%20Release/badge.svg)
 ![Latest Release Download Count](https://img.shields.io/github/downloads/BlitzKraig/fvtt-CommunityLighting/latest/communitylighting-release.zip)
 

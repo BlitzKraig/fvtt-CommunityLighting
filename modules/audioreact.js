@@ -1,4 +1,5 @@
 class CLAudioReactor {
+    static gainShim;
     static analyser;
     static sampleBuffer;
 
@@ -11,19 +12,29 @@ class CLAudioReactor {
     }
 
     static initAnalyser(){
-        CLAudioReactor.analyser = Howler.ctx.createAnalyser();
+        if(game.audio.context){
+        CLAudioReactor.analyser = game.audio.context.createAnalyser();
         CLAudioReactor.analyser.fftSize = 128;
         CLAudioReactor.analyser.maxDecibels = 0;
-        Howler.masterGain.connect(CLAudioReactor.analyser);
+        CLAudioReactor.gainShim = game.audio.context.createGain()
+        CLAudioReactor.gainShim.connect(CLAudioReactor.analyser);
+        CLAudioReactor.analyser.connect(game.audio.context.destination)
+
         CLAudioReactor.sampleBuffer = new Float32Array(CLAudioReactor.analyser.frequencyBinCount);
+
+        game.audio.playing.forEach((sound)=>{
+            sound.container.gainNode.disconnect();
+            sound.container.gainNode.connect(CLAudioReactor.gainShim)
+        })
+        }
     }
 
     static initSoundboardAnalyser(){
-        if(Howler.soundboardGain){
-            CLAudioReactor.soundboardAnalyser = Howler.ctx.createAnalyser();
+        if(game.audio.soundboardGain){
+            CLAudioReactor.soundboardAnalyser = game.audio.context.createAnalyser();
             CLAudioReactor.soundboardAnalyser.fftSize = 128;
             CLAudioReactor.soundboardAnalyser.maxDecibels = 0;
-            Howler.soundboardGain.connect(CLAudioReactor.soundboardAnalyser);
+            game.audio.soundboardGain.connect(CLAudioReactor.soundboardAnalyser);
             CLAudioReactor.soundboardSampleBuffer = new Float32Array(CLAudioReactor.soundboardAnalyser.frequencyBinCount);
         }
     }

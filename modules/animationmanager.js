@@ -5,6 +5,8 @@ class CLAnimationManager {
         this.communityAnimations = new CLAnimations();
         Hooks.on("renderTokenConfig", CLCustomPropertyManager.onRenderTokenOrLightConfig);
         Hooks.on("renderLightConfig", CLCustomPropertyManager.onRenderTokenOrLightConfig);
+        Hooks.on("preUpdateAmbientLight", CLCustomPropertyManager.onPreUpdateLightOrToken);
+        Hooks.on("preUpdateToken", CLCustomPropertyManager.onPreUpdateLightOrToken);
         Hooks.on("updateAmbientLight", CLCustomPropertyManager.onUpdateLightOrToken);
         Hooks.on("updateToken", CLCustomPropertyManager.onUpdateLightOrToken);
     }
@@ -46,6 +48,18 @@ class CLAnimationManager {
                         illuminationShader: CLAnimationManager.getShaderClass(light.shaders?.illumination) || StandardIlluminationShader,
                         colorationShader: CLAnimationManager.getShaderClass(light.shaders?.coloration) || StandardColorationShader
                     }
+                    if (!light.customProperties) {
+                        light.customProperties = [];
+                    }
+                    light.customProperties.push(
+                    {
+                        "default": light.speedDescription,
+                        "type": "speedDescription"
+                    },
+                    {
+                        "default": light.intensityDescription,
+                        "type": "intensityDescription"
+                    })
                     if(light.customProperties){
                         animations[`${author}${light.name}`].customProperties = light.customProperties;
                     }

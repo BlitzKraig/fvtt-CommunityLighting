@@ -13,7 +13,7 @@
                         "name": "Flash Simples",
                         "description": "Uma simples luz intermitente",
                         "intensityDescription": "Controla o quão fraca será a luz quando piscar",
-                        "speedDescription": "Controla a frequência com que a luz pisca"        
+                        "speedDescription": "Controla a frequência com que a luz pisca"
                     },
                     "rgbflash": {
                         "name": "Flash RGB",
@@ -33,7 +33,7 @@
                     }
                 },
                 "misc": {
-                    "otherString":"feiches diversos podem ir para o objeto 'misc' do seu conjunto Autor"
+                    "otherString": "feiches diversos podem ir para o objeto 'misc' do seu conjunto Autor"
                 }
             }
         },
@@ -41,6 +41,9 @@
             "title": "Iluminação Comunitária",
             "name": "Configurações da Iluminação Comunitária",
             "label": "Abrir Configurações"
+        },
+        "notif": {
+            "libWrapperMissing": "Community Lighting recomenda instalar e ativar o módulo 'libWrapper'."
         }
     }
 }

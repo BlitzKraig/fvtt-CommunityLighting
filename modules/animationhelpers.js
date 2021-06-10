@@ -226,6 +226,7 @@ class CLAnimationHelpers {
     }
 
     /**
+     * @deprecated - Use GLSL blurring instead
      * Add a blur filter to the illumination shader
      * This will be removed once Advanced Lighting Toolkit releases and enables this functionality for all lights
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
@@ -235,7 +236,7 @@ class CLAnimationHelpers {
         if(source.illumination._blurred && source.illumination._blurred != strength){
             CLAnimationHelpers.removeIlluminationBlur(source);
         }
-        if(!source.illumination._blurred){
+        if(!source.illumination._blurred && strength > 0){
             let blurFilter = new PIXI.filters.BlurFilter(strength, quality)
             blurFilter.blendMode = PIXI.BLEND_MODES.MAX_COLOR;
             if(source.illumination.filters){

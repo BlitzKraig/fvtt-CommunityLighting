@@ -114,12 +114,15 @@ class CLAnimations {
         }
     }
 
-    // Based on the 0.7 beta torch
+    // Custom torch with movement flickering
     blitzTorch(dt, {
         speed = 5,
         intensity = 5,
         ratioDamper = 1,
-        secondaryColor = "#f0ba5c"
+        secondaryColor = "#f0ba5c",
+        alterAlpha = true,
+        alterTranslation = true,
+        blurStrength = 1
     }) {
         
         CLAnimationHelpers.binaryTimer(this, speed, dt);
@@ -131,6 +134,8 @@ class CLAnimations {
 
         const iu = this.illumination.uniforms;
         const cu = this.coloration.uniforms;
+
+        iu.smoothness = blurStrength / ratioDamper;
 
         if(!this._colorScale){
             this._colorScale = 0.5;
@@ -172,19 +177,38 @@ class CLAnimations {
             center: this.bright / this.dim,
             sigma: (0.002 * intensity) / ratioDamper
         });
-        iu.alpha = this._ar1(iu.alpha, {
-            center: 0.9,
-            sigma: 0.005 * intensity,
-            max: 1.0
-        });
 
-        // Evolve coloration
-        cu.alpha = this._ar1(cu.alpha, {
-            center: this.alpha,
-            sigma: 0.005 * intensity
-        });
+        if(alterAlpha){
+            iu.alpha = this._ar1(iu.alpha, {
+                center: 0.9,
+                sigma: 0.005 * intensity,
+                max: 1.0
+            });
+        }
 
-        
+        if(alterAlpha && this.alpha > 0){
+            // Evolve coloration
+            cu.alpha = this._ar1(cu.alpha, {
+                center: this.alpha,
+                sigma: 0.005 * intensity
+            });
+        }
+        if(!alterAlpha){
+            iu.alpha = 1
+            cu.alpha = this.alpha
+        }
+
+        if(alterTranslation){
+            if(iu.translateX != undefined && iu.translateY != undefined){
+                iu.translateX = ((Math.random() * 0.05) - 0.025) * (intensity / 10) / ratioDamper;
+                iu.translateY = ((Math.random() * 0.05) - 0.025) * (intensity / 10) / ratioDamper;
+            }
+        } else {
+            if(iu.translateX != undefined && iu.translateY != undefined){
+                iu.translateX = 0;
+                iu.translateY = 0;
+            }
+        }
 
         this._colorScale = this._ar1(this._colorScale, {
             center: 0.5,
@@ -202,19 +226,6 @@ class CLAnimations {
         //     cu.color[index] = this._originalColor[index] + ((1 - this._originalColor[index]) * this._wave.simplifiedValue / 2); // Bring the color closer to bright white
         // });
     }
-
-    // Ensure blur is added, then run blitzTorch. This should later be possible using Advanced Lighting Toolkit
-    blitzTorchBlur(dt, {
-        speed = 5,
-        intensity = 5,
-        ratioDamper = 1,
-        secondaryColor = "#f0ba5c",
-        blurStrength = 20
-    }) {
-        CLAnimationHelpers.addIlluminationBlur(this, blurStrength);
-        CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, ratioDamper, secondaryColor});
-    }
-
 
     blitzSimpleFlash(dt, {
         speed = 5,
@@ -416,6 +427,30 @@ class CLAnimations {
             let colorScale = chroma.scale([this._originalColor, secondaryColor]).domain([0, 1]); // Get a color between original and secondaryColor, mapped from 0 to 1
             this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
         }
+    }
+
+     /* Author: Blitz - Commissions */
+     blitzForgottenAdventuresCustom(dt, {
+        speed = 5,
+        intensity = 5,
+        blurStrength = 1,
+        dimBrightness = 1,
+        brightBrightness = 2,
+        shouldFlicker = false,
+        shouldFlickerAlpha = false,
+        shouldFlickerTranslate = false
+    }) {
+        
+        if(shouldFlicker){
+            CLAnimationHelpers.includeAnimation(this, "blitzTorch", dt, {speed, intensity, blurStrength, alterAlpha : shouldFlickerAlpha, alterTranslation: shouldFlickerTranslate, secondaryColor: this._placeableType == "AmbientLight"?this?._source?.data?.tintColor:this?._source?.data?.lightColor});
+        } else {
+            this.illumination.uniforms.ratio = this.bright / this.dim;
+            this.illumination.uniforms.alpha = 1
+            this.coloration.uniforms.alpha = this.alpha
+            this.illumination.uniforms.smoothness = blurStrength;
+        }
+        this.illumination.uniforms.dimBrightness = dimBrightness;
+        this.illumination.uniforms.brightBrightness = brightBrightness;
     }
 
     /* Author: SecretFire */

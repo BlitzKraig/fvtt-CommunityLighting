@@ -1,3 +1,138 @@
+class CLShaderFunctions {
+    static rotate = `
+    vec2 rotateUV(in vec2 uv, in float rotation, in vec2 mid)
+    {
+        return vec2(
+            cos(rotation) * (uv.x - mid.x) + sin(rotation) * (uv.y - mid.y) + mid.x,
+            cos(rotation) * (uv.y - mid.y) - sin(rotation) * (uv.x - mid.x) + mid.y
+        );
+    }`;
+    static scale = `
+    vec2 scaleUV(in vec2 uv, in float scale)
+    {
+        uv -= 0.5;
+        uv *= 1.0 / scale;
+        uv += 0.5;
+        return uv;
+    }`;
+    static stretch = `
+    vec2 stretchUV(in vec2 uv, in vec2 stretch)
+    {
+        uv -= 0.5;
+        uv.x *= 1.0 / stretch.x;
+        uv.y *= 1.0 / stretch.y;
+        uv += 0.5;
+        return uv;
+    }`;
+    static translate = `
+    vec2 translateUV(in vec2 uv, in vec2 translate)
+    {
+        uv += translate;
+        return uv;
+    }`
+    static blur = `
+    vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
+        vec4 color = vec4(0.0);
+        vec2 off1 = vec2(1.3846153846) * direction;
+        vec2 off2 = vec2(3.2307692308) * direction;
+        color += texture2D(image, uv) * 0.2270270270;
+        color += texture2D(image, uv + (off1 / resolution)) * 0.3162162162;
+        color += texture2D(image, uv - (off1 / resolution)) * 0.3162162162;
+        color += texture2D(image, uv + (off2 / resolution)) * 0.0702702703;
+        color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;
+        return color;
+      }`;
+    static getPix = `vec4 pix = texture2D(sampler, stretchUV(rotateUV(scaleUV(translateUV(vUvs, vec2(-translateX, -translateY)), scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)));`;
+    static gobo = {
+        uniforms: `
+        uniform sampler2D sampler;
+        uniform bool useSampler;
+        uniform bool invert;
+        uniform float goboType;
+        uniform float rotation;
+        uniform float scale;
+        uniform float stretchX;
+        uniform float stretchY;
+        uniform float translateX;
+        uniform float translateY;
+        uniform float smoothness;
+        `,
+        functions: `
+        ${CLShaderFunctions.rotate}
+        ${CLShaderFunctions.scale}
+        ${CLShaderFunctions.stretch}
+        ${CLShaderFunctions.translate}
+        `,
+        gsColAvg: `
+        ${CLShaderFunctions.getPix}
+        float avg = (pix.r + pix.g + pix.b) / 3.0;
+        if(invert) {
+            avg = 1.0 - avg;
+        }
+        gsCol = vec3(avg);
+        `,
+        gsColSilhouette: `
+        ${CLShaderFunctions.getPix}
+        float avg = (pix.r + pix.g + pix.b) / 3.0;
+        if(avg > 0.0){
+            avg = 1.0;
+        }
+        if(invert) {
+            avg = 1.0 - avg;
+        }
+        gsCol = vec3(avg);
+        `,
+        gsColReal: `
+        ${CLShaderFunctions.getPix}
+        if(invert){
+            gsCol = vec3(1.0 - pix.r, 1.0 - pix.g, 1.0 - pix.b);
+        } else {
+            gsCol = vec3(pix.r, pix.g, pix.b);
+        }
+        `,
+        gsColBlur: `
+        vec4 pix = blur(sampler, stretchUV(rotateUV(scaleUV(vUvs, scale), radians(rotation), vec2(0.5)), vec2(stretchX, stretchY)), vec2(100.0,100.0), vec2(smoothness/500.0,-smoothness/500.0));
+        //pix = blur(pix, vUvs, vec2(100.0,100.0, vec2(smoothness,-smoothness)))
+        float avg = (pix.r + pix.g + pix.b) / 3.0;
+        if(invert) {
+            avg = 1.0 - avg;
+        }
+        gsCol = vec3(avg);
+        `
+    }
+}
+
+/**
+ * Illumination shader to allow for improved torch animations
+ * @implements {StandardIlluminationShader}
+ * @author Blitz
+ */
+ class CLTorchIlluminationShader extends StandardIlluminationShader {
+    static fragmentShader = `
+    precision mediump float;
+    uniform float alpha;
+    uniform float ratio;
+    uniform vec3 colorDim;
+    uniform vec3 colorBright;
+    varying vec2 vUvs;
+    uniform float smoothness;
+    uniform float translateX;
+    uniform float translateY;
+    
+    void main() {
+        float xdist = 0.5 + translateX;
+        float ydist = 0.5 + translateY;
+        float dist = distance(vUvs, vec2(xdist, ydist)) * 2.0;
+        vec3 color = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 100.0), dist + (smoothness / 100.0), ratio));
+        gl_FragColor = vec4(color * alpha, 1.0);
+    }`;
+    static defaultUniforms = mergeObject(super.defaultUniforms, {
+        smoothness: 1,
+        translateX: 0,
+        translateY: 0
+    });
+  }
+
 /**
  * Wave animation illumination shader
  * @implements {StandardIlluminationShader}
@@ -331,3 +466,40 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
     }`;
 }
 
+
+
+/**
+ * Shader with support to change the brightness of bright & dim, blurring - Commissioned by Stryxin
+ * @extends {StandardIlluminationShader}
+ * @author Blitz
+ */
+ class CLCustomForgottenAdventuresShader extends StandardIlluminationShader {
+    static fragmentShader = `
+  precision mediump float;
+  uniform float alpha;
+  uniform float ratio;
+  uniform vec3 colorDim;
+  uniform vec3 colorBright;
+  varying vec2 vUvs;
+  uniform float dimBrightness;
+  uniform float brightBrightness;
+  uniform float smoothness;
+  uniform float translateX;
+  uniform float translateY;
+
+  void main() {
+      float xdist = 0.5 + translateX;
+      float ydist = 0.5 + translateY;
+    float dist = distance(vUvs, vec2(xdist, ydist)) * 2.0;
+      vec3 color = mix(colorDim * dimBrightness, colorBright * brightBrightness, smoothstep(dist - (smoothness / 100.0), dist + (smoothness / 100.0), ratio));
+      gl_FragColor = vec4(color * alpha, 1.0);
+  }`;
+  static defaultUniforms = mergeObject(super.defaultUniforms, {
+    brightBrightness: 2.0,
+    dimBrightness: 1.0,
+    smoothness: 1,
+    translateX: 0,
+    translateY: 0
+});
+}
+  
