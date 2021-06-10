@@ -1,3 +1,7 @@
+# 0.4.1 - 2021/06/10
+
+* Bugfix - Only show update notification on update from sheet
+
 # 0.4.0 - 2021/06/09
 
 * Added module settings to keep sheets open on update
