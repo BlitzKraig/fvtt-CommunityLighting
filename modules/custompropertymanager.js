@@ -221,9 +221,9 @@ class CLCustomPropertyManager {
 
     static onUpdateLightOrToken(doc, changes, diff, user) {
         if(!changes?.flags?.CommunityLighting){
-            if(doc.documentName === 'AmbientLight' && game.settings.get(CommunityLighting.moduleName, "closeLightOnSubmit") === false){
+            if(doc.documentName === 'AmbientLight' && doc.sheet._state == BaseEntitySheet.RENDER_STATES.RENDERING && game.settings.get(CommunityLighting.moduleName, "closeLightOnSubmit") === false){
                 ui.notifications.notify(game.i18n.localize("COMMUNITYLIGHTING.notif.lightUpdated"));
-            } else if (doc.documentName === 'Token' && game.settings.get(CommunityLighting.moduleName, "closeTokenOnSubmit") === false){
+            } else if (doc.documentName === 'Token' && changes.lightAnimation && game.settings.get(CommunityLighting.moduleName, "closeTokenOnSubmit") === false){
                 ui.notifications.notify(game.i18n.localize("COMMUNITYLIGHTING.notif.tokenUpdated"));
             }
         }
