@@ -503,7 +503,6 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
 });
 }
 
-
 /**
  * Illumination shader used for simple polygonal lighting
  * @extends {StandardIlluminationShader}
@@ -563,3 +562,149 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
 });
 }
 
+/**
+ * Fire Illumination Shader
+ * @extends {StandardIlluminationShader}
+ * @author Blitz
+ */
+ class CLFireIlluminationShader extends StandardIlluminationShader {
+    static fragmentShader = `precision mediump float;
+
+    #define PI 3.14159265359
+    #define TWO_PI 6.28318530718
+    uniform float alpha;
+    uniform float ratio;
+    uniform float time;
+    uniform float intensity;
+    uniform float musicWave;
+    uniform float translateX;
+    uniform float translateY;
+    uniform vec3 colorDim;
+    uniform vec3 colorBright;
+    varying vec2 vUvs;
+    uniform float smoothness;
+    uniform float innerCircleRatio;
+    uniform float ramp;
+    uniform bool castLight;
+
+    float snoise(vec3 uv, float res)
+    {
+      const vec3 s = vec3(1e0, 1e2, 1e3);
+      
+      uv *= res;
+      
+      vec3 uv0 = floor(mod(uv, res))*s;
+      vec3 uv1 = floor(mod(uv+vec3(1.), res))*s;
+      
+      vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
+    
+      vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
+                      uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
+    
+      vec4 r = fract(sin(v*1e-1)*1e3);
+      float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+      
+      r = fract(sin((v + uv1.z - uv0.z)*1e-1)*1e3);
+      float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+      
+      return mix(r0, r1, f.z)*2.-1.;
+    }
+    
+    void main(){
+
+      float xdist = 0.5 + translateX;
+      float ydist = 0.5 + translateY;
+      float dist = distance(vUvs, vec2(xdist, ydist)) * 2.0;
+      vec3 circleColor = vec3(0.0);
+      if(castLight){
+        circleColor = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 100.0), dist + (smoothness / 100.0), innerCircleRatio));
+      }
+      vec2 p = -.5 + vUvs;
+      
+      float color = (3.0 * musicWave) - (3.*length(2.7*p) / ratio);
+      
+      vec3 coord = vec3(atan(p.x,p.y)/TWO_PI+.5, length(p)*(.4/ratio), .5);
+      for(int i = 1; i <= 7; i++)
+      {
+          float power = pow(2.0, float(i));
+          color += ((clamp(1.5 * ramp, 0.4, 1.5)) / power) * snoise(coord + vec3(0.,-time*.1, time*.02), power*(8.0 * intensity));
+      }
+      gl_FragColor = max(vec4(circleColor * alpha, 1.0), vec4( color, pow(max(color,0.),2.)*0.4, pow(max(color,0.),3.)*0.15 , 1.0) * (3.0 * musicWave) * ramp);
+    }
+  `;
+  static defaultUniforms = mergeObject(super.defaultUniforms, {
+    musicWave: 1.0,
+    innerCircleRatio: 0.5,
+    translateX: 0.0,
+    translateY: 0.0,
+    smoothness: 0.1,
+    castLight: false,
+    ramp: 1.0
+});
+}
+
+/**
+ * Fire Coloration Shader
+ * @extends {StandardColorationShader}
+ * @author Blitz
+ */
+ class CLFireColorationShader extends StandardColorationShader {
+    static fragmentShader = `precision mediump float;
+
+    #define PI 3.14159265359
+    #define TWO_PI 6.28318530718
+    uniform float alpha;
+    uniform vec3 color;
+    uniform float ratio;
+    uniform float time;
+    uniform float intensity;
+    uniform float musicWave;
+    uniform float ramp;
+    varying vec2 vUvs;
+
+    float snoise(vec3 uv, float res)
+    {
+      const vec3 s = vec3(1e0, 1e2, 1e3);
+      
+      uv *= res;
+      
+      vec3 uv0 = floor(mod(uv, res))*s;
+      vec3 uv1 = floor(mod(uv+vec3(1.), res))*s;
+      
+      vec3 f = fract(uv); f = f*f*(3.0-2.0*f);
+    
+      vec4 v = vec4(uv0.x+uv0.y+uv0.z, uv1.x+uv0.y+uv0.z,
+                      uv0.x+uv1.y+uv0.z, uv1.x+uv1.y+uv0.z);
+    
+      vec4 r = fract(sin(v*1e-1)*1e3);
+      float r0 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+      
+      r = fract(sin((v + uv1.z - uv0.z)*1e-1)*1e3);
+      float r1 = mix(mix(r.x, r.y, f.x), mix(r.z, r.w, f.x), f.y);
+      
+      return mix(r0, r1, f.z)*2.-1.;
+    }
+    
+    void main(){
+      vec2 p = -.5 + vUvs;
+      
+      float fColor = (3.0 * musicWave) - (3.*length(2.7*p) / ratio);
+      
+      vec3 coord = vec3(atan(p.x,p.y)/TWO_PI+.5, length(p)*(.4/ratio), .5);
+      for(int i = 1; i <= 7; i++)
+      {
+          float power = pow(2.0, float(i));
+          fColor += ((clamp(1.5 * ramp, 0.4, 1.5)) / power) * snoise(coord + vec3(0.,-time*.1, time*.02), power*(8.0 * intensity));
+      }
+      vec4 finalColor = vec4( fColor * color.x, (pow(max(fColor,0.),2.)*0.4)*color.y, (pow(max(fColor,0.),3.)*0.15)*color.z , 1.0) * (3.0 * musicWave) * ramp;
+      gl_FragColor = finalColor * alpha;
+    
+    }
+  `;
+  static defaultUniforms = mergeObject(super.defaultUniforms, {
+    musicWave: 1.0,
+    ratio: 0.1,
+    ramp: 1.0
+});
+}
+  

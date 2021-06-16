@@ -454,6 +454,158 @@
                         "default": false
                     }
                 ]
+            },
+            {
+                "translationName": "customFire",
+                "name": "Custom Fire",
+                "animationFunction": "customFire",
+                "description": "Custom Shader Fire",
+                "intensityDescription": "Controls flame intensity",
+                "speedDescription": "Controls fire speed",
+                "shaders": {
+                    "illumination": "CLFireIlluminationShader",
+                    "coloration": "CLFireColorationShader"
+                },
+                "customProperties": [
+                    {
+                        "title": "Cast Light",
+                        "description": "Enable to cast circular light fields. Reduce the Bright Radius and use Inner Circle Ratio to control the bright circle.",
+                        "varName": "castLight",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Blur Strength",
+                        "varName": "smoothness",
+                        "description": "Strength of blur on the light circles only",
+                        "type": "range",
+                        "min": 1,
+                        "max": 50,
+                        "step": 1,
+                        "default": 1
+                    },
+                    {
+                        "title": "Inner Circle Ratio",
+                        "description": "The flame itself is controlled by the Bright Radius. Use this to detemine where the inner circle should end if your flame is not taking up the entire light.",
+                        "varName": "innerCircleRatio",
+                        "type": "range",
+                        "min": 0.01,
+                        "max": 1.0,
+                        "step": 0.01,
+                        "default": 0.5
+                    },
+                    {
+                        "title": "Cast-light Speed",
+                        "description": "Controls the speed of the circle light animation only.",
+                        "varName": "circleSpeed",
+                        "type": "range",
+                        "min": 1,
+                        "max": 10,
+                        "step": 1,
+                        "default": 5
+                    },
+                    {
+                        "title": "Cast-light Intensity",
+                        "description": "Controls the intensity of the circle light animation only.",
+                        "varName": "circleIntensity",
+                        "type": "range",
+                        "min": 1,
+                        "max": 10,
+                        "step": 1,
+                        "default": 5
+                    },
+                    {
+                        "title": "Should Flicker Scale",
+                        "description": "Torch-like flicker the size of the light circles.",
+                        "varName": "shouldFlicker",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Should Flicker Alpha",
+                        "description": "Torch-like flicker the light circle opacity",
+                        "varName": "shouldFlickerAlpha",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Should Flicker Translate",
+                        "description": "Torch-like flicker the bright circles position",
+                        "varName": "shouldFlickerTranslate",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Animated Enable",
+                        "description": "Experimental. Short animation when the light is enabled.",
+                        "varName": "shouldAnimateOn",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Animated Enable Speed",
+                        "description": "Controls how quickly the light switches on",
+                        "varName": "animateOnSpeed",
+                        "type": "range",
+                        "min": 1,
+                        "max": 10,
+                        "step": 1,
+                        "default": 5
+                    },
+                    {
+                        "title": "Audio Reactivity",
+                        "description": "Enable to allow the light to respond to audio",
+                        "varName": "audioReactive",
+                        "type": "checkbox",
+                        "default": false
+                    },
+                    {
+                        "title": "Band",
+                        "varName": "listeningBand",
+                        "type": "select",
+                        "options": [
+                            {
+                                "label": "Low",
+                                "value": "low"
+                            },
+                            {
+                                "label": "Mid",
+                                "value": "mid"
+                            },
+                            {
+                                "label": "High",
+                                "value": "high"
+                            }
+                        ],
+                        "default": "mid"
+                    },
+                    {
+                        "title": "Source",
+                        "varName": "gainNode",
+                        "type": "select",
+                        "options": [
+                            {
+                                "label": "Master",
+                                "value": "master"
+                            },
+                            {
+                                "label": "SoundBoard by Blitz (requires module)",
+                                "value": "soundboard"
+                            }
+                        ],
+                        "default": "master"
+                    },
+                    {
+                        "title": "Exponent",
+                        "description": "Simple easing. Increase if the light is too reactive.",
+                        "varName": "exponent",
+                        "type": "range",
+                        "min": 1,
+                        "max": 12,
+                        "step": 1,
+                        "default": 1
+                    }
+                ]
             }
         ]
     },

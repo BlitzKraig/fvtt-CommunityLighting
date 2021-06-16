@@ -523,6 +523,137 @@ class CLAnimations {
         }
     }
 
+    customFire(dt, {
+        speed = 5,
+        intensity = 5,
+        listeningBand = "mid",
+        gainNode = "master",
+        exponent = 1,
+        audioReactive = false,
+        innerCircleRatio = 0.5,
+        castLight = false,
+        smoothness = 1,
+        shouldFlicker = false,
+        shouldFlickerAlpha = false,
+        shouldFlickerTranslate = false,
+        circleSpeed = 5,
+        circleIntensity = 5,
+        shouldAnimateOn = false,
+        animateOnSpeed = 5
+    }) {
+        const iu = this.illumination.uniforms;
+        const cu = this.coloration.uniforms;
+        this._shouldAnimateOn = shouldAnimateOn;
+        if(!this._updateHook){
+            this._updateHook = (that, updateData, options)=>{
+                // console.log(updateData);
+                if(that._shouldAnimateOn){
+                    if(options._id === that._source.id){
+                        if(options.hidden === false) {
+                            this._ramp = true;
+                            this._rampValue = 0;
+                        } else if(options.hidden === true){
+
+                        }
+                    }
+                }
+            }
+            Hooks.on("updateAmbientLight", (updateData, options)=>{return this._updateHook(this, updateData, options)});
+            // Run on first enable
+            this._updateHook(this, {}, {_id: this._source.id, hidden: false})
+        }
+
+        if (audioReactive) {
+            let peak = Math.pow(CLAnimationHelpers.getEzFreqPower(listeningBand, gainNode == "soundboard"), exponent);
+            iu.musicWave = peak;
+            cu.musicWave = peak;
+        } else {
+            iu.musicWave = 1.0;
+            cu.musicWave = 1.0;
+        }
+        iu.innerCircleRatio = this._ramp?innerCircleRatio * Back.easeOut(this._rampValue):innerCircleRatio;
+        iu.castLight = castLight;
+        iu.smoothness = smoothness;
+        iu.ratio = this._ramp?(this.bright/this.dim) * Back.easeOut(this._rampValue):this.bright / this.dim;
+        let rampUniformVal = this._ramp?Circ.easeIn(this._rampValue):1.0;
+        iu.ramp = rampUniformVal;
+        cu.ramp = rampUniformVal;
+        cu.ratio = this._ramp?(this.bright/this.dim) * Back.easeOut(this._rampValue):this.bright / this.dim;
+        cu.alpha = this.alpha;
+        CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
+            speed,
+            intensity
+        });
+
+        if(this._ramp){
+            this._rampValue += 0.1 * (animateOnSpeed / 10);
+            if(this._rampValue >= 1){
+                this._ramp = false;
+            }
+            shouldFlicker = shouldFlickerAlpha = shouldFlickerTranslate = false;
+        }
+        // Flickering
+
+        CLAnimationHelpers.binaryTimer(this, circleSpeed, dt);
+
+        // Cause the torch to flicker by not changing every frame
+        this._lastUpdate = Date.now();
+        const targetMS = (0.5 + (Math.random() / 2)) * (10 - circleSpeed) * 16;
+
+        if ((this._lastUpdate - this._circleAnimTime) < targetMS) {
+            var alteredValue = Math.random() * 0.001 * circleIntensity;
+            if (this._flipped) {
+                if (shouldFlicker) {
+                    iu.innerCircleRatio -= alteredValue;
+                }
+                if (shouldFlickerAlpha) {
+                    iu.alpha -= alteredValue;
+                }
+            } else {
+                if (shouldFlicker) {
+                    iu.innerCircleRatio += alteredValue;
+                }
+                if (shouldFlickerAlpha) {
+                    iu.alpha += alteredValue;
+                }
+            }
+            return;
+        }
+        this._circleAnimTime = this._lastUpdate;
+
+        // Evolve illumination
+        if (shouldFlicker) {
+            iu.innerCircleRatio = this._ar1(iu.innerCircleRatio, {
+                center: innerCircleRatio,
+                sigma: 0.002 * circleIntensity
+            });
+        }
+
+        if (shouldFlickerAlpha) {
+            iu.alpha = this._ar1(iu.alpha, {
+                center: 0.9,
+                sigma: 0.005 * circleIntensity,
+                max: 1.0
+            });
+        }
+
+        if (!shouldFlickerAlpha) {
+            iu.alpha = 1
+        }
+
+        if (shouldFlickerTranslate) {
+            if (iu.translateX != undefined && iu.translateY != undefined) {
+                iu.translateX = ((Math.random() * 0.05) - 0.025) * (circleIntensity / 10);
+                iu.translateY = ((Math.random() * 0.05) - 0.025) * (circleIntensity / 10);
+            }
+        } else {
+            if (iu.translateX != undefined && iu.translateY != undefined) {
+                iu.translateX = 0;
+                iu.translateY = 0;
+            }
+        }
+    }
+
      /* Author: Blitz - Commissions */
      blitzForgottenAdventuresCustom(dt, {
         speed = 5,
