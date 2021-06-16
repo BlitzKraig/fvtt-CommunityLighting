@@ -91,10 +91,6 @@
                             {
                                 "label": "High",
                                 "value": "high"
-                            },
-                            {
-                                "label": "All",
-                                "value": "all"
                             }
                         ],
                         "default": "mid"
@@ -114,6 +110,16 @@
                             }
                         ],
                         "default": "master"
+                    },
+                    {
+                        "title": "Exponent",
+                        "description": "Simple easing. Increase if the light is too reactive.",
+                        "varName": "exponent",
+                        "type": "range",
+                        "min": 1,
+                        "max": 12,
+                        "step": 1,
+                        "default": 1
                     }
                 ]
             },
@@ -141,10 +147,6 @@
                             {
                                 "label": "High",
                                 "value": "high"
-                            },
-                            {
-                                "label": "All",
-                                "value": "all"
                             }
                         ],
                         "default": "mid"
@@ -164,6 +166,16 @@
                             }
                         ],
                         "default": "master"
+                    },
+                    {
+                        "title": "Exponent",
+                        "description": "Simple easing. Increase if the light is too reactive.",
+                        "varName": "exponent",
+                        "type": "range",
+                        "min": 1,
+                        "max": 12,
+                        "step": 1,
+                        "default": 1
                     }
                 ]
             },
@@ -212,10 +224,6 @@
                             {
                                 "label": "High",
                                 "value": "high"
-                            },
-                            {
-                                "label": "All",
-                                "value": "all"
                             }
                         ],
                         "default": "mid"
@@ -235,6 +243,16 @@
                             }
                         ],
                         "default": "master"
+                    },
+                    {
+                        "title": "Exponent",
+                        "description": "Simple easing. Increase if the light is too reactive.",
+                        "varName": "exponent",
+                        "type": "range",
+                        "min": 1,
+                        "max": 12,
+                        "step": 1,
+                        "default": 1
                     }
                 ]
             },
@@ -696,10 +714,6 @@
                             {
                                 "label": "High",
                                 "value": "high"
-                            },
-                            {
-                                "label": "All",
-                                "value": "all"
                             }
                         ],
                         "default": "mid"
@@ -719,6 +733,16 @@
                             }
                         ],
                         "default": "master"
+                    },
+                    {
+                        "title": "Exponent",
+                        "description": "Simple easing. Increase if the light is too reactive.",
+                        "varName": "exponent",
+                        "type": "range",
+                        "min": 1,
+                        "max": 12,
+                        "step": 1,
+                        "default": 1
                     }
                 ]
             }
