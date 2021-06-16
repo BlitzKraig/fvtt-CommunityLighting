@@ -17,14 +17,11 @@ class CLMonkeyPatcher {
 
         this.checkLibWrapper();
 
-        const wrappedSoundLoad = async function load(wrapped, ...args) {
+        const wrappedSoundPlay = function play(wrapped, ...args) {
             // Call base fn
-            await wrapped(...args);
-            // Connect the audio up to our gainShim
-            if (CLAudioReactor.gainShim) {
-                this.container.gainNode.disconnect()
-                this.container.gainNode.connect(CLAudioReactor.gainShim)
-            }
+            wrapped(...args);
+            
+            CLAudioReactor.attemptEmbiggen(this);
         };
 
         const wrappedPointSourceAnimate = function animate(wrapped, ...args) {
@@ -43,9 +40,9 @@ class CLMonkeyPatcher {
             libWrapper.register("CommunityLighting", "Sound.prototype.load", wrappedSoundLoad, "WRAPPER");
             libWrapper.register("CommunityLighting", "PointSource.prototype.animate", wrappedPointSourceAnimate, "WRAPPER");
         } else {
-            const baseSoundLoad = Sound.prototype.load;
-            Sound.prototype.load = async function () {
-                return await wrappedSoundLoad.call(this, baseSoundLoad.bind(this), ...arguments);
+            const baseSoundPlay = Sound.prototype.play;
+            Sound.prototype.play = function () {
+                return wrappedSoundPlay.call(this, baseSoundPlay.bind(this), ...arguments);
             };
 
             const basePointSourceanimate = PointSource.prototype.animate;

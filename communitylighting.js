@@ -58,6 +58,7 @@ class CommunityLighting {
     }
 
     static async onReady() {
+        CLAudioReactor.startAnalysis()
         // Patching and using libWrapper if available
         CLMonkeyPatcher.runPatches()
     }

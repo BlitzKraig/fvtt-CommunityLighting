@@ -15,7 +15,7 @@ class CLAnimationHelpers {
 
     /**
      * EXPERIMENTAL - Cache or get-cached audio analyser and return a float representing the current relative peak of a frequency band
-     * 
+     * @deprecated
      * @param {PointSource} source - The animations PointSource, 'this' from your animation function
      * @param {float} currentPeak - The current audio power peak, used to smooth between peaks
      * @param {int} smoothing - How much smoothing to apply to peak changes from 1 to 10
@@ -25,6 +25,34 @@ class CLAnimationHelpers {
      */
     static getAudioFrequencyPower(source, currentPeak, smoothing = 5, band = [0, 63], minIncrease = 1, maxDecrease = 0.1, soundBoard = false) {
         return CLAudioReactor.getAudioFreqPower(source, currentPeak, smoothing, band, minIncrease, maxDecrease, soundBoard);
+    }
+
+
+    /**
+     * EXPERIMENTAL - Get the 'energy' of a listening band from 0..1
+     * @param {String} listeningBand - String representation of the listening band, low, mid or high 
+     * @param {Boolean} soundBoard - Should the returned value use the SoundBoard analyser
+     * @returns 
+     */
+    static getEzFreqPower(listeningBand, soundBoard = false) {
+        let newPeak = 0;
+        switch (listeningBand) {
+            case 'low':
+                newPeak = CLAudioReactor.getEZFreqPower(0, soundBoard);
+                break;
+            case 'mid':
+                newPeak = CLAudioReactor.getEZFreqPower(1, soundBoard);
+                break;
+            case 'high':
+                newPeak = CLAudioReactor.getEZFreqPower(2, soundBoard);
+                break;
+
+            default:
+                newPeak = CLAudioReactor.getEZFreqPower(0, soundBoard);
+                break;
+        }
+        
+        return newPeak;
     }
 
     /**
