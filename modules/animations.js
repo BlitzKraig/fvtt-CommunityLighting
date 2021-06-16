@@ -529,7 +529,7 @@ class CLAnimations {
             this._updateHook = (that, updateData, options)=>{
                 // console.log(updateData);
                 if(that._shouldAnimateOn){
-                    if(options._id === that._source.id){
+                    if(options?._id === that?._source?.id){
                         if(options.hidden === false) {
                             this._ramp = true;
                             this._rampValue = 0;
@@ -539,9 +539,9 @@ class CLAnimations {
                     }
                 }
             }
-            Hooks.on("updateAmbientLight", (updateData, options)=>{return this._updateHook(this, updateData, options)});
+            Hooks.on("updateAmbientLight", (updateData, options)=>{if(this._updateHook){return this._updateHook(this, updateData, options)}});
             // Run on first enable
-            this._updateHook(this, {}, {_id: this._source.id, hidden: false})
+            this._updateHook(this, {}, {_id: this?._source?.id, hidden: false})
         }
 
         if (audioReactive) {
