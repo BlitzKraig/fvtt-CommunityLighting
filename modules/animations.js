@@ -428,6 +428,100 @@ class CLAnimations {
             this.coloration.uniforms.color = hexToRGB(colorScale(this._wave.simplifiedValue).num()); // Set color to a color from colorScale, using full intensity cos wave to get a smooth 0 to 1 and back
         }
     }
+    blitzPolyLight(dt, {
+        speed = 5,
+        intensity = 5,
+        shapeSides = 4,
+        shapeSidesTo = 4,
+        innerBlur = 0.1,
+        outerBlur = 0.1,
+        scale = 1.0,
+        shouldFlicker = false,
+        shouldFlickerAlpha = false,
+        shouldFlickerTranslate = false
+    }) {
+        const iu = this.illumination.uniforms;
+        const cu = this.coloration.uniforms;
+        CLAnimationHelpers.cosineWave(this, speed, intensity, dt);
+
+        if (shapeSides == shapeSidesTo) {
+            iu.shapeSides = shapeSides;
+        } else {
+            iu.shapeSides = shapeSides + ((shapeSidesTo - shapeSides) * this._wave.simplifiedValue)
+        }
+        iu.smoothness = innerBlur;
+        iu.outerSmoothness = outerBlur;
+        iu.scale = scale;
+
+        CLAnimationHelpers.binaryTimer(this, speed, dt);
+
+        // Cause the torch to flicker by not changing every frame
+        const t = Date.now();
+        const targetMS = (0.5 + (Math.random() / 2)) * (10 - speed) * 16;
+
+        if ((t - this._animTime) < targetMS) {
+            var alteredValue = Math.random() * 0.001 * intensity;
+            if (this._flipped) {
+                if (shouldFlicker) {
+                    iu.ratio -= alteredValue;
+                }
+                if (shouldFlickerAlpha) {
+                    iu.alpha -= alteredValue;
+                    cu.alpha -= alteredValue;
+                }
+            } else {
+                if (shouldFlicker) {
+                    iu.ratio += alteredValue;
+                }
+                if (shouldFlickerAlpha) {
+                    iu.alpha += alteredValue;
+                    cu.alpha += alteredValue;
+                }
+            }
+            return;
+        }
+        this._animTime = t;
+
+        // Evolve illumination
+        if (shouldFlicker) {
+            iu.ratio = this._ar1(iu.ratio, {
+                center: this.bright / this.dim,
+                sigma: 0.002 * intensity
+            });
+        }
+
+        if (shouldFlickerAlpha) {
+            iu.alpha = this._ar1(iu.alpha, {
+                center: 0.9,
+                sigma: 0.005 * intensity,
+                max: 1.0
+            });
+        }
+
+        if (shouldFlickerAlpha && this.alpha > 0) {
+            // Evolve coloration
+            cu.alpha = this._ar1(cu.alpha, {
+                center: this.alpha,
+                sigma: 0.005 * intensity
+            });
+        }
+        if (!shouldFlickerAlpha) {
+            iu.alpha = 1
+            cu.alpha = this.alpha
+        }
+
+        if (shouldFlickerTranslate) {
+            if (iu.translateX != undefined && iu.translateY != undefined) {
+                iu.translateX = ((Math.random() * 0.05) - 0.025) * (intensity / 10);
+                iu.translateY = ((Math.random() * 0.05) - 0.025) * (intensity / 10);
+            }
+        } else {
+            if (iu.translateX != undefined && iu.translateY != undefined) {
+                iu.translateX = 0;
+                iu.translateY = 0;
+            }
+        }
+    }
 
      /* Author: Blitz - Commissions */
      blitzForgottenAdventuresCustom(dt, {

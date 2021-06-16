@@ -502,4 +502,64 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
     translateY: 0
 });
 }
-  
+
+
+/**
+ * Illumination shader used for simple polygonal lighting
+ * @extends {StandardIlluminationShader}
+ * @author Blitz
+ */
+ class CLPolyIlluminationShader extends StandardIlluminationShader {
+    static fragmentShader = `
+    precision mediump float;
+
+    #define PI 3.14159265359
+    #define TWO_PI 6.28318530718
+    uniform float alpha;
+    uniform float ratio;
+    uniform vec3 colorDim;
+    uniform vec3 colorBright;
+    uniform float shapeSides;
+    uniform float smoothness;
+    uniform float scale;
+    uniform float outerSmoothness;
+    uniform float translateX;
+    uniform float translateY;
+    varying vec2 vUvs;
+    
+    void main(){  
+
+      vec3 color = vec3(0.0);
+      float d = 0.0;
+      vec2 st = vUvs;
+    
+      st = st *2.-1.;
+    
+      // Angle and radius from the current pixel
+      float a = atan(st.x, st.y)+PI;
+      float r = TWO_PI/shapeSides;
+    
+      // Shaping function that modulate the distance
+      d = cos(floor(.5+a/r)*r-a)*length(vec2(st.x + translateX, st.y + translateY));
+    
+      float dist = distance(vUvs, vec2(0.5)) * 2.0;
+      
+      float dimRadius = 0.7 * scale;
+      float brightRadius = dimRadius * ratio;
+      
+      vec3 dimCol = vec3(1.0-smoothstep((dimRadius-outerSmoothness),(dimRadius+outerSmoothness),d)) * colorDim;
+      vec3 brightCol = vec3(1.0-smoothstep((brightRadius-smoothness),(brightRadius+smoothness),d)) * colorBright;
+      
+      color = clamp(dimCol + brightCol, 0.0, colorBright.x);
+      gl_FragColor = vec4(color * alpha, 1.0);
+  }`;
+  static defaultUniforms = mergeObject(super.defaultUniforms, {
+    shapeSides : 4.0,
+    smoothness: 0.1,
+    outerSmoothness: 0.1,
+    translateX: 0,
+    translateY: 0,
+    scale : 1.0
+});
+}
+
