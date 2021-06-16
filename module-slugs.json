@@ -1,0 +1,5 @@
+{
+    "repoUrl":"https://github.com/BlitzKraig/fvtt-CommunityLighting",
+    "downloadName":"communitylighting-release.zip",
+    "downloadFiles": "module.json lights.json communitylighting.js dependencies/ lang/ modules/ templates/"
+}

@@ -1,0 +1,50 @@
+name: CommunityLighting Prerelease
+
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get Version
+      shell: bash
+      id: get-version
+      run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)-dev"
+    - name: Get Download Name
+      shell: bash
+      id: get-download-output
+      run: echo "::set-output name=download::$(node ./.github/workflows/get-download-name.js)"
+    - name: Get Download Files
+      shell: bash
+      id: get-download-input
+      run: echo "::set-output name=files::$(node ./.github/workflows/get-download-files.js)"
+
+      # DEV RELEASE
+    - name: Update Module JSON Dev
+      shell: bash
+      run: node ./.github/workflows/update-manifest.js dev
+    - run: zip -r ./${{ steps.get-download-output.outputs.download }} ${{ steps.get-download-input.outputs.files }}
+    - name: Delete Release
+      id: delete_release
+      continue-on-error: true
+      uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      with:
+        delete_release: true
+        tag_name: dev
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create Release
+      id: create_release
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true
+        name: Dev Release ${{ steps.get-version.outputs.version }}
+        bodyfile: latest-changes.md
+        draft: false
+        prerelease: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: './module.json,./${{ steps.get-download-output.outputs.download }}'
+        tag: dev
