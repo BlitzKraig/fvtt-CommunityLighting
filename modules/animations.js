@@ -323,34 +323,13 @@ class CLAnimations {
         speed = 5,
         intensity = 5,
         listeningBand = "mid",
-        gainNode = "master"
+        gainNode = "master",
+        exponent = 1
     }) {
         if(!this._currentPeak){
             this._currentPeak = 0; // store currentPeak inside the pointSource
         }
-        switch (listeningBand) {
-            case "low":
-                listeningBand = [0,4];
-                break;
-            case "mid":
-                listeningBand = [5,30];
-                break;
-            case "high":
-                listeningBand = [31,63];
-                break;
-            case "all":
-                listeningBand = undefined;
-                break
-        
-            default:
-                listeningBand = [5,30];
-                break;
-        }
-        if(listeningBand){
-            this._currentPeak = CLAnimationHelpers.getAudioFrequencyPower(this, this._currentPeak, 11 - speed, listeningBand, 1, 0.1, gainNode=="soundboard"); // Update currentPeak
-        }else{
-            this._currentPeak = CLAnimationHelpers.getAudioPeak(this,this._currentPeak,11 - speed, 1, 0.1, gainNode=="soundboard");
-        }
+        this._currentPeak = Math.pow(CLAnimationHelpers.getEzFreqPower(listeningBand, gainNode == "soundboard"), exponent);
 
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -369,9 +348,10 @@ class CLAnimations {
         speed = 5,
         intensity = 5,
         listeningBand = "mid",
-        gainNode = "master"
+        gainNode = "master",
+        exponent = 1
     }) {
-        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {speed, intensity, listeningBand, gainNode})
+        CLAnimationHelpers.includeAnimation(this, "blitzFadeMusic", dt, {speed, intensity, listeningBand, gainNode, exponent})
         this.illumination.uniforms.ratio = this._calculatedIntensity;
     }
 
@@ -382,7 +362,8 @@ class CLAnimations {
         tertiaryColor = '#0000ff',
         listeningBand = "mid",
         colorSpeed = 5,
-        gainNode = "master"
+        gainNode = "master",
+        exponent = 1
     }) {
         if (this._placeableType == "AmbientLight") {
             this._originalColorAlpha = this?._source?.data?.tintAlpha;
@@ -392,7 +373,7 @@ class CLAnimations {
             this._originalColor = this?._source?.data?.lightColor;
         }
         CLAnimationHelpers.forceColorationShader(this, '#ff0000');
-        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity, listeningBand, gainNode});
+        CLAnimationHelpers.includeAnimation(this, "blitzPulseMusic", dt, {speed, intensity, listeningBand, gainNode, exponent});
 
         CLAnimationHelpers.cosineWave(this, colorSpeed, 10, dt);
 
@@ -705,35 +686,16 @@ class CLAnimations {
         intensity = 5,
         secondaryColor = '#00ff00',
         listeningBand = "mid",
-        gainNode = "master"
+        gainNode = "master",
+        exponent = 1
     }) {
 
         if (!this._currentPeak) {
             this._currentPeak = 0; // store currentPeak inside the pointSource
         }
-        switch (listeningBand) {
-            case "low":
-                listeningBand = [0, 4];
-                break;
-            case "mid":
-                listeningBand = [5, 30];
-                break;
-            case "high":
-                listeningBand = [31, 63];
-                break;
-            case "all":
-                listeningBand = undefined;
-                break
 
-            default:
-                listeningBand = [5, 30];
-                break;
-        }
-        if (listeningBand) {
-            this._currentPeak = CLAnimationHelpers.getAudioFrequencyPower(this, this._currentPeak, 11 - speed, listeningBand, 1, 0.1, gainNode == "soundboard"); // Update currentPeak
-        } else {
-            this._currentPeak = CLAnimationHelpers.getAudioPeak(this, this._currentPeak, 11 - speed, 1, 0.1, gainNode == "soundboard");
-        }
+        this._currentPeak = Math.pow(CLAnimationHelpers.getEzFreqPower(listeningBand, gainNode == "soundboard"), exponent);
+       
 
         CLAnimationHelpers.forceColorationShader(this, '#ff0000'); // Force the lights tintColor to Red if the user has not set one
         CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, { speed, intensity }); // Call `foundryTime` to manipulate the custom shaders based on time
