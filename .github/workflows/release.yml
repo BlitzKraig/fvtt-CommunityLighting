@@ -32,5 +32,5 @@ jobs:
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: './module.json,./${{ steps.get-download-output.outputs.download }}'
+        artifacts: './module.json,./communitylighting-release.zip'
         tag: latest
