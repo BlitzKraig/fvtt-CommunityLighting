@@ -3,7 +3,7 @@ name: CommunityLighting Release
 on: 
   push:
     branches:
-      - production
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,59 +13,14 @@ jobs:
       shell: bash
       id: get-version
       run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
-    - name: Get Download Name
-      shell: bash
-      id: get-download-output
-      run: echo "::set-output name=download::$(node ./.github/workflows/get-download-name.js)"
-    - name: Get Download Files
-      shell: bash
-      id: get-download-input
-      run: echo "::set-output name=files::$(node ./.github/workflows/get-download-files.js)"
-    - name: Get Module Name
-      shell: bash
-      id: get-module-name
-      run: echo "::set-output name=name::$(node ./.github/workflows/get-module-name.js)"
-
-      # TAGGED
-    - name: Update Module JSON Tagged
-      shell: bash
-      run: node ./.github/workflows/update-manifest.js
-    - run: zip -r ./${{ steps.get-download-output.outputs.download }} ${{ steps.get-download-input.outputs.files }}
-    - name: Delete Versioned Release
-      id: delete_versioned_release
-      continue-on-error: true
-      uses: dev-drprasad/delete-tag-and-release@v0.2.0
-      with:
-        delete_release: true
-        tag_name: ${{ steps.get-version.outputs.version }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Create Versioned Release
-      id: create_versioned_release
-      uses: ncipollo/release-action@v1
-      with:
-        allowUpdates: true
-        name: Archived Release ${{ steps.get-version.outputs.version }}
-        bodyfile: latest-changes.md
-        draft: false
-        prerelease: false
-        token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: './module.json,./${{ steps.get-download-output.outputs.download }}'
-        tag: ${{ steps.get-version.outputs.version }}
-
-      # live
-    - name: Update Module JSON Latest
-      shell: bash
-      run: node ./.github/workflows/update-manifest.js live
-    - run: rm ./${{ steps.get-download-output.outputs.download }}
-    - run: zip -r ./${{ steps.get-download-output.outputs.download }} ${{ steps.get-download-input.outputs.files }}
+    - run: zip -r ./communitylighting-release.zip module.json lights.json communitylighting.js dependencies/ lang/ modules/ templates/
     - name: Delete Release
       id: delete_release
       continue-on-error: true
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true
-        tag_name: live
+        tag_name: latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Create Release
@@ -73,29 +28,9 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        name: Live Release ${{ steps.get-version.outputs.version }}
-        bodyfile: latest-changes.md
+        name: Release ${{ steps.get-version.outputs.version }}
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json,./${{ steps.get-download-output.outputs.download }}'
-        tag: live
-    - name: Get Latest Changes
-      shell: bash
-      id: get-latest-changes
-      run: |
-        CHANGES=$(cat ./latest-changes.md)
-        CHANGES="${CHANGES//'%'/'%25'}"
-        CHANGES="${CHANGES//$'\n'/'%0A'}"
-        CHANGES="${CHANGES//$'\r'/'%0D'}"
-        echo "::set-output name=changes::$CHANGES"
-    - name: Post Discord Release
-      uses: sarisia/actions-status-discord@v1
-      with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        nodetail: true
-        noprefix: true
-        title: ${{ steps.get-module-name.outputs.name }} Release ${{ steps.get-version.outputs.version }}
-        description: ${{ steps.get-latest-changes.outputs.changes }}
-        color: 0x0000ff
-
+        tag: latest
