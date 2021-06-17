@@ -1,3 +1,7 @@
+# 0.4.6 - 2021/06/17
+
+* Added missing greensock inclusion
+
 # 0.4.5 - 2021/06/17
 
 * Reverted release workflow
