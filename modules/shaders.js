@@ -583,7 +583,7 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
     uniform vec3 colorBright;
     varying vec2 vUvs;
     uniform float smoothness;
-    uniform float innerCircleRatio;
+    uniform float flameRatio;
     uniform float ramp;
     uniform bool castLight;
 
@@ -617,13 +617,13 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
       float dist = distance(vUvs, vec2(xdist, ydist)) * 2.0;
       vec3 circleColor = vec3(0.0);
       if(castLight){
-        circleColor = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 100.0), dist + (smoothness / 100.0), innerCircleRatio));
+        circleColor = mix(colorDim, colorBright, smoothstep(dist - (smoothness / 100.0), dist + (smoothness / 100.0), ratio));
       }
       vec2 p = -.5 + vUvs;
       
-      float color = (3.0 * musicWave) - (3.*length(2.7*p) / ratio);
+      float color = (3.0 * musicWave) - (3.*length(2.7*p) / flameRatio);
       
-      vec3 coord = vec3(atan(p.x,p.y)/TWO_PI+.5, length(p)*(.4/ratio), .5);
+      vec3 coord = vec3(atan(p.x,p.y)/TWO_PI+.5, length(p)*(.4/flameRatio), .5);
       for(int i = 1; i <= 7; i++)
       {
           float power = pow(2.0, float(i));
@@ -634,7 +634,7 @@ class CLSmoothTransitionIlluminationShader extends StandardIlluminationShader {
   `;
   static defaultUniforms = mergeObject(super.defaultUniforms, {
     musicWave: 1.0,
-    innerCircleRatio: 0.5,
+    flameRatio: 0.5,
     translateX: 0.0,
     translateY: 0.0,
     smoothness: 0.1,

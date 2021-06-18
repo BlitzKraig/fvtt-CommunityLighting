@@ -511,7 +511,7 @@ class CLAnimations {
         gainNode = "master",
         exponent = 1,
         audioReactive = false,
-        innerCircleRatio = 0.5,
+        flameRatio = 0.5,
         castLight = false,
         smoothness = 1,
         shouldFlicker = false,
@@ -524,6 +524,7 @@ class CLAnimations {
     }) {
         const iu = this.illumination.uniforms;
         const cu = this.coloration.uniforms;
+        const ratio = this.bright/this.dim;
         this._shouldAnimateOn = shouldAnimateOn;
         if(!this._updateHook){
             this._updateHook = (that, updateData, options)=>{
@@ -552,14 +553,14 @@ class CLAnimations {
             iu.musicWave = 1.0;
             cu.musicWave = 1.0;
         }
-        iu.innerCircleRatio = this._ramp?innerCircleRatio * Back.easeOut(this._rampValue):innerCircleRatio;
+        iu.ratio = this._ramp?ratio * Back.easeOut(this._rampValue):ratio;
         iu.castLight = castLight;
         iu.smoothness = smoothness;
-        iu.ratio = this._ramp?(this.bright/this.dim) * Back.easeOut(this._rampValue):this.bright / this.dim;
+        iu.flameRatio = this._ramp?(flameRatio) * Back.easeOut(this._rampValue):flameRatio;
         let rampUniformVal = this._ramp?Circ.easeIn(this._rampValue):1.0;
         iu.ramp = rampUniformVal;
         cu.ramp = rampUniformVal;
-        cu.ratio = this._ramp?(this.bright/this.dim) * Back.easeOut(this._rampValue):this.bright / this.dim;
+        cu.ratio = this._ramp?(flameRatio) * Back.easeOut(this._rampValue):flameRatio;
         cu.alpha = this.alpha;
         CLAnimationHelpers.includeAnimation(this, "foundryTime", dt, {
             speed,
@@ -585,14 +586,14 @@ class CLAnimations {
             var alteredValue = Math.random() * 0.001 * circleIntensity;
             if (this._flipped) {
                 if (shouldFlicker) {
-                    iu.innerCircleRatio -= alteredValue;
+                    iu.ratio -= alteredValue;
                 }
                 if (shouldFlickerAlpha) {
                     iu.alpha -= alteredValue;
                 }
             } else {
                 if (shouldFlicker) {
-                    iu.innerCircleRatio += alteredValue;
+                    iu.ratio += alteredValue;
                 }
                 if (shouldFlickerAlpha) {
                     iu.alpha += alteredValue;
@@ -604,8 +605,8 @@ class CLAnimations {
 
         // Evolve illumination
         if (shouldFlicker) {
-            iu.innerCircleRatio = this._ar1(iu.innerCircleRatio, {
-                center: innerCircleRatio,
+            iu.ratio = this._ar1(iu.ratio, {
+                center: ratio,
                 sigma: 0.002 * circleIntensity
             });
         }
