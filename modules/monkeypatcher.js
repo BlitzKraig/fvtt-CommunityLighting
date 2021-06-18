@@ -37,7 +37,7 @@ class CLMonkeyPatcher {
         };
 
         if (this.libWrapped) {
-            libWrapper.register("CommunityLighting", "Sound.prototype.load", wrappedSoundLoad, "WRAPPER");
+            libWrapper.register("CommunityLighting", "Sound.prototype.play", wrappedSoundPlay, "WRAPPER");
             libWrapper.register("CommunityLighting", "PointSource.prototype.animate", wrappedPointSourceAnimate, "WRAPPER");
         } else {
             const baseSoundPlay = Sound.prototype.play;
