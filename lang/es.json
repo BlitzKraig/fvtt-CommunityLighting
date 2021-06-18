@@ -44,10 +44,20 @@
         "settings": {
             "title": "Community Lighting",
             "name": "Ajustes de iluminación basada en la comunidad (Community Lighting)",
-            "label": "Abrir la configuración"
+            "label": "Abrir la configuración",
+            "closeLightOnSubmit": {
+                "name": "Cerrar la hoja de iluminación ambiental al actualizar",
+                "hint": "Deshabilite esta opción para ignorar el comportamiento por defecto del ajuste de la iluminación, permitiendo actualizar una fuente de luz sin cerrar la hoja"
+            },
+            "closeTokenOnSubmit": {
+                "name": "Cerrar hoja de icono al actualizar",
+                "hint": "Deshabilite esta opción para ignorar el comportamiento por defecto del ajuste de los iconos, permitiendo actualizar sus fuentes de luz sin cerrar la hoja. Tenga en cuenta que esto hará que cuando haga cualquier actualización, relacionada o no con la iluminación, la hoja seguirá abierta"
+            }
         },
         "notif": {
-            "libWrapperMissing": "Community Lighting recomienda instalar y activar el módulo 'libWrapper'."
+            "libWrapperMissing": "Community Lighting recomienda instalar y activar el módulo 'libWrapper'",
+            "lightUpdated": "Iluminación actualizada",
+            "tokenUpdated": "Icono actualizado"
         }
     }
 }
