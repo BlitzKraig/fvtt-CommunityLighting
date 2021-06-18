@@ -1,3 +1,11 @@
+# 0.4.7 - 2021/06/18
+
+* Fixed libwrapper calls
+* Changed custom fire light to use radius for circle lighting, and new flame size property
+  * This allows the light to work with Perfect Vision
+* Merged in Spanish localization
+
+
 # 0.4.6 - 2021/06/17
 
 * Added missing greensock inclusion
