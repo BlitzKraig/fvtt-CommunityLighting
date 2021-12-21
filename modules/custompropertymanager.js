@@ -39,7 +39,7 @@ class CLCustomPropertyManager {
         if (!pointSource._source) {
             return; // Source is not cached yet, return
         }
-        var customProperties = pointSource.object.getFlag("CommunityLighting", "customProperties");
+        var customProperties = pointSource.object.document.getFlag("CommunityLighting", "customProperties");
 
         // Remove any customProperties from the current lightAnimation object
         Object.keys(pointSource.object.data._source.lightAnimation).forEach(key => {
